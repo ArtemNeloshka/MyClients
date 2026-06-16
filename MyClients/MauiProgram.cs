@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using MyClients.DAL;
 
 namespace MyClients;
 
@@ -19,6 +20,16 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-		return builder.Build();
+		builder.Services.AddDbContext<MyClientsDbContext>();
+
+		var app = builder.Build();
+
+		using (var scope = app.Services.CreateScope())
+		{
+			var db = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
+			db.Database.EnsureCreated();
+		}
+		
+		return app;
 	}
 }
