@@ -68,7 +68,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DAL\Repositories\" />
       <Folder Include="Services\" />
       <Folder Include="ViewModels\" />
       <Folder Include="Views\" />
