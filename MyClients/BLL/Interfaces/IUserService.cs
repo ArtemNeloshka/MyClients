@@ -1,0 +1,11 @@
+using MyClients.DAL.Entities;
+
+namespace MyClients.BLL.Interfaces;
+
+public interface IUserService
+{
+	Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday);
+	Task<ICollection<User>> GetAllUsersAsync();
+	Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate);
+	Task LoginUserAsync(string email);
+}
