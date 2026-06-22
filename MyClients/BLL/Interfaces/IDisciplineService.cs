@@ -4,6 +4,6 @@ namespace MyClients.BLL.Interfaces;
 
 public interface IDisciplineService
 {
-	Task<Discipline> GetDisciplineByIdAsync(int id);
+	Task<Discipline?> GetDisciplineByIdAsync(int id);
 	Task<ICollection<Discipline>> GetAllDisciplinesAsync();
 }
