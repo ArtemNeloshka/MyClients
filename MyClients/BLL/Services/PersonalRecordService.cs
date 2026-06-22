@@ -21,11 +21,10 @@ public class PersonalRecordService : Service, IPersonalRecordService
 	public async Task<ICollection<PersonalRecord>> GetRecordsByUserIdAsync(int userId)
 	{
 		// getting records from DB
-		var allRecords = (await _personalRecordRepository.GetAllAsync())
-			.ToList();
-		
-		// finding needed record
-		return allRecords.FindAll(pr => pr.UserId == userId);
+		var records = await _personalRecordRepository
+			.GetRecordsByUserIdAsync(userId);
+
+		return records.ToList();
 	}
 
 	public async Task AddRecordAsync(User user, Grade grade, DateOnly date, Discipline discipline)
