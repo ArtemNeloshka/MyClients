@@ -53,7 +53,7 @@ public class PersonalRecordService : Service, IPersonalRecordService
 		// validate input
 		if (date > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException("Date of the record cannot be bigger than today's.");
+			throw new ArgumentException("Date of the record cannot be bigger than today's.", nameof(date));
 		}
 		
 		// getting the record from DB
