@@ -19,7 +19,7 @@ public class UserService : Service, IUserService
 		// validate input
 		if (birthday != null && birthday > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException("Birthdate cannot be higher than today");
+			throw new ArgumentException("Birthdate cannot be higher than today", nameof(birthday));
 		}
 		
 		// getting user from DB
@@ -70,7 +70,7 @@ public class UserService : Service, IUserService
 		// validate input
 		if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
 		{
-			throw new ArgumentException("Name of surname cannot be null.");
+			throw new ArgumentException("Name or surname cannot be null.");
 		}
 
 		if (!IsValidEmail(email))
@@ -80,11 +80,18 @@ public class UserService : Service, IUserService
 
 		if (birthdate > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException("Birthdate cannot be higher that today.");
+			throw new ArgumentException("Birthdate cannot be higher than today.");
 		}
 		
 		// initialisation of a new user
-		var newUser = CreateNewUser(firstName, lastName, email, birthdate);
+		var newUser = new User()
+		{
+			Name = firstName,
+			Surname = lastName,
+			Email = email,
+			Birthday = birthdate,
+		};
+		
 		await _userRepository.AddAsync(newUser);
 	}
 
@@ -107,16 +114,5 @@ public class UserService : Service, IUserService
 		var emailPattern = @"[\w-]+@gmail\.com";
 
 		return Regex.IsMatch(email, emailPattern);
-	}
-	
-	private static User CreateNewUser(string firstName, string lastName, string email, DateOnly birthdate)
-	{
-		var newUser = new User();
-		newUser.Name = firstName;
-		newUser.Surname = lastName;
-		newUser.Email = email;
-		newUser.Birthday = birthdate;
-
-		return newUser;
 	}
 }
