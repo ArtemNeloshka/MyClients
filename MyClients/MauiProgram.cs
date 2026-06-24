@@ -37,6 +37,9 @@ public static class MauiProgram
 		builder.Services.AddTransient<IGradeService, GradeService>();
 		builder.Services.AddTransient<ITrainingService, TrainingService>();
 		builder.Services.AddTransient<IPersonalRecordService, PersonalRecordService>();
+		
+		// PL
+		builder.Services.AddTransient<MainPage>();
 	
 		var app = builder.Build();
 
