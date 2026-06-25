@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using MyClients.BLL.Interfaces;
 using MyClients.DAL.Entities;
@@ -65,7 +66,7 @@ public class UserService : Service, IUserService
 		return users.FirstOrDefault(u => u.Email == email);
 	}
 
-	public async Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate)
+	public async Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate, string password)
 	{
 		// validate input
 		if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
@@ -82,6 +83,16 @@ public class UserService : Service, IUserService
 		{
 			throw new ArgumentException("Birthdate cannot be higher than today.");
 		}
+
+		if (password.Length < 8)
+		{
+			throw new ArgumentException("Password cannot be less then 8 symbols.", nameof(password));
+		}
+
+		if (await GetUserByEmailAsync(email) != null)
+		{
+			throw new InvalidOperationException($"User with email {email} already exists.");
+		}
 		
 		// initialisation of a new user
 		var newUser = new User()
@@ -90,23 +101,29 @@ public class UserService : Service, IUserService
 			Surname = lastName,
 			Email = email,
 			Birthday = birthdate,
+			PasswordHash = password, // TODO: hash function
 		};
 		
 		await _userRepository.AddAsync(newUser);
 	}
 
-	public async Task<bool> LoginUserAsync(string email)
+	public async Task<bool> LoginUserAsync(string email, string password)
 	{
 		// validate input
 		if (!IsValidEmail(email))
 		{
 			throw new ArgumentException("Email is not valid.", nameof(email));
 		}
+
+		if (password.Length < 8)
+		{
+			throw new ArgumentException("Password cannot be shorter then 8 symbols.", nameof(password));
+		}
 		
 		// getting user by email
 		var user = await GetUserByEmailAsync(email);
 
-		return user != null;
+		return user != null && user.PasswordHash == password; // TODO: Hash function
 	}
 
 	private static bool IsValidEmail(string email)

@@ -190,7 +190,8 @@ public class UserServiceTests
 				firstName: string.Empty,
 				lastName: "Test",
 				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1)));
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
 
 		Assert.Contains("Name or surname cannot be null.", exception.Message);
 	}
@@ -207,7 +208,8 @@ public class UserServiceTests
 				firstName: "Test",
 				lastName: string.Empty,
 				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1)));
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
 
 		Assert.Contains("Name or surname cannot be null.", exception.Message);
 	}
@@ -230,7 +232,8 @@ public class UserServiceTests
 				firstName: "Test",
 				lastName: "Test",
 				email: invalidEmail,
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1)));
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
 
 		Assert.Contains("Email doesn't match the pattern.", exception.Message);
 	}
@@ -247,10 +250,13 @@ public class UserServiceTests
 				firstName: "Test",
 				lastName: "Test",
 				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(1)));
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(1),
+				password: "TestPassword"));
 
 		Assert.Contains("Birthdate cannot be higher than today.", exception.Message);
 	}
+	
+	// TODO: password test
 	
 	// register happy path
 	[Fact]
@@ -272,7 +278,8 @@ public class UserServiceTests
 			firstName: userToRegister.Name,
 			lastName: userToRegister.Surname,
 			email: userToRegister.Email,
-			birthdate: userToRegister.Birthday);
+			birthdate: userToRegister.Birthday,
+			password: "TestPassword");
 		
 		mockRepo.Verify(r => r.AddAsync(It.Is<User>(u =>
 			u.Name == userToRegister.Name &&
@@ -296,7 +303,7 @@ public class UserServiceTests
 		var service = new UserService(mockRepo.Object);
 
 		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			service.LoginUserAsync(invalidEmail));
+			service.LoginUserAsync(invalidEmail, "TestPassword"));
 
 		Assert.Contains("Email is not valid.", exception.Message);
 	}
@@ -312,6 +319,7 @@ public class UserServiceTests
 			Id = 1,
 			Name = "Test",
 			Email = "test@gmail.com",
+			PasswordHash = "TestPassword",
 		};
 
 		mockRepo.Setup(r => r.GetAllAsync())
@@ -319,7 +327,7 @@ public class UserServiceTests
 		
 		var service = new UserService(mockRepo.Object);
 
-		var result = await service.LoginUserAsync(existingUser.Email);
+		var result = await service.LoginUserAsync(existingUser.Email, existingUser.PasswordHash);
 
 		Assert.True(result);
 		
@@ -337,6 +345,7 @@ public class UserServiceTests
 			Id = 1,
 			Name = "Test",
 			Email = "test@gmail.com",
+			PasswordHash = "TestPassword",
 		};
 
 		mockRepo.Setup(r => r.GetAllAsync())
@@ -344,7 +353,7 @@ public class UserServiceTests
 		
 		var service = new UserService(mockRepo.Object);
 
-		var result = await service.LoginUserAsync("invalid" + existingUser.Email);
+		var result = await service.LoginUserAsync("invalid" + existingUser.Email, existingUser.PasswordHash);
 
 		Assert.False(result);
 		
