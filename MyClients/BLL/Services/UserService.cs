@@ -91,17 +91,19 @@ public class UserService : Service, IUserService
 
 		if (await GetUserByEmailAsync(email) != null)
 		{
-			throw new InvalidOperationException($"User with email {email} already exists.");
+			throw new InvalidOperationException("User with this email already exists.");
 		}
 		
 		// initialisation of a new user
+		var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+		
 		var newUser = new User()
 		{
 			Name = firstName,
 			Surname = lastName,
 			Email = email,
 			Birthday = birthdate,
-			PasswordHash = password, // TODO: hash function
+			PasswordHash = passwordHash,
 		};
 		
 		await _userRepository.AddAsync(newUser);
@@ -123,7 +125,7 @@ public class UserService : Service, IUserService
 		// getting user by email
 		var user = await GetUserByEmailAsync(email);
 
-		return user != null && user.PasswordHash == password; // TODO: Hash function
+		return user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 	}
 
 	private static bool IsValidEmail(string email)

@@ -4,6 +4,7 @@ using MyClients.BLL.Services;
 using MyClients.DAL;
 using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
+using MyClients.ViewModels;
 using MyClients.Views;
 
 namespace MyClients;
@@ -41,6 +42,8 @@ public static class MauiProgram
 		
 		// PL
 		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddTransient<RegisterViewModel>();
+		builder.Services.AddTransient<RegistrationPage>();
 	
 		var app = builder.Build();
 

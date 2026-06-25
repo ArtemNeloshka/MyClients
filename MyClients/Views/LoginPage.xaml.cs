@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyClients.BLL.Interfaces;
+using MyClients.ViewModels;
 
 namespace MyClients.Views;
 
@@ -24,6 +25,7 @@ public partial class LoginPage : ContentPage
 
 	private async void OnRegisterClicked(object? sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new RegistrationPage());
+		var page = Handler.MauiContext.Services.GetService<RegistrationPage>();
+		await Navigation.PushAsync(page);
 	}
 }
