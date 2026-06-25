@@ -4,6 +4,7 @@ using MyClients.BLL.Services;
 using MyClients.DAL;
 using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
+using MyClients.Views;
 
 namespace MyClients;
 
@@ -39,7 +40,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<IPersonalRecordService, PersonalRecordService>();
 		
 		// PL
-		builder.Services.AddTransient<MainPage>();
+		builder.Services.AddTransient<LoginPage>();
 	
 		var app = builder.Build();
 

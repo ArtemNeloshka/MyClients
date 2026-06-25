@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyClients.Views.LoginPage"
+             NavigationPage.HasNavigationBar="False">
+	
+	<Grid>
+		<Image Source="background_blured.png"
+		       SemanticProperties.Description="adsgw"
+		       Aspect="AspectFill"/>
+		
+		<ScrollView>
+			
+			<Grid RowDefinitions="5*, Auto, 5*">
+				<VerticalStackLayout
+					Grid.Row="1"
+					Spacing="0"
+          Padding="30, 0"
+          Margin="0, 0"
+          VerticalOptions="Fill"
+					HorizontalOptions="Fill"
+          MinimumHeightRequest="600">
+        				
+        	<Image Source="logo.png"
+	               SemanticProperties.Description="adsgw"
+        	       HeightRequest="80"
+        	       WidthRequest="80"
+        	       Margin="0, 50, 0, 30">
+		        <Image.Clip>
+			        <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+		        </Image.Clip>
+	        </Image>
+        	
+        	<VerticalStackLayout VerticalOptions="Center"
+	                             Spacing="15"
+	                             Padding="5 5">
+        		
+        		<Border StrokeShape="RoundRectangle 20"
+        		        StrokeThickness="0"
+        		        BackgroundColor="Gray"
+        		        HeightRequest="45">
+			        <Entry
+        				x:Name="LoginEmailEntry"
+        				Placeholder="Enter your email..."
+        				Keyboard="Email"
+        				ClearButtonVisibility="WhileEditing"
+        				Margin="15, 0"
+        				VerticalOptions="Center"/>
+        		</Border>
+        	
+        		<Border StrokeShape="RoundRectangle 20"
+        		        StrokeThickness="0"
+        		        BackgroundColor="Gray"
+        		        HeightRequest="45">
+        			<Entry
+        				x:Name="LoginPasswordEntry"
+        				Placeholder="Enter your password..."
+        				IsPassword="True"
+        				ClearButtonVisibility="WhileEditing"
+        				Margin="15, 0"
+        				VerticalOptions="Center"/>
+        		</Border>
+        	
+        		<Button Text="Log in"
+        		        BackgroundColor="Black"
+        		        TextColor="White"
+        		        CornerRadius="20"
+		                Padding="5"
+        		        HeightRequest="50"
+        		        FontAttributes="Italic, Bold"
+        		        FontSize="28"
+        		        Clicked="OnLoginClicked"
+        		></Button>
+        		
+        		<Label Text="or"
+        		       TextColor="White"
+        		       FontSize="32"
+        		       FontAttributes="Italic, Bold"
+		               
+		               HorizontalOptions="Center"/>
+        		
+        		<Button Text="Register now!"
+        		        BackgroundColor="#78B983"
+        		        TextColor="Black"
+        		        CornerRadius="20"
+		                Padding="5"
+        		        HeightRequest="50"
+        		        FontAttributes="Italic, Bold"
+        		        FontSize="28"
+        		        Clicked="OnRegisterClicked" />
+        		
+        	</VerticalStackLayout>
+				</VerticalStackLayout>
+			</Grid>
+			
+			
+				
+			
+		</ScrollView>
+		
+	</Grid>
+</ContentPage>

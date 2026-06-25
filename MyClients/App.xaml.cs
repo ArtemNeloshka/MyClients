@@ -1,11 +1,19 @@
-﻿namespace MyClients;
+﻿using MyClients.Views;
+
+namespace MyClients;
 
 public partial class App : Application
 {
-	public App()
+	private readonly LoginPage _loginPage;
+
+	public App(LoginPage loginPage)
 	{
 		InitializeComponent();
+		_loginPage = loginPage;
+	}
 
-		MainPage = new AppShell();
+	protected override Window CreateWindow(IActivationState? activationState)
+	{
+		return new Window(new NavigationPage(_loginPage));
 	}
 }
