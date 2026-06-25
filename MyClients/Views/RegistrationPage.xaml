@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             x:Class="MyClients.Views.RegistrationPage"
+             NavigationPage.HasNavigationBar="False">
+	<Grid>
+		
+		<Image Source="background_blured.png"
+		       SemanticProperties.Description="adsgw"
+		       Aspect="AspectFill"/>
+		
+		<ScrollView>
+			
+			<Grid RowDefinitions="*, Auto, 2*">
+				
+				<Grid Grid.Row="0"
+				      MinimumHeightRequest="40"
+				      MaximumHeightRequest="80"
+				      MinimumWidthRequest="40"
+				      MaximumWidthRequest="80"
+				      VerticalOptions="Start"
+				      HorizontalOptions="Start"
+				      Margin="30 30 10 30">
+
+					<ImageButton Source="back_arrow.png"
+					             BackgroundColor="Transparent"
+					             Clicked="OnBackToLogInPageClicked"/>
+
+					<Label Text="BACK"
+					       FontSize="20"
+					       FontAttributes="Bold"
+					       TextColor="Black"
+					       HorizontalOptions="Center"
+					       VerticalOptions="Center"
+					       Margin="0 0 0 5"
+					       InputTransparent="True"/>
+				</Grid>
+				
+				<VerticalStackLayout Grid.Row="1"
+				                     VerticalOptions="Center"
+				                     HorizontalOptions="Fill"
+				                     Margin="0"
+				                     Padding="0 30"
+				                     Spacing="10">
+					
+					<Image Source="logo.png"
+					       SemanticProperties.Description="adsgw"
+					       HeightRequest="80"
+					       WidthRequest="80"
+					       Margin="0">
+						<Image.Clip>
+							<EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+						</Image.Clip>
+					</Image>
+					
+					<Label Text="Sign up for free!"
+					       TextColor="White"
+					       VerticalOptions="Center"
+					       HorizontalOptions="Center"
+					       FontSize="28"
+					       FontAttributes="Italic, Bold"/>
+					
+					<Border StrokeShape="RoundRectangle 20"
+					        BackgroundColor="Gray"
+					        HeightRequest="45"
+					        StrokeThickness="0">
+						<Entry x:Name="EntryNameRegistration"
+						       Placeholder="Enter your name..."
+						       TextColor="Black"
+						       ClearButtonVisibility="WhileEditing"
+						       Margin="0 15"
+						       VerticalOptions="Center"/>
+					</Border>
+					
+					<Border StrokeShape="RoundRectangle 20"
+					        BackgroundColor="Gray"
+					        HeightRequest="45"
+					        StrokeThickness="0">
+						<Entry x:Name="EntrySurnameRegistration"
+						       Placeholder="Enter your surname..."
+						       TextColor="Black"
+						       ClearButtonVisibility="WhileEditing"
+						       Margin="0 15"
+						       VerticalOptions="Center"/>
+					</Border>
+					
+					<Border StrokeShape="RoundRectangle 20"
+					        BackgroundColor="Gray"
+					        HeightRequest="45"
+					        StrokeThickness="0">
+						<Entry x:Name="EntryEmailRegistration"
+						       Placeholder="Enter your email (gmail.com)..."
+						       ClearButtonVisibility="WhileEditing"
+						       Margin="0 15"
+						       VerticalOptions="Center"
+						       Keyboard="Email"/>
+					</Border>
+					
+					<Label Text="Pick your birth date"
+					       TextColor="White"
+					       VerticalOptions="Center"
+					       HorizontalOptions="Center"
+					       Margin="15 0 0 0"
+					       FontSize="16"
+					       FontAttributes="Italic, Bold">
+						
+						<Label.Shadow>
+							<Shadow Brush="Black"
+							        Offset="2,2"
+							        Radius="3"
+							        Opacity="0.7"/>
+						</Label.Shadow>
+						
+					</Label>
+					
+					<Border StrokeShape="RoundRectangle 20"
+					        BackgroundColor="Gray"
+					        HeightRequest="45"
+					        StrokeThickness="0">
+						<DatePicker x:Name="RegistrationBirthDatePicker"
+						            Format="dd.MM.yyyy"
+						            Date="01.01.2000"
+						            HorizontalOptions="Fill"
+						            VerticalOptions="Center"
+						            Margin="0 15"
+						            TextColor="Black"
+						            MinimumDate="01/01/1920"
+						            MaximumDate="{x:Static system:DateTime.Today}"/>
+					</Border>
+					
+					<Label Text="Create a password"
+					       TextColor="White"
+					       VerticalOptions="Center"
+					       HorizontalOptions="Center"
+					       Margin="15 0 0 0"
+					       FontSize="28"
+					       FontAttributes="Italic, Bold"/>
+					
+					<Border StrokeShape="RoundRectangle 20"
+					        BackgroundColor="Gray"
+					        HeightRequest="45"
+					        StrokeThickness="0">
+						<Entry x:Name="EntryPasswordRegistration"
+						       Placeholder="Enter your password..."
+						       TextColor="Black"
+						       ClearButtonVisibility="WhileEditing"
+						       Margin="0 15"
+						       VerticalOptions="Center"
+						       IsPassword="True"/>
+					</Border>
+					
+					<Border StrokeShape="RoundRectangle 20"
+					        BackgroundColor="Gray"
+					        HeightRequest="45"
+					        StrokeThickness="0">
+						<Entry x:Name="EntryConfirmPasswordRegistration"
+						       Placeholder="Enter your password again..."
+						       TextColor="Black"
+						       ClearButtonVisibility="WhileEditing"
+						       Margin="0 15"
+						       VerticalOptions="Center"
+						       IsPassword="True"/>
+					</Border>
+					
+					<Button Text="Register!"
+					        TextColor="Black"
+					        FontAttributes="Italic, Bold"
+					        FontSize="28"
+					        BackgroundColor="Green"
+					        CornerRadius="20"
+					        VerticalOptions="Center"
+					        HorizontalOptions="Center"
+					        Margin="15 0"
+					        Padding="5 35"
+					        Clicked="OnRegisterClicked"/>
+					
+				</VerticalStackLayout>
+				
+			</Grid>
+			
+		</ScrollView>
+		
+	</Grid>
+</ContentPage>

@@ -22,8 +22,8 @@ public partial class LoginPage : ContentPage
 		throw new NotImplementedException();
 	}
 
-	private void OnRegisterClicked(object? sender, EventArgs e)
+	private async void OnRegisterClicked(object? sender, EventArgs e)
 	{
-		throw new NotImplementedException();
+		await Navigation.PushAsync(new RegistrationPage());
 	}
 }
