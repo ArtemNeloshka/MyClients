@@ -9,7 +9,8 @@
     Title="MyClients"
     
     Shell.TabBarBackgroundColor="#222222"
-    Shell.TabBarForegroundColor="Yellow">
+    Shell.TabBarForegroundColor="Green"
+    Shell.TabBarUnselectedColor="Firebrick">
     
     <TabBar>
         <Tab Title="Home" Icon="home_icon.png">

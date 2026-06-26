@@ -38,7 +38,8 @@
 				        StrokeThickness="0"
 				        WidthRequest="50"
 				        HeightRequest="50"
-				        HorizontalOptions="End">
+				        HorizontalOptions="End"
+				        BackgroundColor="#565656">
 					<Image Source="user_icon.png" Aspect="AspectFill"/>
 				</Border>
 				
