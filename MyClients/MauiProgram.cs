@@ -42,8 +42,16 @@ public static class MauiProgram
 		
 		// PL
 		builder.Services.AddTransient<LoginPage>();
-		builder.Services.AddTransient<RegisterViewModel>();
 		builder.Services.AddTransient<RegistrationPage>();
+		builder.Services.AddTransient<MainPage>();
+		builder.Services.AddTransient<DisciplinesPage>();
+		builder.Services.AddTransient<TrainPage>();
+		builder.Services.AddTransient<StatisticsPage>();
+		builder.Services.AddTransient<ProfilePage>();
+		builder.Services.AddTransient<RegistrationPage>();
+		builder.Services.AddTransient<RegisterViewModel>();
+		
+		builder.Services.AddSingleton<AppShell>();
 	
 		var app = builder.Build();
 

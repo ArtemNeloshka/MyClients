@@ -20,7 +20,7 @@ public partial class LoginPage : ContentPage
 
 	private void OnLoginClicked(object? sender, EventArgs e)
 	{
-		throw new NotImplementedException();
+		Application.Current.MainPage = new AppShell();
 	}
 
 	private async void OnRegisterClicked(object? sender, EventArgs e)

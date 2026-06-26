@@ -1,8 +1,159 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MyClients.MainPage">
+             x:Class="MyClients.MainPage"
+             NavigationPage.HasNavigationBar="False">
+	<Grid>
+		<!-- background -->
+		<Image Source="background_blured.png"
+		       SemanticProperties.Description="adsgw"
+		       Aspect="AspectFill"/>
+		<!-- page -->
+		<Grid RowDefinitions="*, 9*, *">
+			<!-- header -->
+			<Grid Grid.Row="0"
+			      ColumnDefinitions="*, Auto, *"
+			      Padding="20"
+			      BackgroundColor="#222222">
+				<!-- app icon -->
+				<Border Grid.Column="0"
+				        StrokeShape="RoundRectangle 25"
+				        StrokeThickness="0"
+				        WidthRequest="50"
+				        HeightRequest="50"
+				        HorizontalOptions="Start">
+					<Image Source="logo.png" Aspect="AspectFill"/>
+				</Border>
+				<!-- greetings -->
+				<Label Grid.Column="1"
+				       Text="Hi, Username!"
+				       TextColor="White"
+				       FontAttributes="Italic, Bold"
+				       VerticalOptions="Center"
+				       HorizontalOptions="Center"
+				       FontSize="24"/>
+				<!-- user profile picture -->
+				<Border Grid.Column="2"
+				        StrokeShape="RoundRectangle 25"
+				        StrokeThickness="0"
+				        WidthRequest="50"
+				        HeightRequest="50"
+				        HorizontalOptions="End">
+					<Image Source="user_icon.png" Aspect="AspectFill"/>
+				</Border>
+				
+			</Grid>
+			<!-- main information -->
+			<VerticalStackLayout Grid.Row="1">
+				
+				<Grid RowDefinitions="*, *, Auto" ColumnDefinitions="*, *">
+					<!-- introducing -->
+					<Label Grid.Row="0"
+					       Grid.Column="0"
+					       Grid.ColumnSpan="2"
+					       Padding="0 30"
+					       Margin="10"
+					       Text="Hmm, seems like you are new here..."
+					       TextColor="White"
+					       FontSize="36"
+					       FontAttributes="Bold, Italic"
+					       HorizontalTextAlignment="Center"
+					       VerticalOptions="Center"
+					       HorizontalOptions="Fill"/>
+					<!-- tip to start -->
+					<Label Grid.Row="1"
+					       Grid.Column="0"
+					       Grid.ColumnSpan="2"
+					       Padding="0 30"
+					       Margin="10 0"
+					       Text="Here is where to start:"
+					       TextColor="White"
+					       FontSize="36"
+					       FontAttributes="Bold, Italic"
+					       HorizontalTextAlignment="Center"
+					       VerticalOptions="Center"
+					       HorizontalOptions="Fill"/>
+					<!-- what is climbing section -->
+					<Border Grid.Row="2"
+					        Grid.Column="0"
+					        BackgroundColor="#565656"
+					        StrokeShape="RoundRectangle 15"
+					        StrokeThickness="0"
+					        Margin="0 10 0 20">
 
-    
+						<VerticalStackLayout>
+							<!-- what is climbing text -->
+							<Label Margin="10"
+							       Text="What is bouldering, top rope etc?"
+							       TextColor="Black"
+							       HorizontalTextAlignment="Center"
+							       FontAttributes="Bold, Italic"
+							       FontSize="24"/>
 
+							<!-- disciplines button -->
+							<Border Padding="5"
+							        Margin="10"
+							        BackgroundColor="#B50000"
+							        StrokeShape="RoundRectangle 10"
+							        StrokeThickness="0">
+								<!-- <Border.GestureRecognizers> -->
+								<!-- 	<TapGestureRecognizer Tapped="OnDisciplinesClicked"/> -->
+								<!-- </Border.GestureRecognizers> -->
+
+								<Label Text="Explore climbing disciplines"
+								       TextColor="White"
+								       FontSize="18"
+								       FontAttributes="Bold, Italic"
+								       HorizontalTextAlignment="Center"/>
+							</Border>
+						</VerticalStackLayout>
+
+					</Border>
+					<!-- start training section -->
+					<Border Grid.Row="2"
+					        Grid.Column="1"
+					        BackgroundColor="#565656"
+					        StrokeShape="RoundRectangle 15"
+					        StrokeThickness="0"
+					        Margin="0 20 0 10">
+
+						<VerticalStackLayout>
+							<!-- text -->
+							<Label Margin="10"
+							       Text="Want to try some climbing?"
+							       TextColor="Black"
+							       HorizontalTextAlignment="Center"
+							       VerticalOptions="Start"
+							       FontAttributes="Bold, Italic"
+							       FontSize="24"/>
+							<!-- button -->
+							<Border Padding="5"
+							        Margin="10"
+							        BackgroundColor="#B50000"
+							        StrokeShape="RoundRectangle 10"
+							        StrokeThickness="0">
+								<!-- <Border.GestureRecognizers> -->
+								<!-- 	<TapGestureRecognizer Tapped="OnStartTrainingClicked"/> -->
+								<!-- </Border.GestureRecognizers> -->
+								<!-- button text -->
+								<Label Text="Start new training"
+								       TextColor="White"
+								       FontSize="18"
+								       FontAttributes="Bold, Italic"
+								       HorizontalTextAlignment="Center"/>
+							</Border>
+
+						</VerticalStackLayout>
+
+					</Border>
+					
+				</Grid>
+				
+			</VerticalStackLayout>
+			
+			
+			
+		</Grid>
+	</Grid>
+	
 </ContentPage>
