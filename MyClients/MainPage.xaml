@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MyClients.Views.Controls"
              x:Class="MyClients.MainPage"
              NavigationPage.HasNavigationBar="False">
 	<Grid>
@@ -11,39 +12,7 @@
 		<!-- page -->
 		<Grid RowDefinitions="*, 9*, *">
 			<!-- header -->
-			<Grid Grid.Row="0"
-			      ColumnDefinitions="*, Auto, *"
-			      Padding="20"
-			      BackgroundColor="#222222">
-				<!-- app icon -->
-				<Border Grid.Column="0"
-				        StrokeShape="RoundRectangle 25"
-				        StrokeThickness="0"
-				        WidthRequest="50"
-				        HeightRequest="50"
-				        HorizontalOptions="Start">
-					<Image Source="logo.png" Aspect="AspectFill"/>
-				</Border>
-				<!-- greetings -->
-				<Label Grid.Column="1"
-				       Text="Hi, Username!"
-				       TextColor="White"
-				       FontAttributes="Italic, Bold"
-				       VerticalOptions="Center"
-				       HorizontalOptions="Center"
-				       FontSize="24"/>
-				<!-- user profile picture -->
-				<Border Grid.Column="2"
-				        StrokeShape="RoundRectangle 25"
-				        StrokeThickness="0"
-				        WidthRequest="50"
-				        HeightRequest="50"
-				        HorizontalOptions="End"
-				        BackgroundColor="#565656">
-					<Image Source="user_icon.png" Aspect="AspectFill"/>
-				</Border>
-				
-			</Grid>
+			<controls:HeaderView Grid.Row="0" HeaderText="Hi, Username!"/>
 			<!-- main information -->
 			<VerticalStackLayout Grid.Row="1">
 				

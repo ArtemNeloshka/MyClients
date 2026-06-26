@@ -1,4 +1,5 @@
 using MyClients.ViewModels;
+using MyClients.Views.Controls;
 
 namespace MyClients.Views;
 
@@ -82,7 +83,7 @@ public partial class RegistrationPage : ContentPage
 		}
 	}
 
-	private static void ChangeEntryInvalidInput(Entry entry, string placeholder)
+	private static void ChangeEntryInvalidInput(RegistrationTextFieldView entry, string placeholder)
 	{
 		entry.Text = string.Empty;
 		entry.Placeholder = placeholder;

@@ -3,10 +3,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:controls="clr-namespace:MyClients.Views.Controls"
              x:Class="MyClients.Views.RegistrationPage"
              NavigationPage.HasNavigationBar="False">
 	<Grid>
-		
+		<!-- background -->
 		<Image Source="background_blured.png"
 		       SemanticProperties.Description="adsgw"
 		       Aspect="AspectFill"/>
@@ -14,7 +15,7 @@
 		<ScrollView>
 			
 			<Grid RowDefinitions="*, Auto, 2*">
-				
+				<!-- back button -->
 				<Grid Grid.Row="0"
 				      MinimumHeightRequest="40"
 				      MaximumHeightRequest="80"
@@ -44,7 +45,7 @@
 				                     Margin="0"
 				                     Padding="0 30"
 				                     Spacing="10">
-					
+					<!-- app logo -->
 					<Image Source="logo.png"
 					       SemanticProperties.Description="adsgw"
 					       HeightRequest="80"
@@ -54,50 +55,24 @@
 							<EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
 						</Image.Clip>
 					</Image>
-					
+					<!-- sing up encourage -->
 					<Label Text="Sign up for free!"
 					       TextColor="White"
 					       VerticalOptions="Center"
 					       HorizontalOptions="Center"
 					       FontSize="28"
 					       FontAttributes="Italic, Bold"/>
-					
-					<Border StrokeShape="RoundRectangle 20"
-					        BackgroundColor="Gray"
-					        HeightRequest="45"
-					        StrokeThickness="0">
-						<Entry x:Name="EntryNameRegistration"
-						       Placeholder="Enter your name..."
-						       TextColor="Black"
-						       ClearButtonVisibility="WhileEditing"
-						       Margin="0 15"
-						       VerticalOptions="Center"/>
-					</Border>
-					
-					<Border StrokeShape="RoundRectangle 20"
-					        BackgroundColor="Gray"
-					        HeightRequest="45"
-					        StrokeThickness="0">
-						<Entry x:Name="EntrySurnameRegistration"
-						       Placeholder="Enter your surname..."
-						       TextColor="Black"
-						       ClearButtonVisibility="WhileEditing"
-						       Margin="0 15"
-						       VerticalOptions="Center"/>
-					</Border>
-					
-					<Border StrokeShape="RoundRectangle 20"
-					        BackgroundColor="Gray"
-					        HeightRequest="45"
-					        StrokeThickness="0">
-						<Entry x:Name="EntryEmailRegistration"
-						       Placeholder="Enter your email (gmail.com)..."
-						       ClearButtonVisibility="WhileEditing"
-						       Margin="0 15"
-						       VerticalOptions="Center"
-						       Keyboard="Email"/>
-					</Border>
-					
+					<!-- name field -->
+					<controls:RegistrationTextFieldView x:Name="EntryNameRegistration"
+					                                    Placeholder="Enter your name..."/>
+					<!-- surname field -->
+					<controls:RegistrationTextFieldView x:Name="EntrySurnameRegistration"
+					                                    Placeholder="Enter your surname..."/>
+					<!-- email field -->
+					<controls:RegistrationTextFieldView x:Name="EntryEmailRegistration"
+					                                    Placeholder="Enter your email..."
+					                                    Keyboard="Email"/>
+					<!-- birth date text -->
 					<Label Text="Pick your birth date"
 					       TextColor="White"
 					       VerticalOptions="Center"
@@ -114,7 +89,7 @@
 						</Label.Shadow>
 						
 					</Label>
-					
+					<!-- birth date field -->
 					<Border StrokeShape="RoundRectangle 20"
 					        BackgroundColor="Gray"
 					        HeightRequest="45"
@@ -129,7 +104,7 @@
 						            MinimumDate="01/01/1920"
 						            MaximumDate="{x:Static system:DateTime.Today}"/>
 					</Border>
-					
+					<!-- create a password text -->
 					<Label Text="Create a password"
 					       TextColor="White"
 					       VerticalOptions="Center"
@@ -137,33 +112,15 @@
 					       Margin="15 0 0 0"
 					       FontSize="28"
 					       FontAttributes="Italic, Bold"/>
-					
-					<Border StrokeShape="RoundRectangle 20"
-					        BackgroundColor="Gray"
-					        HeightRequest="45"
-					        StrokeThickness="0">
-						<Entry x:Name="EntryPasswordRegistration"
-						       Placeholder="Enter your password..."
-						       TextColor="Black"
-						       ClearButtonVisibility="WhileEditing"
-						       Margin="0 15"
-						       VerticalOptions="Center"
-						       IsPassword="True"/>
-					</Border>
-					
-					<Border StrokeShape="RoundRectangle 20"
-					        BackgroundColor="Gray"
-					        HeightRequest="45"
-					        StrokeThickness="0">
-						<Entry x:Name="EntryConfirmPasswordRegistration"
-						       Placeholder="Enter your password again..."
-						       TextColor="Black"
-						       ClearButtonVisibility="WhileEditing"
-						       Margin="0 15"
-						       VerticalOptions="Center"
-						       IsPassword="True"/>
-					</Border>
-					
+					<!-- password field -->
+					<controls:RegistrationTextFieldView x:Name="EntryPasswordRegistration"
+					                                    Placeholder="Enter your email..."
+					                                    IsPassword="True"/>
+					<!-- confirm password field -->
+					<controls:RegistrationTextFieldView x:Name="EntryConfirmPasswordRegistration"
+					                                    Placeholder="Enter your email..."
+					                                    IsPassword="True"/>
+					<!-- register button -->
 					<Button Text="Register!"
 					        TextColor="Black"
 					        FontAttributes="Italic, Bold"
