@@ -114,11 +114,11 @@
 					       FontAttributes="Italic, Bold"/>
 					<!-- password field -->
 					<controls:RegistrationTextFieldView x:Name="EntryPasswordRegistration"
-					                                    Placeholder="Enter your email..."
+					                                    Placeholder="Create a password"
 					                                    IsPassword="True"/>
 					<!-- confirm password field -->
 					<controls:RegistrationTextFieldView x:Name="EntryConfirmPasswordRegistration"
-					                                    Placeholder="Enter your email..."
+					                                    Placeholder="Enter your password again..."
 					                                    IsPassword="True"/>
 					<!-- register button -->
 					<Button Text="Register!"

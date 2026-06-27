@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyClients.BLL.Interfaces;
+using MyClients.Constants;
 using MyClients.ViewModels;
 
 namespace MyClients.Views;
@@ -41,28 +42,32 @@ public partial class LoginPage : ContentPage
 
 		switch (result.ErrorMessage)
 		{
-			case "Please, enter your email":
-				ChangeEntryInvalidInput(LoginEmailEntry, result.ErrorMessage);
+			case ErrorPlaceholders.EmailIsEmpty:
+				ChangeEntryInvalidInput(LoginEmailEntry, ErrorPlaceholders.EmailIsEmpty);
 				break;
 			
-			case "Please, enter your password":
-				ChangeEntryInvalidInput(LoginPasswordEntry, result.ErrorMessage);
+			case ErrorPlaceholders.LogInPasswordIsEmpty:
+				ChangeEntryInvalidInput(LoginPasswordEntry, ErrorPlaceholders.LogInPasswordIsEmpty);
 				break;
 			
-			case "Email is not valid.":
-				ChangeEntryInvalidInput(LoginEmailEntry, "Please, enter your @gmail.com email");
+			case ErrorPlaceholders.InvalidEmail:
+				ChangeEntryInvalidInput(LoginEmailEntry, ErrorPlaceholders.InvalidEmail);
 				break;
 			
-			case "Password cannot be shorter then 8 symbols.":
-				ChangeEntryInvalidInput(LoginPasswordEntry, result.ErrorMessage);
+			case ErrorPlaceholders.LogInEmailNotFound:
+				ChangeEntryInvalidInput(LoginEmailEntry, ErrorPlaceholders.LogInEmailNotFound);
 				break;
 			
-			case "Incorrect password":
-				ChangeEntryInvalidInput(LoginPasswordEntry, "Incorrect password. Try again");
+			case ErrorPlaceholders.PasswordIsShort:
+				ChangeEntryInvalidInput(LoginPasswordEntry, ErrorPlaceholders.PasswordIsShort);
+				break;
+			
+			case ErrorPlaceholders.PasswordIncorrect:
+				ChangeEntryInvalidInput(LoginPasswordEntry, ErrorPlaceholders.PasswordIncorrect);
 				break;
 			
 			default:
-				
+				ChangeEntryInvalidInput(LoginEmailEntry, result.ErrorMessage);
 				break;
 		}
 		

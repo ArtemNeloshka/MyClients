@@ -8,5 +8,5 @@ public interface IUserService
 	Task<ICollection<User>> GetAllUsersAsync();
 	Task<User?> GetUserByEmailAsync(string email);
 	Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate, string password);
-	Task<bool> LoginUserAsync(string email, string password);
+	Task<(bool Success, string? ErrorMessage)> LoginUserAsync(string email, string password);
 }

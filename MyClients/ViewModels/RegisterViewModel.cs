@@ -1,4 +1,5 @@
 using MyClients.BLL.Interfaces;
+using MyClients.Constants;
 
 namespace MyClients.ViewModels;
 
@@ -23,27 +24,47 @@ public class RegisterViewModel
 		// UI validation
 		if (string.IsNullOrWhiteSpace(Name))
 		{
-			return (false, "Name cannot be empty.");
+			return (false, ErrorPlaceholders.NameIsEmpty);
+		}
+		if (Name.Length > ValidationRules.MaxNameLength)
+		{
+			return (false, ErrorPlaceholders.NameIsLong);
 		}
 		if (string.IsNullOrWhiteSpace(Surname))
 		{
-			return (false, "Surname cannot be empty.");
+			return (false, ErrorPlaceholders.SurnameIsEmpty);
+		}
+		if (Surname.Length > ValidationRules.MaxSurnameLength)
+		{
+			return (false, ErrorPlaceholders.SurnameIsLong);
 		}
 		if (string.IsNullOrWhiteSpace(Email))
 		{
-			return (false, "Email cannot be empty.");
+			return (false, ErrorPlaceholders.EmailIsEmpty);
 		}
-		if (string.IsNullOrWhiteSpace(Password) || Password.Length < 8)
+		if (!ValidationRules.IsValidEmail(Email))
 		{
-			return (false, "Password cannot be less than 8 symbols.");
+			return (false, ErrorPlaceholders.InvalidEmail);
+		}
+		if (await _userService.GetUserByEmailAsync(Email) != null)
+		{
+			return (false, ErrorPlaceholders.EmailAlreadyExists);
+		}
+		if (string.IsNullOrWhiteSpace(Password))
+		{
+			return (false, ErrorPlaceholders.RegistrationPasswordIsEmpty);
+		}
+		if (Password.Length < ValidationRules.MinPasswordLength)
+		{
+			return (false, ErrorPlaceholders.PasswordIsShort);
 		}
 		if (string.IsNullOrWhiteSpace(ConfirmPassword))
 		{
-			return (false, "Password confirmation cannot be empty.");
+			return (false, ErrorPlaceholders.ConfirmPasswordIsEmpty);
 		}
 		if (Password != ConfirmPassword)
 		{
-			return (false, "Passwords don't match.");
+			return (false, ErrorPlaceholders.PasswordsDontMatch);
 		}
 		
 		// BLL

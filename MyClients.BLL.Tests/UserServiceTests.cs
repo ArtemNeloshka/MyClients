@@ -141,6 +141,10 @@ public class UserServiceTests
 	[InlineData("      ")]
 	[InlineData("shortDomain@gmail.c")]
 	[InlineData("@gmail.com")]
+	[InlineData("invalidEmail@gmail.com@gmail.com")]
+	[InlineData("invalidEm@il@gmail.com")]
+	[InlineData(" @gmail.com")]
+	[InlineData("with space@gmail.com")]
 	public async Task GetUserByEmailAsync_InvalidEmail_ThrowsArgumentException(string invalidEmail)
 	{
 		var mockRepo = new Mock<IUserRepository>();
@@ -329,7 +333,7 @@ public class UserServiceTests
 
 		var result = await service.LoginUserAsync(existingUser.Email, existingUser.PasswordHash);
 
-		Assert.True(result);
+		Assert.True(result.Success);
 		
 		mockRepo.Verify(r => r.GetAllAsync(), Times.Once);
 	}
@@ -355,7 +359,7 @@ public class UserServiceTests
 
 		var result = await service.LoginUserAsync("invalid" + existingUser.Email, existingUser.PasswordHash);
 
-		Assert.False(result);
+		Assert.False(result.Success);
 		
 		mockRepo.Verify(r => r.GetAllAsync(), Times.Once);
 	}
