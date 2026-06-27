@@ -10,22 +10,69 @@ namespace MyClients.Views;
 
 public partial class LoginPage : ContentPage
 {
-	private readonly IUserService _userService;
+	private readonly LogInViewModel _userViewModel;
 	
-	public LoginPage(IUserService userService)
+	public LoginPage(LogInViewModel userViewModel)
 	{
 		InitializeComponent();
-		this._userService = userService;
+		this._userViewModel = userViewModel;
 	}
 
-	private void OnLoginClicked(object? sender, EventArgs e)
+	private async void OnLoginClicked(object? sender, EventArgs e)
 	{
-		Application.Current.MainPage = new AppShell();
+		if (await VerifyLogInDataAsync())
+			Application.Current.MainPage = new AppShell();
 	}
 
 	private async void OnRegisterClicked(object? sender, EventArgs e)
 	{
 		var page = Handler.MauiContext.Services.GetService<RegistrationPage>();
 		await Navigation.PushAsync(page);
+	}
+
+	private async Task<bool> VerifyLogInDataAsync()
+	{
+		_userViewModel.Email = LoginEmailEntry.Text;
+		_userViewModel.Password = LoginPasswordEntry.Text;
+		
+		var result = await _userViewModel.LogInUserAsync();
+
+		if (result.ErrorMessage == null) return true;
+
+		switch (result.ErrorMessage)
+		{
+			case "Please, enter your email":
+				ChangeEntryInvalidInput(LoginEmailEntry, result.ErrorMessage);
+				break;
+			
+			case "Please, enter your password":
+				ChangeEntryInvalidInput(LoginPasswordEntry, result.ErrorMessage);
+				break;
+			
+			case "Email is not valid.":
+				ChangeEntryInvalidInput(LoginEmailEntry, "Please, enter your @gmail.com email");
+				break;
+			
+			case "Password cannot be shorter then 8 symbols.":
+				ChangeEntryInvalidInput(LoginPasswordEntry, result.ErrorMessage);
+				break;
+			
+			case "Incorrect password":
+				ChangeEntryInvalidInput(LoginPasswordEntry, "Incorrect password. Try again");
+				break;
+			
+			default:
+				
+				break;
+		}
+		
+		return false;
+	}
+	
+	private static void ChangeEntryInvalidInput(Entry entry, string placeholder)
+	{
+		entry.Text = string.Empty;
+		entry.Placeholder = placeholder;
+		entry.PlaceholderColor = Colors.Red;
 	}
 }
