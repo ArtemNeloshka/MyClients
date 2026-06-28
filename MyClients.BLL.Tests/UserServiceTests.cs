@@ -318,12 +318,13 @@ public class UserServiceTests
 	{
 		var mockRepo = new Mock<IUserRepository>();
 
+		var plainPassword = "TestPassword";
 		var existingUser = new User()
 		{
 			Id = 1,
 			Name = "Test",
 			Email = "test@gmail.com",
-			PasswordHash = "TestPassword",
+			PasswordHash = BCrypt.Net.BCrypt.HashPassword(plainPassword),
 		};
 
 		mockRepo.Setup(r => r.GetAllAsync())
@@ -331,7 +332,7 @@ public class UserServiceTests
 		
 		var service = new UserService(mockRepo.Object);
 
-		var result = await service.LoginUserAsync(existingUser.Email, existingUser.PasswordHash);
+		var result = await service.LoginUserAsync(existingUser.Email, plainPassword);
 
 		Assert.True(result.Success);
 		
@@ -344,12 +345,13 @@ public class UserServiceTests
 	{
 		var mockRepo = new Mock<IUserRepository>();
 
+		var plainPassword = "TestPassword";
 		var existingUser = new User()
 		{
 			Id = 1,
 			Name = "Test",
 			Email = "test@gmail.com",
-			PasswordHash = "TestPassword",
+			PasswordHash = BCrypt.Net.BCrypt.HashPassword(plainPassword),
 		};
 
 		mockRepo.Setup(r => r.GetAllAsync())
@@ -357,7 +359,7 @@ public class UserServiceTests
 		
 		var service = new UserService(mockRepo.Object);
 
-		var result = await service.LoginUserAsync("invalid" + existingUser.Email, existingUser.PasswordHash);
+		var result = await service.LoginUserAsync("invalid" + existingUser.Email, plainPassword);
 
 		Assert.False(result.Success);
 		

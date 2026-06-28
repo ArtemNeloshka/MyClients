@@ -2,7 +2,6 @@
 using MyClients.BLL.Interfaces;
 using MyClients.BLL.Services;
 using MyClients.DAL;
-using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 using MyClients.ViewModels;
 using MyClients.Views;
@@ -25,14 +24,18 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+		builder.Services.AddSingleton<App>();
+		
 		// db context
 		builder.Services.AddDbContext<MyClientsDbContext>();
+		
 		// DAL
 		builder.Services.AddTransient<IUserRepository, UserRepository>();
 		builder.Services.AddTransient<IDisciplineRepository, DisciplineRepository>();
 		builder.Services.AddTransient<IGradeRepository, GradeRepository>();
 		builder.Services.AddTransient<ITrainingRepository, TrainingRepository>();
 		builder.Services.AddTransient<IPersonalRecordRepository, PersonalRecordRepository>();
+		
 		// BLL
 		builder.Services.AddTransient<IUserService, UserService>();
 		builder.Services.AddTransient<IDisciplineService, DisciplineService>();
@@ -48,20 +51,14 @@ public static class MauiProgram
 		builder.Services.AddTransient<TrainPage>();
 		builder.Services.AddTransient<StatisticsPage>();
 		builder.Services.AddTransient<ProfilePage>();
-		builder.Services.AddTransient<RegistrationPage>();
 		
+		// viewModels
 		builder.Services.AddTransient<RegisterViewModel>();
 		builder.Services.AddTransient<LogInViewModel>();
 		
 		builder.Services.AddSingleton<AppShell>();
 	
 		var app = builder.Build();
-
-		using (var scope = app.Services.CreateScope())
-		{
-			var db = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
-			db.Database.EnsureCreated();
-		}
 		
 		return app;
 	}

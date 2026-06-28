@@ -11,12 +11,17 @@ namespace MyClients.Views;
 
 public partial class LoginPage : ContentPage
 {
-	private readonly LogInViewModel _userViewModel;
+	private LogInViewModel? _userViewModel;
 	
-	public LoginPage(LogInViewModel userViewModel)
+	public LoginPage()
 	{
 		InitializeComponent();
-		this._userViewModel = userViewModel;
+	}
+	
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		this._userViewModel = IPlatformApplication.Current.Services.GetService<LogInViewModel>();
 	}
 
 	private async void OnLoginClicked(object? sender, EventArgs e)

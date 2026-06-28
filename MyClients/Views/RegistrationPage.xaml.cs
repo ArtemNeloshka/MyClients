@@ -6,12 +6,17 @@ namespace MyClients.Views;
 
 public partial class RegistrationPage : ContentPage
 {
-	private readonly RegisterViewModel _registerViewModel;
+	private RegisterViewModel? _registerViewModel;
 	
-	public RegistrationPage(RegisterViewModel registerViewModel)
+	public RegistrationPage()
 	{
 		InitializeComponent();
-		this._registerViewModel = registerViewModel;
+	}
+	
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		this._registerViewModel = IPlatformApplication.Current.Services.GetService<RegisterViewModel>();
 	}
 
 	private async void OnBackToLogInPageClicked(object? sender, EventArgs e)

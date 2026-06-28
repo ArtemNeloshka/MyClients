@@ -4,11 +4,16 @@ namespace MyClients;
 
 public partial class MainPage : ContentPage
 {
-	private readonly IUserService _userService;
+	private IUserService? _userService;
 
-	public MainPage(IUserService userService)
+	public MainPage()
 	{
 		InitializeComponent();
-		_userService = userService;
+	}
+
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		this._userService = IPlatformApplication.Current.Services.GetService<IUserService>();
 	}
 }
