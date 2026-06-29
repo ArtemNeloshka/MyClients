@@ -12,4 +12,14 @@ public partial class TrainPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private void OnPauseTrainingClicked(object? sender, TappedEventArgs e)
+	{
+		throw new NotImplementedException();
+	}
+
+	private void OnFinishTrainingClicked(object? sender, TappedEventArgs e)
+	{
+		throw new NotImplementedException();
+	}
 }

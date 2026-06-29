@@ -16,9 +16,110 @@
 			<controls:HeaderView Grid.Row="0" HeaderText="New Training"/>
 			<!-- main information -->
 			<ScrollView Grid.Row="1">
-				<VerticalStackLayout>
-					
-				</VerticalStackLayout>
+				<Grid RowDefinitions="10*, *"
+				      ColumnDefinitions="*, *"
+				      Margin="20">
+					<!-- log -->
+					<VerticalStackLayout Grid.Row="0"
+					                     Grid.Column="0"
+					                     Padding="0 10 0 0"
+					                     Spacing="10">
+						<Label Text="01.01.2026"
+						       TextColor="Black"
+						       FontAttributes="Bold, Italic"
+						       HorizontalTextAlignment="Center"
+						       HorizontalOptions="Center"
+						       FontSize="30"/>
+						
+						<Border StrokeShape="RoundRectangle 15"
+						        BackgroundColor="#D9D9D9"
+						        StrokeThickness="0"
+						        Padding="5">
+							<Label Text="Training Log"
+							       TextColor="Black"
+							       FontAttributes="Bold, Italic"
+							       HorizontalTextAlignment="Center"
+							       HorizontalOptions="Center"
+							       FontSize="24"/>
+						</Border>
+						
+						<!-- logs container -->
+						<Border StrokeShape="RoundRectangle 10"
+						        StrokeThickness="1"
+						        Stroke="Black">
+							<Editor Placeholder="Type your training progress here..."
+							        FontAttributes="Bold, Italic"
+							        AutoSize="TextChanges"
+							        BackgroundColor="#D9D9D9"
+							        Opacity="0.75"
+							        TextColor="Black"/>
+						</Border>
+					</VerticalStackLayout>
+					<!-- attempts -->
+					<VerticalStackLayout Grid.Row="0"
+					                     Grid.Column="1"
+					                     Spacing="10"
+					                     Margin="0 0 0 10">
+						<Label Text="1h:32m:34s"
+						       TextColor="Black"
+						       FontAttributes="Bold, Italic"
+						       HorizontalTextAlignment="Center"
+						       HorizontalOptions="Center"
+						       FontSize="30"/>
+						
+						<Border StrokeShape="RoundRectangle 15"
+						        BackgroundColor="#D9D9D9"
+						        Padding="5">
+							<Label Text="Attempts"
+							       TextColor="Black"
+							       FontAttributes="Bold, Italic"
+							       HorizontalTextAlignment="Center"
+							       HorizontalOptions="Center"
+							       FontSize="24"/>
+						</Border>
+						
+						<!-- Add attempt button -->
+						<Button Text="+ Add"
+						        TextColor="Black"
+						        BackgroundColor="DarkRed"
+						        FontSize="24"
+						        FontAttributes="Bold, Italic"/>
+					</VerticalStackLayout>
+					<!-- pause button -->
+					<Border Grid.Row="1"
+					        Grid.Column="0"
+					        BackgroundColor="#797979"
+					        StrokeShape="RoundRectangle 15"
+					        Margin="0 10 0 0">
+						<Border.GestureRecognizers>
+							<TapGestureRecognizer Tapped="OnPauseTrainingClicked"/>
+						</Border.GestureRecognizers>
+						<Label Text="Pause"
+						       TextColor="Black"
+						       FontSize="24"
+						       FontAttributes="Bold, Italic"
+						       HorizontalTextAlignment="Center"
+						       HorizontalOptions="Center"
+						       VerticalOptions="Center"/>
+					</Border>
+					<!-- finish button -->
+					<Border Grid.Row="1"
+					        Grid.Column="1"
+					        BackgroundColor="DarkRed"
+					        StrokeShape="RoundRectangle 15"
+					        Margin="0 0 0 10">
+						<Border.GestureRecognizers>
+							<TapGestureRecognizer Tapped="OnFinishTrainingClicked"/>
+						</Border.GestureRecognizers>
+						<Label Text="Finish"
+						       TextColor="Black"
+						       FontSize="24"
+						       FontAttributes="Bold, Italic"
+						       HorizontalTextAlignment="Center"
+						       HorizontalOptions="Center"
+						       VerticalOptions="Center"/>
+					</Border>
+				</Grid>
 			</ScrollView>
 			
 		</Grid>
