@@ -1,5 +1,6 @@
 using Moq;
 using MyClients.BLL.Services;
+using MyClients.Constants;
 using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 
@@ -257,10 +258,26 @@ public class UserServiceTests
 				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(1),
 				password: "TestPassword"));
 
-		Assert.Contains("Birthdate cannot be higher than today.", exception.Message);
+		Assert.Contains(ErrorMessages.InvalidDateHigherThanToday, exception.Message);
 	}
 	
-	// TODO: password test
+	// short password
+	[Fact]
+	public async Task RegisterUserAsync_ShortPassword_ThrowsArgumentException()
+	{
+		var mockRepo = new Mock<IUserRepository>();
+		var service = new UserService(mockRepo.Object);
+
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			service.RegisterUserAsync(
+				firstName: "Test",
+				lastName: "Test",
+				email: "test@gmail.com",
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "short"));
+
+		Assert.Contains(ErrorMessages.PasswordIsShort, exception.Message);
+	}
 	
 	// register happy path
 	[Fact]

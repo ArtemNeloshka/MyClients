@@ -12,4 +12,20 @@ public partial class ProfilePage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private async void OnDisciplinePickerTapped(object? sender, EventArgs e)
+	{
+		var result = await DisplayActionSheetAsync(
+			"Select discipline", "Cancel", null,
+			"Bouldering", "Top rope", "Lead", "Speed");
+
+		if (result != null && result != "Cancel")
+			DisciplineLabel.Text = result;
+	}
+
+	private async void OnGoToLoginPageClicked(object? sender, EventArgs e)
+	{
+		var loginPage = IPlatformApplication.Current.Services.GetService<LoginPage>();
+		Application.Current.MainPage = new NavigationPage(loginPage);
+	}
 }
