@@ -12,7 +12,8 @@
 		<!-- page -->
 		<Grid RowDefinitions="*, 9*, *">
 			<!-- header -->
-			<controls:HeaderView Grid.Row="0" HeaderText="Hi, Username!"/>
+			<controls:HeaderView Grid.Row="0"
+			                     HeaderText="{Binding UserName, StringFormat='Hi, {0}!'}"/>
 			<!-- main information -->
 			<VerticalStackLayout Grid.Row="1">
 				
