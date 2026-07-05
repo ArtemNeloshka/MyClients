@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MyClients.BLL.Interfaces;
 using MyClients.Constants;
+using MyClients.DAL.Entities;
+using System.Linq;
 
 namespace MyClients.ViewModels;
 
@@ -46,6 +48,50 @@ public class ProfileViewModel : INotifyPropertyChanged
 		set { _birthdate = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Birthdate))); }
 	}
 
+	private string _boulderingBestGrade = "-";
+	public string BoulderingBestGrade
+	{
+		get => _boulderingBestGrade;
+		set
+		{
+			_boulderingBestGrade = value; 
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BoulderingBestGrade)));
+		}
+	}
+
+	private string _topRopeBestGrade = "-";
+	public string TopRopeBestGrade
+	{
+		get => _topRopeBestGrade;
+		set
+		{
+			_topRopeBestGrade = value; 
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TopRopeBestGrade)));
+		}
+	}
+
+	private string _leadBestGrade = "-";
+	public string LeadBestGrade
+	{
+		get => _leadBestGrade;
+		set
+		{
+			_leadBestGrade = value; 
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeadBestGrade)));
+		}
+	}
+
+	private string _speedBestGrade = "-";
+	public string SpeedBestGrade
+	{
+		get => _speedBestGrade;
+		set
+		{
+			_speedBestGrade = value; 
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpeedBestGrade)));
+		}
+	}
+
 	public List<string> DisciplineNames { get; set; } = new();
 
 	public async Task LoadUserAsync()
@@ -65,5 +111,25 @@ public class ProfileViewModel : INotifyPropertyChanged
 
 		var disciplines = await _disciplineService.GetAllDisciplinesAsync();
 		DisciplineNames = disciplines.Select(d => d.Name).ToList();
+
+		var bouldering = await _disciplineService.GetDisciplineByNameAsync(Disciplines.Bouldering);
+		BoulderingBestGrade = (await _userService
+			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id)).Name?
+			.ToString() ?? "-";
+		
+		var topRope = await _disciplineService.GetDisciplineByNameAsync(Disciplines.TopRopeClimbing);
+		TopRopeBestGrade = (await _userService
+				.GetBestGradeInDisciplineAsync(user.Id, topRope.Id)).Name?
+			.ToString() ?? "-";
+		
+		var lead = await _disciplineService.GetDisciplineByNameAsync(Disciplines.LeadClimbing);
+		LeadBestGrade = (await _userService
+				.GetBestGradeInDisciplineAsync(user.Id, lead.Id)).Name?
+			.ToString() ?? "-";
+		
+		var speed = await _disciplineService.GetDisciplineByNameAsync(Disciplines.SpeedClimbing);
+		SpeedBestGrade = (await _userService
+				.GetBestGradeInDisciplineAsync(user.Id, speed.Id)).Name?
+			.ToString() ?? "-";
 	}
 }
