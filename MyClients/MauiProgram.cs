@@ -63,6 +63,7 @@ public static class MauiProgram
 	
 		var app = builder.Build();
 		
+		// test data
 		using (var scope = app.Services.CreateScope())
 		{
 		    var db = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
