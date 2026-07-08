@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls.Shapes;
+using MyClients.ViewModels;
 
 namespace MyClients.Views;
 
@@ -14,9 +15,30 @@ public partial class TrainPage : ContentPage
 		InitializeComponent();
 	}
 
-	private void OnPauseTrainingClicked(object? sender, TappedEventArgs e)
+	protected override async void OnAppearing()
 	{
-		throw new NotImplementedException();
+		base.OnAppearing();
+		var viewModel = IPlatformApplication.Current.Services.GetService<TrainPageViewModel>();
+		BindingContext = viewModel;
+		viewModel.LoadTrainingInfoAsync();
+		ClearLogsAndAttempts();
+	}
+
+	private void OnPauseOrResumeTrainingClicked(object? sender, TappedEventArgs e)
+	{
+		var viewModel = (TrainPageViewModel)BindingContext;
+		
+		if (PauseResumeButtonLabel.Text == "Pause")
+		{
+			viewModel.StopTimer();
+			PauseResumeButtonLabel.Text = "Resume";
+		}
+
+		if (PauseResumeButtonLabel.Text == "Resume")
+		{
+			viewModel.ResumeTimer();
+			PauseResumeButtonLabel.Text = "Pause";
+		}
 	}
 
 	private void OnFinishTrainingClicked(object? sender, TappedEventArgs e)
@@ -121,5 +143,11 @@ public partial class TrainPage : ContentPage
 		border.Content = grid;
 		
 		TrainingAttemptsContainer.Children.Add(border);
+	}
+	
+	private void ClearLogsAndAttempts()
+	{
+		TrainingAttemptsContainer.Children.Clear();
+		TrainingLogEditor.Text = string.Empty;
 	}
 }
