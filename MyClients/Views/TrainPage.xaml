@@ -83,44 +83,52 @@
 						        TextColor="Black"
 						        BackgroundColor="DarkRed"
 						        FontSize="24"
-						        FontAttributes="Bold, Italic"/>
+						        FontAttributes="Bold, Italic"
+						        Clicked="OnAddAttemptClicked"/>
+						
+						<VerticalStackLayout x:Name="TrainingAttemptsContainer"
+						                     Spacing="10"/>
+						
 					</VerticalStackLayout>
-					<!-- pause button -->
-					<Border Grid.Row="1"
-					        Grid.Column="0"
-					        BackgroundColor="#797979"
-					        StrokeShape="RoundRectangle 15"
-					        Margin="0 10 0 0">
-						<Border.GestureRecognizers>
-							<TapGestureRecognizer Tapped="OnPauseTrainingClicked"/>
-						</Border.GestureRecognizers>
-						<Label Text="Pause"
-						       TextColor="Black"
-						       FontSize="24"
-						       FontAttributes="Bold, Italic"
-						       HorizontalTextAlignment="Center"
-						       HorizontalOptions="Center"
-						       VerticalOptions="Center"/>
-					</Border>
-					<!-- finish button -->
-					<Border Grid.Row="1"
-					        Grid.Column="1"
-					        BackgroundColor="DarkRed"
-					        StrokeShape="RoundRectangle 15"
-					        Margin="0 0 0 10">
-						<Border.GestureRecognizers>
-							<TapGestureRecognizer Tapped="OnFinishTrainingClicked"/>
-						</Border.GestureRecognizers>
-						<Label Text="Finish"
-						       TextColor="Black"
-						       FontSize="24"
-						       FontAttributes="Bold, Italic"
-						       HorizontalTextAlignment="Center"
-						       HorizontalOptions="Center"
-						       VerticalOptions="Center"/>
-					</Border>
 				</Grid>
 			</ScrollView>
+			
+			<Grid Grid.Row="2"
+			      ColumnDefinitions="*, *"
+			      Margin="10 20">
+				<!-- pause button -->
+				<Border Grid.Column="0"
+				        BackgroundColor="#797979"
+				        StrokeShape="RoundRectangle 15"
+				        Margin="0 10 0 0">
+					<Border.GestureRecognizers>
+						<TapGestureRecognizer Tapped="OnPauseTrainingClicked"/>
+					</Border.GestureRecognizers>
+					<Label Text="Pause"
+					       TextColor="Black"
+					       FontSize="24"
+					       FontAttributes="Bold, Italic"
+					       HorizontalTextAlignment="Center"
+					       HorizontalOptions="Center"
+					       VerticalOptions="Center"/>
+				</Border>
+				<!-- finish button -->
+				<Border Grid.Column="1"
+				        BackgroundColor="DarkRed"
+				        StrokeShape="RoundRectangle 15"
+				        Margin="0 0 0 10">
+					<Border.GestureRecognizers>
+						<TapGestureRecognizer Tapped="OnFinishTrainingClicked"/>
+					</Border.GestureRecognizers>
+					<Label Text="Finish"
+					       TextColor="Black"
+					       FontSize="24"
+					       FontAttributes="Bold, Italic"
+					       HorizontalTextAlignment="Center"
+					       HorizontalOptions="Center"
+					       VerticalOptions="Center"/>
+				</Border>
+			</Grid>
 			
 		</Grid>
 	</Grid>
