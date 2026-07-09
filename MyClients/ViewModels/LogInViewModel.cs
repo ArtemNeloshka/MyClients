@@ -41,7 +41,10 @@ public class LogInViewModel
 		{
 			var result = await _userService.LoginUserAsync(Email, Password);
 			if (result.Success)
+			{
+				Session.CurrentUserEmail = Email;
 				return (true, null);
+			}
 
 			if (result.ErrorMessage == ErrorMessages.UserNotFound)
 				return (false, ErrorPlaceholders.LogInEmailNotFound);
