@@ -49,7 +49,7 @@ public class TrainPageViewModel : INotifyPropertyChanged
      	_timer.Interval = TimeSpan.FromSeconds(1);
         _timer.Tick += (s, e) =>
         {
-	        _elapsed = _elapsed.Add(TimeSpan.FromSeconds(1));
+	        _elapsed = _elapsed.Add(_timer.Interval);
 	        TimerString = _elapsed.ToString(@"hh\:mm\:ss");
         };
         

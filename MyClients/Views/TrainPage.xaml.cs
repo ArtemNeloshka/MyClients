@@ -34,7 +34,7 @@ public partial class TrainPage : ContentPage
 			PauseResumeButtonLabel.Text = "Resume";
 		}
 
-		if (PauseResumeButtonLabel.Text == "Resume")
+		else if (PauseResumeButtonLabel.Text == "Resume")
 		{
 			viewModel.ResumeTimer();
 			PauseResumeButtonLabel.Text = "Pause";
