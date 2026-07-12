@@ -51,10 +51,12 @@ public static class MauiProgram
 		builder.Services.AddTransient<TrainPage>();
 		builder.Services.AddTransient<StatisticsPage>();
 		builder.Services.AddTransient<ProfilePage>();
+		builder.Services.AddTransient<WorkoutsArchivePage>();
 		
 		// viewModels
 		builder.Services.AddTransient<RegisterViewModel>();
 		builder.Services.AddTransient<LogInViewModel>();
+		builder.Services.AddTransient<WorkoutsArchiveViewModel>();
 		
 		builder.Services.AddSingleton<AppShell>();
 	

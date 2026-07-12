@@ -26,7 +26,8 @@
 							<ImageButton Source="workouts_archive_background.png"
 										       Aspect="AspectFill"
 										       VerticalOptions="Start"
-										       CornerRadius="25">
+										       CornerRadius="25"
+										       Clicked="OnOpenWorkoutsArchivePageClicked">
 							</ImageButton>
 							<Label Text="Workouts Archive"
 							       HorizontalOptions="Center"
