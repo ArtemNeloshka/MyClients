@@ -1,0 +1,126 @@
+// using System.Collections.ObjectModel;
+// using System.ComponentModel;
+// using MyClients.BLL.Interfaces;
+// using MyClients.Constants;
+// using MyClients.DAL.Entities;
+// using System.Linq;
+//
+// namespace MyClients.ViewModels;
+//
+// public class TrainingDetailsViewModel : INotifyPropertyChanged
+// {
+// 	private readonly IUserService _userService;
+// 	private readonly IDisciplineService _disciplineService;
+//
+// 	public TrainingDetailsViewModel(IUserService userService, IDisciplineService disciplineService)
+// 	{
+// 		this._userService = userService;
+// 		this._disciplineService = disciplineService;
+// 	}
+//
+// 	public event PropertyChangedEventHandler? PropertyChanged;
+//
+// 	private string _name = string.Empty;
+// 	public string Name
+// 	{
+// 		get => _name;
+// 		set { _name = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name))); }
+// 	}
+//
+// 	private string _surname = string.Empty;
+// 	public string Surname
+// 	{
+// 		get => _surname;
+// 		set { _surname = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Surname))); }
+// 	}
+//
+// 	private DateOnly _trainingDate;
+// 	public DateOnly TrainingDate
+// 	{
+// 		get => _trainingDate;
+// 		set { _trainingDate = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrainingDate))); }
+// 	}
+//
+// 	private string _boulderingBestGrade = "-";
+// 	public string BoulderingBestGrade
+// 	{
+// 		get => _boulderingBestGrade;
+// 		set
+// 		{
+// 			_boulderingBestGrade = value; 
+// 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BoulderingBestGrade)));
+// 		}
+// 	}
+//
+// 	private string _topRopeBestGrade = "-";
+// 	public string TopRopeBestGrade
+// 	{
+// 		get => _topRopeBestGrade;
+// 		set
+// 		{
+// 			_topRopeBestGrade = value; 
+// 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TopRopeBestGrade)));
+// 		}
+// 	}
+//
+// 	private string _leadBestGrade = "-";
+// 	public string LeadBestGrade
+// 	{
+// 		get => _leadBestGrade;
+// 		set
+// 		{
+// 			_leadBestGrade = value; 
+// 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeadBestGrade)));
+// 		}
+// 	}
+//
+// 	private string _speedBestGrade = "-";
+// 	public string SpeedBestGrade
+// 	{
+// 		get => _speedBestGrade;
+// 		set
+// 		{
+// 			_speedBestGrade = value; 
+// 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpeedBestGrade)));
+// 		}
+// 	}
+//
+// 	public List<string> DisciplineNames { get; set; } = new();
+//
+// 	public async Task LoadUserAsync()
+// 	{
+// 		// if (string.IsNullOrEmpty(Session.CurrentUserEmail))
+// 		// 	throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+//
+// 		var user = await _userService.GetUserByEmailAsync("artem@gmail.com");
+//
+// 		if (user == null)
+// 			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+//
+// 		Name = user.Name;
+// 		Surname = user.Surname;
+//
+// 		var disciplines = await _disciplineService.GetAllDisciplinesAsync();
+// 		DisciplineNames = disciplines.Select(d => d.Name).ToList();
+//
+// 		var bouldering = await _disciplineService.GetDisciplineByNameAsync(Disciplines.Bouldering);
+// 		BoulderingBestGrade = (await _userService
+// 			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id)).Name?
+// 			.ToString() ?? "-";
+// 		
+// 		var topRope = await _disciplineService.GetDisciplineByNameAsync(Disciplines.TopRopeClimbing);
+// 		TopRopeBestGrade = (await _userService
+// 				.GetBestGradeInDisciplineAsync(user.Id, topRope.Id)).Name?
+// 			.ToString() ?? "-";
+// 		
+// 		var lead = await _disciplineService.GetDisciplineByNameAsync(Disciplines.LeadClimbing);
+// 		LeadBestGrade = (await _userService
+// 				.GetBestGradeInDisciplineAsync(user.Id, lead.Id)).Name?
+// 			.ToString() ?? "-";
+// 		
+// 		var speed = await _disciplineService.GetDisciplineByNameAsync(Disciplines.SpeedClimbing);
+// 		SpeedBestGrade = (await _userService
+// 				.GetBestGradeInDisciplineAsync(user.Id, speed.Id)).Name?
+// 			.ToString() ?? "-";
+// 	}
+// }
