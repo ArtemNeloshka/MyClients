@@ -29,7 +29,7 @@ public class WorkoutsArchiveViewModel : INotifyPropertyChanged
 		}
 	}
 
-	public async void LoadTrainingsAsync()
+	public async Task LoadTrainingsAsync()
 	{
 		var trainingsByUser = await _trainingService.GetTrainingsByUserIdAsync(1);
 

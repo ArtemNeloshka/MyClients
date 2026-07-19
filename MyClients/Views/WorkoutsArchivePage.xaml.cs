@@ -17,12 +17,12 @@ public partial class WorkoutsArchivePage : ContentPage
 		Shell.SetNavBarIsVisible(this, false);
 	}
 
-	protected override void OnAppearing()
+	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
 		var viewModel = IPlatformApplication.Current.Services.GetService<WorkoutsArchiveViewModel>();
 		BindingContext = viewModel;
-		viewModel.LoadTrainingsAsync();
+		await viewModel.LoadTrainingsAsync();
 		
 		foreach (var training in viewModel.Trainings)
 		{
