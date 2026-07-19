@@ -107,7 +107,17 @@ public partial class WorkoutsArchivePage : ContentPage
 			FontAttributes = FontAttributes.Italic | FontAttributes.Bold,
 		};
 
+
+		var tapGesture = new TapGestureRecognizer();
+		tapGesture.Tapped += async (s, e) =>
+		{
+			var trainingDetailsPage = Handler.MauiContext.Services.GetService<TrainingDetailsPage>();
+			trainingDetailsPage.TrainingId = training.Id;
+			await Navigation.PushAsync(trainingDetailsPage);
+		};
+		
 		viewMoreButtonBorder.Content = viewMoreButtonTextLabel;
+		viewMoreButtonBorder.GestureRecognizers.Add(tapGesture);
 		
 		Grid.SetRow(viewMoreButtonBorder, 3);
 		Grid.SetColumn(viewMoreButtonBorder, 1);
