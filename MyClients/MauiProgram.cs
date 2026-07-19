@@ -2,6 +2,7 @@
 using MyClients.BLL.Interfaces;
 using MyClients.BLL.Services;
 using MyClients.DAL;
+using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 using MyClients.ViewModels;
 using MyClients.Views;
@@ -59,6 +60,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<LogInViewModel>();
 		builder.Services.AddTransient<WorkoutsArchiveViewModel>();
 		builder.Services.AddTransient<TrainingDetailsViewModel>();
+		builder.Services.AddTransient<MainViewModel>();
 		
 		builder.Services.AddSingleton<AppShell>();
 	
