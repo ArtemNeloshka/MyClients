@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MyClients.Views.Controls"
+             xmlns:entities="clr-namespace:MyClients.DAL.Entities"
+             xmlns:viewModels="clr-namespace:MyClients.ViewModels"
+             x:DataType="viewModels:DisciplinesViewModel"
+             x:Class="MyClients.Views.DisciplinesPage"
+             NavigationPage.HasNavigationBar="False">
+	<Grid>
+		<!-- background -->
+		<Image Source="background_blured.png"
+		       SemanticProperties.Description="background"
+		       Aspect="AspectFill"/>
+		<!-- page -->
+		<Grid RowDefinitions="*, 9*, *">
+			
+			<!-- header -->
+			<controls:HeaderView Grid.Row="0" HeaderText="Disciplines"/>
+			<!-- main information -->
+			<ScrollView Grid.Row="1">
+				<VerticalStackLayout Spacing="10"
+				                     Margin="20 30"
+				                     BindableLayout.ItemsSource="{Binding Disciplines}">
+					<BindableLayout.ItemTemplate>
+						<DataTemplate x:DataType="entities:Discipline">
+							<Border BackgroundColor="#D9D9D9"
+							        Padding="15"
+							        StrokeThickness="0"
+							        StrokeShape="RoundRectangle 25">
+								<!-- content -->
+								<VerticalStackLayout Spacing="10">
+									<!-- article -->
+									<Label Text="{Binding Name}"
+									       TextColor="Black"
+									       FontAttributes="Bold, Italic"
+									       FontSize="20"
+									       HorizontalTextAlignment="Center"/>
+									<!-- description -->
+									<Label Text="{Binding Description}"
+									       FontAttributes="Bold, Italic"/>
+								</VerticalStackLayout>
+							</Border>
+						</DataTemplate>
+					</BindableLayout.ItemTemplate>
+					
+					
+				</VerticalStackLayout>
+			</ScrollView>
+			
+		</Grid>
+	</Grid>
+</ContentPage>

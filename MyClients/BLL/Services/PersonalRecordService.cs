@@ -1,4 +1,5 @@
 using MyClients.BLL.Interfaces;
+using MyClients.Constants;
 using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 
@@ -32,7 +33,7 @@ public class PersonalRecordService : Service, IPersonalRecordService
 		// validating input
 		if (date > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException("Date of the record cannot be bigger than today's.", nameof(date));
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(date));
 		}
 		
 		// creating new object
@@ -53,7 +54,7 @@ public class PersonalRecordService : Service, IPersonalRecordService
 		// validate input
 		if (date > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException("Date of the record cannot be bigger than today's.", nameof(date));
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(date));
 		}
 		
 		// getting the record from DB
@@ -61,7 +62,7 @@ public class PersonalRecordService : Service, IPersonalRecordService
 
 		if (record == null)
 		{
-			throw new KeyNotFoundException("There's no personal record to update.");
+			throw new KeyNotFoundException(ErrorMessages.PersonalRecordNotFound + $" (id={id})");
 		}
 
 		if (grade != null)

@@ -1,23 +1,20 @@
-﻿namespace MyClients;
+﻿using MyClients.BLL.Interfaces;
+using MyClients.ViewModels;
+
+namespace MyClients;
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
-
 	public MainPage()
 	{
 		InitializeComponent();
 	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
+	protected override async void OnAppearing()
 	{
-		count++;
-
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
-
-		SemanticScreenReader.Announce(CounterBtn.Text);
+		base.OnAppearing();
+		var viewModel = IPlatformApplication.Current.Services.GetService<MainViewModel>();
+		BindingContext = viewModel;
+		await viewModel.LoadUserNameAsync();
 	}
 }

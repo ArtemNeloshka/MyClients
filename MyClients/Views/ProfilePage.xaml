@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MyClients.Views.Controls"
+             x:Class="MyClients.Views.ProfilePage">
+	<Grid>
+		<!-- background -->
+		<Image Source="background_blured.png"
+		       SemanticProperties.Description="background"
+		       Aspect="AspectFill"/>
+		<!-- page -->
+		<Grid RowDefinitions="*, 9*, *">
+			
+			<!-- header -->
+			<controls:HeaderView Grid.Row="0" HeaderText="Profile"/>
+			<!-- main information -->
+			<ScrollView Grid.Row="1">
+				<VerticalStackLayout Margin="20 30">
+					<!-- container -->
+					<Border BackgroundColor="#565656"
+					        StrokeShape="RoundRectangle 20"
+					        StrokeThickness="0"
+					        Padding="15">
+						<Grid RowDefinitions="*, *"
+						      RowSpacing="10">
+							<!-- person info -->
+							<Grid Grid.Row="0"
+							      RowDefinitions="*, *, *"
+							      ColumnDefinitions="2*, 2*, *">
+								<!-- user name -->
+								<Border Grid.Row="0"
+								        Grid.Column="0"
+								        StrokeShape="RoundRectangle 7"
+								        StrokeThickness="0"
+								        BackgroundColor="#D9D9D9"
+								        Margin="0 5 0 0">
+									<Label Text="{Binding Name}"
+									       HorizontalOptions="Center"
+									       VerticalOptions="Center"
+									       FontAttributes="Bold, Italic"/>
+								</Border>
+								<!-- user surname -->
+								<Border Grid.Row="0"
+								        Grid.Column="1"
+								        StrokeShape="RoundRectangle 7"
+								        StrokeThickness="0"
+								        BackgroundColor="#D9D9D9"
+								        Margin="0 10 0 5">
+									<Label Text="{Binding Surname}"
+									       HorizontalOptions="Center"
+									       VerticalOptions="Center"
+									       FontAttributes="Bold, Italic"/>
+								</Border>
+								<!-- user favorite discipline -->
+								<Border Grid.Row="1"
+								        Grid.Column="0"
+								        StrokeShape="RoundRectangle 7"
+								        StrokeThickness="0"
+								        BackgroundColor="#D9D9D9"
+								        Margin="10 5 0 0">
+									<Border.GestureRecognizers>
+										<TapGestureRecognizer Tapped="OnDisciplinePickerTapped"/>
+									</Border.GestureRecognizers>
+    
+									<Label x:Name="DisciplineLabel"
+									       Text="Favorite discipline"
+									       FontAttributes="Bold, Italic"
+									       HorizontalTextAlignment="Center"
+									       VerticalOptions="Center"/>
+								</Border>
+								<!-- user birth date -->
+								<Border Grid.Row="1"
+								        Grid.Column="1"
+								        StrokeShape="RoundRectangle 7"
+								        StrokeThickness="0"
+								        BackgroundColor="#D9D9D9"
+								        Margin="10 10 0 5">
+									<Label Text="{Binding Birthdate}"
+									       HorizontalOptions="Center"
+									       VerticalOptions="Center"
+									       FontAttributes="Bold, Italic"/>
+								</Border>
+								<!-- user picture -->
+								<Border Grid.Row="0"
+								        Grid.RowSpan="2"
+								        Grid.Column="2"
+								        StrokeThickness="0"
+								        StrokeShape="RoundRectangle 100">
+									<Image Source="user_icon.png"
+									       BackgroundColor="White">
+									</Image>
+								</Border>
+								<!-- user email -->
+								<Border Grid.Row="2"
+								        Grid.Column="0"
+								        Grid.ColumnSpan="2"
+								        StrokeShape="RoundRectangle 7"
+								        StrokeThickness="0"
+								        BackgroundColor="#D9D9D9"
+								        Margin="10 10 0 0"
+								        Padding="5">
+									<Label Text="{Binding Email}"
+									       HorizontalOptions="Center"
+									       VerticalOptions="Center"
+									       FontAttributes="Bold, Italic"/>
+								</Border>
+								<!-- edit button -->
+								<Border Grid.Row="2"
+								        Grid.Column="2"
+								        StrokeShape="RoundRectangle 7"
+								        StrokeThickness="0"
+								        Margin="10 0 0 0"
+								        BackgroundColor="DarkRed"
+								        Padding="5">
+									<Label Text="Edit"
+									        FontAttributes="Bold, Italic"
+									        HorizontalOptions="Center"
+									        VerticalOptions="Center"
+									        HorizontalTextAlignment="Center"/>
+								</Border>
+							</Grid>
+							
+							<!-- Grades info -->
+							<Grid Grid.Row="1" 
+							      RowDefinitions="*, *, *"
+							      ColumnDefinitions="*, *"
+							      RowSpacing="10"
+							      ColumnSpacing="10">
+								<!-- best grades article -->
+								<Label Grid.Row="0"
+								       Grid.Column="0"
+								       Grid.ColumnSpan="2"
+								       Text="Best Grades"
+								       FontSize="32"
+								       FontAttributes="Bold, Italic"
+								       HorizontalTextAlignment="Center"/>
+								<!-- bouldering section -->
+								<Border Grid.Row="1"
+								        Grid.Column="0"
+								        StrokeShape="RoundRectangle 7"
+								        Padding="5"
+								        BackgroundColor="#D9D9D9">
+									<Grid ColumnDefinitions="*, *">
+										<!-- bouldering best grade -->
+										<Label Grid.Column="0"
+										       Text="Bouldering:"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="Start"
+										       VerticalTextAlignment="Center"/>
+										<!-- grade -->
+										<Label Grid.Column="1"
+										       Text="{Binding BoulderingBestGrade}"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="End"
+										       VerticalTextAlignment="Center"/>
+									</Grid>
+								</Border>
+								<!-- top rope section -->
+								<Border Grid.Row="1"
+								        Grid.Column="1"
+									      StrokeShape="RoundRectangle 7"
+								        Padding="5"
+								        BackgroundColor="#D9D9D9">
+									<Grid ColumnDefinitions="*, *">
+										<!-- top rope best grade -->
+										<Label Grid.Column="0" Text="Top rope:"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="Start"
+										       VerticalTextAlignment="Center"/>
+										<!-- grade -->
+										<Label Grid.Column="1" Text="{Binding TopRopeBestGrade}"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="End"
+										       VerticalTextAlignment="Center"/>
+									</Grid>
+								</Border>
+								<!-- Lead section -->
+								<Border Grid.Row="2"
+								        Grid.Column="0"
+								        StrokeShape="RoundRectangle 7"
+								        Padding="5"
+								        BackgroundColor="#D9D9D9">
+									<Grid ColumnDefinitions="*, *">
+										<!-- lead best grade -->
+										<Label Grid.Column="0" Text="Lead:"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="Start"
+										       VerticalTextAlignment="Center"/>
+										<!-- grade -->
+										<Label Grid.Column="1" Text="{Binding LeadBestGrade}"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="End"
+										       VerticalTextAlignment="Center"/>
+									</Grid>
+								</Border>
+								<!-- speed section -->
+								<Border Grid.Row="2"
+								        Grid.Column="1"
+								        StrokeShape="RoundRectangle 7"
+								        Padding="5"
+								        BackgroundColor="#D9D9D9">
+									<Grid ColumnDefinitions="*, *">
+										<!-- speed best grade -->
+										<Label Grid.Column="0"
+										       Text="Speed:"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="Start"
+										       VerticalTextAlignment="Center"/>
+										<!-- grade -->
+										<Label Grid.Column="1" 
+										       Text="{Binding SpeedBestGrade}"
+										       FontSize="12"
+										       FontAttributes="Bold, Italic"
+										       HorizontalTextAlignment="End"
+										       VerticalTextAlignment="Center"/>
+									</Grid>
+								</Border>
+							</Grid>
+						</Grid>
+					</Border>
+					
+					<!-- Log out button -->
+					<Button Text="Log out"
+					        BackgroundColor="DarkRed"
+					        FontAttributes="Bold, Italic"
+					        TextColor="Black"
+					        FontSize="20"
+					        HorizontalOptions="Center"
+					        Margin="15"
+					        Clicked="OnGoToLoginPageClicked"/>
+				</VerticalStackLayout>
+			</ScrollView>
+			
+		</Grid>
+	</Grid>
+</ContentPage>

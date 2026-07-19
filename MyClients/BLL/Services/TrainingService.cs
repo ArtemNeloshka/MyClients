@@ -1,4 +1,5 @@
 using MyClients.BLL.Interfaces;
+using MyClients.Constants;
 using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 
@@ -18,7 +19,7 @@ public class TrainingService : Service, ITrainingService
 		// input validation
 		if (string.IsNullOrWhiteSpace(text))
 		{
-			throw new ArgumentException("Log cannot be empty.", nameof(text));
+			throw new ArgumentException(ErrorMessages.TrainingLogIsNullOrEmpty, nameof(text));
 		}
 
 		// get a record from DB
@@ -26,7 +27,7 @@ public class TrainingService : Service, ITrainingService
 
 		if (training == null)
 		{
-			throw new KeyNotFoundException($"Training id={id} is not found.");
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
 		}
 		
 		// adding the log
@@ -40,7 +41,7 @@ public class TrainingService : Service, ITrainingService
 		// input validation
 		if (string.IsNullOrWhiteSpace(text))
 		{
-			throw new ArgumentException("Log cannot be empty.", nameof(text));
+			throw new ArgumentException(ErrorMessages.TrainingLogIsNullOrEmpty, nameof(text));
 		}
 		
 		// get a record from DB
@@ -48,7 +49,7 @@ public class TrainingService : Service, ITrainingService
 
 		if (training == null)
 		{
-			throw new KeyNotFoundException($"Training id={id} is not found.");
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
 		}
 		
 		// editing the log
@@ -64,7 +65,7 @@ public class TrainingService : Service, ITrainingService
 
 		if (training == null)
 		{
-			throw new KeyNotFoundException($"Training id={id} is not found.");
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
 		}
 		
 		// deleting training
@@ -76,7 +77,7 @@ public class TrainingService : Service, ITrainingService
 		var training = await _trainingRepository.GetByIdAsync(id);
 		if (training == null)
 		{
-			throw new KeyNotFoundException($"Training id={id} is not found.");
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
 		}
 
 		return training;
@@ -87,12 +88,12 @@ public class TrainingService : Service, ITrainingService
 		// validate input
 		if (end > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException("Date cannot be higher than today.", nameof(end));
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(end));
 		}
 
 		if (start > end)
 		{
-			throw new ArgumentException("Start date cannot be higher than an end date.");
+			throw new ArgumentException(ErrorMessages.DateStartHigherThanEnd);
 		}
 		
 		// getting record from DB
@@ -103,5 +104,12 @@ public class TrainingService : Service, ITrainingService
 			.ToList();
 
 		return selectedTrainings;
+	}
+
+	public async Task<ICollection<Training>> GetTrainingsByUserIdAsync(int userId)
+	{
+		var trainings = await _trainingRepository.GetAllByUserIdAsync(userId);
+
+		return trainings;
 	}
 }
