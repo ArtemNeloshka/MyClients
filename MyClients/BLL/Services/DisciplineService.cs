@@ -1,4 +1,5 @@
 using MyClients.BLL.Interfaces;
+using MyClients.Constants;
 using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 
@@ -23,5 +24,17 @@ public class DisciplineService : Service, IDisciplineService
 		var disciplines = (await _disciplineRepository.GetAllAsync()).ToList();
 
 		return disciplines;
+	}
+
+	public async Task<Discipline> GetDisciplineByNameAsync(string name)
+	{
+		var discipline = await _disciplineRepository.GetDisciplineByNameAsync(name);
+
+		if (discipline == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.DisciplineNotFoundMessage);
+		}
+
+		return discipline;
 	}
 }
