@@ -17,7 +17,26 @@
 			<!-- main information -->
 			<ScrollView Grid.Row="1">
 				<VerticalStackLayout>
-					
+					<Border StrokeShape="RoundRectangle 25"
+					        StrokeThickness="0"
+					        Margin="20 30"
+					        HorizontalOptions="Start"
+					        HeightRequest="250">
+						<Grid>
+							<ImageButton Source="workouts_archive_background.png"
+										       Aspect="AspectFill"
+										       VerticalOptions="Start"
+										       CornerRadius="25"
+										       Clicked="OnOpenWorkoutsArchivePageClicked">
+							</ImageButton>
+							<Label Text="Workouts Archive"
+							       HorizontalOptions="Center"
+							       Margin="15"
+							       FontAttributes="Bold, Italic"
+							       FontSize="36"
+							       TextColor="White"/>
+						</Grid>
+					</Border>
 				</VerticalStackLayout>
 			</ScrollView>
 			
