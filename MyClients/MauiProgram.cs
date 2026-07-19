@@ -51,15 +51,27 @@ public static class MauiProgram
 		builder.Services.AddTransient<TrainPage>();
 		builder.Services.AddTransient<StatisticsPage>();
 		builder.Services.AddTransient<ProfilePage>();
+		builder.Services.AddTransient<WorkoutsArchivePage>();
+		builder.Services.AddTransient<TrainingDetailsPage>();
 		
 		// viewModels
 		builder.Services.AddTransient<RegisterViewModel>();
 		builder.Services.AddTransient<LogInViewModel>();
+		builder.Services.AddTransient<WorkoutsArchiveViewModel>();
+		builder.Services.AddTransient<TrainingDetailsViewModel>();
 		
 		builder.Services.AddSingleton<AppShell>();
 	
 		var app = builder.Build();
 		
+#if DEBUG
+		using var scope = app.Services.CreateScope();
+		var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
+            
+		dbContext.Database.EnsureCreated(); 
+		
+		Task.Run(async () => await dbContext.SeedTestDataAsync()).Wait();
+#endif
 		return app;
 	}
 }
