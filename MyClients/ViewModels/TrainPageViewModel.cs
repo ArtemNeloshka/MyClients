@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace MyClients.ViewModels;
 
-public class TrainPageViewModel : INotifyPropertyChanged
+public class TrainPageViewModel : INotifyPropertyChanged, IDisposable
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 	
@@ -32,7 +32,7 @@ public class TrainPageViewModel : INotifyPropertyChanged
 		}
 	}
 
-	private IDispatcherTimer _timer;
+	private IDispatcherTimer? _timer;
 	private TimeSpan _elapsed = TimeSpan.Zero;
 	
 	public void LoadTrainingInfoAsync()
@@ -45,7 +45,7 @@ public class TrainPageViewModel : INotifyPropertyChanged
 	
 	private void StartTimer()
     {
-     	_timer = Application.Current.Dispatcher.CreateTimer();
+     	_timer = Application.Current?.Dispatcher.CreateTimer();
      	_timer.Interval = TimeSpan.FromSeconds(1);
         _timer.Tick += (s, e) =>
         {
@@ -58,11 +58,16 @@ public class TrainPageViewModel : INotifyPropertyChanged
 
 	public void StopTimer()
 	{
-		_timer.Stop();
+		_timer?.Stop();
 	}
 
 	public void ResumeTimer()
 	{
-		_timer.Start();
+		_timer?.Start();
+	}
+
+	public void Dispose()
+	{
+		_timer?.Stop();
 	}
 }

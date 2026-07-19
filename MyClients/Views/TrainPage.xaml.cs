@@ -10,40 +10,48 @@ namespace MyClients.Views;
 
 public partial class TrainPage : ContentPage
 {
-	public TrainPage()
+	private readonly TrainPageViewModel _viewModel;
+	public TrainPage(TrainPageViewModel viewModel)
 	{
 		InitializeComponent();
+		this._viewModel = viewModel;
+		BindingContext = _viewModel;
 	}
 
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		var viewModel = IPlatformApplication.Current.Services.GetService<TrainPageViewModel>();
-		BindingContext = viewModel;
-		viewModel.LoadTrainingInfoAsync();
+		_viewModel.LoadTrainingInfoAsync();
 		ClearLogsAndAttempts();
+	}
+	
+	protected override void OnDisappearing()
+	{
+		base.OnDisappearing();
+		_viewModel?.Dispose();
 	}
 
 	private void OnPauseOrResumeTrainingClicked(object? sender, TappedEventArgs e)
 	{
-		var viewModel = (TrainPageViewModel)BindingContext;
-		
 		if (PauseResumeButtonLabel.Text == "Pause")
 		{
-			viewModel.StopTimer();
+			_viewModel.StopTimer();
 			PauseResumeButtonLabel.Text = "Resume";
 		}
 
 		else if (PauseResumeButtonLabel.Text == "Resume")
 		{
-			viewModel.ResumeTimer();
+			_viewModel.ResumeTimer();
 			PauseResumeButtonLabel.Text = "Pause";
 		}
 	}
 
-	private void OnFinishTrainingClicked(object? sender, TappedEventArgs e)
+	private async void OnFinishTrainingClicked(object? sender, TappedEventArgs e)
 	{
-		throw new NotImplementedException();
+		if (Application.Current?.MainPage != null)
+		{
+			await Application.Current.MainPage.Navigation.PopAsync();
+		}
 	}
 
 	private void OnAddAttemptClicked(object? sender, EventArgs e)
