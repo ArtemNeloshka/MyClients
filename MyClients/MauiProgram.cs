@@ -64,15 +64,12 @@ public static class MauiProgram
 	
 		var app = builder.Build();
         
-		Task.Run(async () =>
-		{
-			using var scope = app.Services.CreateScope();
-			var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
+		using var scope = app.Services.CreateScope();
+		var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
             
-			await dbContext.Database.EnsureCreatedAsync(); 
-			
-			await dbContext.SeedTestDataAsync(); 
-		});
+		dbContext.Database.EnsureCreated(); 
+		
+		dbContext.SeedTestDataAsync().GetAwaiter().GetResult();
 		
 		return app;
 	}

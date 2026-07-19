@@ -117,6 +117,8 @@ public class TrainingDetailsViewModel : INotifyPropertyChanged
 		Surname = user.Surname;
 
 		var training = await _trainingService.GetTrainingByIdAsync(trainingId);
+
+		if (training == null) return;
 		
 		BoulderingBestGrade = "N/A";
 		TopRopeBestGrade = "N/A";
@@ -125,6 +127,5 @@ public class TrainingDetailsViewModel : INotifyPropertyChanged
 
 		TrainingDate = training.TrainingDate;
 		TrainingLog = training.TrainingLog;
-		TrainingLog += "wqef ewfjoewj coew joj cowj coewjcow owm oew mcow cwo";
 	}
 }
