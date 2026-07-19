@@ -24,6 +24,7 @@ public partial class WorkoutsArchivePage : ContentPage
 		BindingContext = viewModel;
 		await viewModel.LoadTrainingsAsync();
 		
+		WorkoutsContainerVerticalStackLayout.Children.Clear();
 		foreach (var training in viewModel.Trainings)
 		{
 			var trainingCard = GenerateTrainingCardBorder(training);
