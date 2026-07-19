@@ -105,4 +105,11 @@ public class TrainingService : Service, ITrainingService
 
 		return selectedTrainings;
 	}
+
+	public async Task<ICollection<Training>> GetTrainingsByUserIdAsync(int userId)
+	{
+		var trainings = await _trainingRepository.GetAllByUserIdAsync(userId);
+
+		return trainings;
+	}
 }
