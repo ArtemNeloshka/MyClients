@@ -45,7 +45,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<IPersonalRecordService, PersonalRecordService>();
 		
 		// PL
-		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddSingleton<LoginPage>();
 		builder.Services.AddTransient<RegistrationPage>();
 		builder.Services.AddTransient<MainPage>();
 		builder.Services.AddTransient<DisciplinesPage>();

@@ -136,6 +136,11 @@ public class UserService : Service, IUserService
 			return (false, ErrorMessages.UserNotFound);
 		}
 
+		if (string.IsNullOrWhiteSpace(user.PasswordHash))
+		{
+			return (false, ErrorMessages.PasswordIncorrect);
+		}
+
 		bool isPasswordMatch = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 		
 		return isPasswordMatch ? (true, null) : (false, ErrorMessages.PasswordIncorrect);
