@@ -18,8 +18,14 @@ public class DisciplinesViewModel
 	public async Task LoadDisciplinesAsync()
 	{
 		var disciplines = await _disciplineService.GetAllDisciplinesAsync();
-		Disciplines.Clear();
-        foreach (var d in disciplines)
-            Disciplines.Add(d);
+		
+		if (disciplines == null) return;
+		
+		MainThread.BeginInvokeOnMainThread(() =>
+		{
+			Disciplines.Clear();
+			foreach (var d in disciplines)
+				Disciplines.Add(d);
+		});
 	}
 }
