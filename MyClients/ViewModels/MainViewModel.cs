@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace MyClients.ViewModels;
 
-partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
 	private readonly IUserService _userService;
 
@@ -26,12 +26,40 @@ partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	public async Task GoToDisciplinesAsync()
 	{
-		await Shell.Current.GoToAsync($"//{AppRoutes.DisciplinesPageRoute}");
+		try
+		{
+			await Shell.Current.GoToAsync($"//{AppRoutes.DisciplinesPageRoute}");
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"Navigation to {AppRoutes.DisciplinesPageRoute} error: {e}");
+			if (Shell.Current != null)
+			{
+				await Shell.Current.DisplayAlertAsync(
+					title: "Woops...",
+					message: "We couldn't show you disciplines. Try again!",
+					cancel: "OK");
+			}
+		}
 	}
 	
 	[RelayCommand]
 	public async Task StartTrainingAsync()
 	{
-		await Shell.Current.GoToAsync($"//{AppRoutes.TrainPageRoute}");
+		try
+		{
+			await Shell.Current.GoToAsync($"//{AppRoutes.TrainPageRoute}");
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"Navigation to {AppRoutes.TrainPageRoute} error: {e}");
+			if (Shell.Current != null)
+			{
+				await Shell.Current.DisplayAlertAsync(
+					title: "Woops...",
+					message: "We couldn't start your training. Try again!",
+					cancel: "OK");
+			}
+		}
 	}
 }
