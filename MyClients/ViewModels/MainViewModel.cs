@@ -26,12 +26,12 @@ partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	public async Task GoToDisciplinesAsync()
 	{
-		await Shell.Current.GoToAsync("//DisciplinesPage");
+		await Shell.Current.GoToAsync($"//{AppRoutes.DisciplinesPageRoute}");
 	}
 	
 	[RelayCommand]
 	public async Task StartTrainingAsync()
 	{
-		await Shell.Current.GoToAsync("//TrainPage");
+		await Shell.Current.GoToAsync($"//{AppRoutes.TrainPageRoute}");
 	}
 }
