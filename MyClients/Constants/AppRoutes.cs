@@ -1,6 +1,6 @@
 namespace MyClients.Constants;
 
-public class AppRoutes
+public static class AppRoutes
 {
 	public const string MainPageRoute = "MainPage";
 	public const string DisciplinesPageRoute = "DisciplinesPage";

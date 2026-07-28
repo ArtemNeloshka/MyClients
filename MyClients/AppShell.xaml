@@ -14,23 +14,33 @@
     Shell.TabBarUnselectedColor="Firebrick">
     
     <TabBar>
-        <Tab Title="Home" Icon="home_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="{Binding MainPageRoute}"/>
+        <Tab Title="Home"
+             Icon="home_icon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" 
+                          Route="{x:Static constants:AppRoutes.MainPageRoute}"/>
         </Tab>
 	    
-        <Tab Title="Disciplines" Icon="disciplines_icon.png" Route="{Binding DisciplinesPageRoute}">
+        <Tab Title="Disciplines" 
+             Icon="disciplines_icon.png" 
+             Route="{x:Static constants:AppRoutes.DisciplinesPageRoute}">
             <ShellContent ContentTemplate="{DataTemplate views:DisciplinesPage}" />
         </Tab>
 	    
-        <Tab Title="Train" Icon="train_icon.png" Route="{Binding TrainPageRoute}">
+        <Tab Title="Train" 
+             Icon="train_icon.png" 
+             Route="{x:Static constants:AppRoutes.TrainPageRoute}">
             <ShellContent ContentTemplate="{DataTemplate views:TrainPage}" />
         </Tab>
 	    
-        <Tab Title="Statistics" Icon="statistics_icon.png" Route="{Binding StatisticsPageRoute}">
+        <Tab Title="Statistics" 
+             Icon="statistics_icon.png" 
+             Route="{x:Static constants:AppRoutes.StatisticsPageRoute}">
             <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}" />
         </Tab>
 	    
-        <Tab Title="Profile" Icon="user_icon.png" Route="{Binding ProfilePageRoute}">
+        <Tab Title="Profile" 
+             Icon="user_icon.png" 
+             Route="{x:Static constants:AppRoutes.ProfilePageRoute}">
             <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
         </Tab>
     </TabBar>
