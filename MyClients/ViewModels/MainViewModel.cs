@@ -1,10 +1,12 @@
 using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using MyClients.BLL.Interfaces;
 using MyClients.Constants;
+using CommunityToolkit.Mvvm.Input;
 
 namespace MyClients.ViewModels;
 
-public class MainViewModel : INotifyPropertyChanged
+partial class MainViewModel : ObservableObject
 {
 	private readonly IUserService _userService;
 
@@ -15,21 +17,24 @@ public class MainViewModel : INotifyPropertyChanged
 	
 	public event PropertyChangedEventHandler? PropertyChanged;
 	
+	[ObservableProperty]
 	private string _userName = String.Empty;
-
-	public string UserName
-	{
-		get => _userName;
-		set
-		{
-			_userName = value;
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UserName)));
-		}
-	}
 
 	public async Task LoadUserNameAsync()
 	{
 		var user = await _userService.GetUserByEmailAsync(Session.CurrentUserEmail);
 		UserName = user?.Name ?? string.Empty;
+	}
+
+	[RelayCommand]
+	public async Task GoToDisciplinesAsync()
+	{
+		await Shell.Current.GoToAsync("//DisciplinesPage");
+	}
+	
+	[RelayCommand]
+	public async Task StartTrainingAsync()
+	{
+		await Shell.Current.GoToAsync("//TrainPage");
 	}
 }

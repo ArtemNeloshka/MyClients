@@ -17,19 +17,19 @@
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage"/>
         </Tab>
 	    
-        <Tab Title="Disciplines" Icon="disciplines_icon.png">
+        <Tab Title="Disciplines" Icon="disciplines_icon.png" Route="DisciplinesPage">
             <ShellContent ContentTemplate="{DataTemplate views:DisciplinesPage}" />
         </Tab>
 	    
-        <Tab Title="Train" Icon="train_icon.png">
+        <Tab Title="Train" Icon="train_icon.png" Route="TrainPage">
             <ShellContent ContentTemplate="{DataTemplate views:TrainPage}" />
         </Tab>
 	    
-        <Tab Title="Statistics" Icon="statistics_icon.png">
+        <Tab Title="Statistics" Icon="statistics_icon.png" Route="StatisticsPage">
             <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}" />
         </Tab>
 	    
-        <Tab Title="Profile" Icon="user_icon.png">
+        <Tab Title="Profile" Icon="user_icon.png" Route="ProfilePage">
             <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
         </Tab>
     </TabBar>
