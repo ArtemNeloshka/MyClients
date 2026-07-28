@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MyClients.BLL.Interfaces;
 using MyClients.Constants;
@@ -14,8 +13,6 @@ partial class MainViewModel : ObservableObject
 	{
 		this._userService = userService;
 	}
-	
-	public event PropertyChangedEventHandler? PropertyChanged;
 	
 	[ObservableProperty]
 	private string _userName = String.Empty;
