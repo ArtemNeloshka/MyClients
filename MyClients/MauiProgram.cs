@@ -72,10 +72,12 @@ public static class MauiProgram
 #if DEBUG
 		using var scope = app.Services.CreateScope();
 		var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
-            
-		dbContext.Database.EnsureCreated(); 
 		
-		Task.Run(async () => await dbContext.SeedTestDataAsync()).Wait();
+		dbContext.Database.EnsureCreated();
+		
+		Task.Run(async () => await dbContext.SeedTestDataAsync())
+			// .Wait()
+			;
 #endif
 		return app;
 	}

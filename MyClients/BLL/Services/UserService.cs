@@ -146,7 +146,7 @@ public class UserService : Service, IUserService
 		return isPasswordMatch ? (true, null) : (false, ErrorMessages.PasswordIncorrect);
 	}
 	
-	public async Task<Grade> GetBestGradeInDisciplineAsync(int userId, int disciplineId)
+	public async Task<Grade?> GetBestGradeInDisciplineAsync(int userId, int disciplineId)
 	{
 		return await _userRepository.GetBestGradeInDisciplineAsync(userId, disciplineId);
 	}

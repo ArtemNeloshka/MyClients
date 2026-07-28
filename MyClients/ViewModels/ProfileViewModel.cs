@@ -96,11 +96,12 @@ public class ProfileViewModel : INotifyPropertyChanged
 
 	public async Task LoadUserAsync()
 	{
-		// if (string.IsNullOrEmpty(Session.CurrentUserEmail))
-		// 	throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+		var userEmail = Session.CurrentUserEmail;
+		if (string.IsNullOrEmpty(userEmail))
+			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
 
-		var user = await _userService.GetUserByEmailAsync("artem@gmail.com");
-
+		var user = await _userService.GetUserByEmailAsync(userEmail);
+		
 		if (user == null)
 			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
 
@@ -114,22 +115,18 @@ public class ProfileViewModel : INotifyPropertyChanged
 
 		var bouldering = await _disciplineService.GetDisciplineByNameAsync(Disciplines.Bouldering);
 		BoulderingBestGrade = (await _userService
-			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id)).Name?
-			.ToString() ?? "-";
+			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id))?.Name ?? "-";
 		
 		var topRope = await _disciplineService.GetDisciplineByNameAsync(Disciplines.TopRopeClimbing);
 		TopRopeBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, topRope.Id)).Name?
-			.ToString() ?? "-";
+				.GetBestGradeInDisciplineAsync(user.Id, topRope.Id))?.Name ?? "-";
 		
 		var lead = await _disciplineService.GetDisciplineByNameAsync(Disciplines.LeadClimbing);
 		LeadBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, lead.Id)).Name?
-			.ToString() ?? "-";
+				.GetBestGradeInDisciplineAsync(user.Id, lead.Id))?.Name ?? "-";
 		
 		var speed = await _disciplineService.GetDisciplineByNameAsync(Disciplines.SpeedClimbing);
 		SpeedBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, speed.Id)).Name?
-			.ToString() ?? "-";
+				.GetBestGradeInDisciplineAsync(user.Id, speed.Id))?.Name ?? "-";
 	}
 }
