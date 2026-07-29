@@ -12,5 +12,4 @@ public class User
 	
 	// Navigation properties
 	public ICollection<Training> Trainings { get; set; } = new List<Training>();
-	public ICollection<PersonalRecord> PersonalRecords { get; set; } = new List<PersonalRecord>();
 }
