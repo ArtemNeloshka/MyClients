@@ -12,10 +12,12 @@ public class UserRepository : Repository<User>, IUserRepository
 
 	public async Task<Grade> GetBestGradeInDisciplineAsync(int userId, int disciplineId)
 	{
-		var bestGrade = await _dbContext.PersonalRecords
-			.Where(pr => pr.UserId == userId
-			             && pr.DisciplineId == disciplineId)
-			.Select(pr => pr.Grade)
+		var bestGrade = await _dbContext.Attempts
+			.Where(a => a.DisciplineId == disciplineId
+			            && a.Training.UserId == userId
+			            && (a.ClimbResult.Name == "Flash"
+			                || a.ClimbResult.Name == "Top"))
+			.Select(a => a.Grade)
 			.OrderByDescending(grade => grade.Value)
 			.FirstOrDefaultAsync();
 

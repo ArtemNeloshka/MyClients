@@ -10,4 +10,5 @@ public class Training
 	
 	// Navigation property
 	public User User { get; set; } = null!;
+	public ICollection<Attempt> Attempts { get; set; } = new List<Attempt>();
 }

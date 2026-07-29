@@ -8,5 +8,5 @@ public class Discipline
 	public string Description { get; set; } = string.Empty;
 	
 	// Navigation properties
-	public ICollection<PersonalRecord> PersonalRecords { get; set; } = new List<PersonalRecord>();
+	public ICollection<Attempt> Attempts { get; set; } = new List<Attempt>();
 }
