@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyClients.BLL.Interfaces;
-using MyClients.Constants;
+using MyClients.Domain.Constants;
 using MyClients.ViewModels;
 
 namespace MyClients.Views;

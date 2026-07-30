@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using MyClients.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using MyClients.BLL.Interfaces.Repositories;
+using MyClients.BLL.Interfaces.Services;
 using MyClients.BLL.Services;
 using MyClients.DAL;
-using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 using MyClients.ViewModels;
 using MyClients.Views;
@@ -28,7 +29,10 @@ public static class MauiProgram
 		builder.Services.AddSingleton<App>();
 		
 		// db context
-		builder.Services.AddDbContext<MyClientsDbContext>();
+		var dbPath = Path.Combine(FileSystem.AppDataDirectory, "myClients.db");
+
+		builder.Services.AddDbContext<MyClientsDbContext>(options =>
+			options.UseSqlite($"Filename={dbPath}"));
 		
 		// DAL
 		builder.Services.AddTransient<IUserRepository, UserRepository>();
@@ -72,7 +76,8 @@ public static class MauiProgram
 #if DEBUG
 		using var scope = app.Services.CreateScope();
 		var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
-            
+
+		// dbContext.Database.EnsureDeleted();
 		dbContext.Database.EnsureCreated(); 
 		
 		Task.Run(async () => await dbContext.SeedTestDataAsync()).Wait();
