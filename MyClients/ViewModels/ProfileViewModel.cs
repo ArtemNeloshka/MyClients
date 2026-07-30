@@ -111,18 +111,22 @@ public class ProfileViewModel : INotifyPropertyChanged
 
 		var bouldering = await _disciplineService.GetDisciplineByNameAsync(Disciplines.Bouldering);
 		BoulderingBestGrade = (await _userService
-			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id)).Name;
+			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id))?
+			.Name ?? "-";
 		
 		var topRope = await _disciplineService.GetDisciplineByNameAsync(Disciplines.TopRopeClimbing);
 		TopRopeBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, topRope.Id)).Name;
+			.GetBestGradeInDisciplineAsync(user.Id, topRope.Id))?
+			.Name ?? "-";
 		
 		var lead = await _disciplineService.GetDisciplineByNameAsync(Disciplines.LeadClimbing);
 		LeadBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, lead.Id)).Name;
+			.GetBestGradeInDisciplineAsync(user.Id, lead.Id))?
+			.Name ?? "-";
 		
 		var speed = await _disciplineService.GetDisciplineByNameAsync(Disciplines.SpeedClimbing);
 		SpeedBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, speed.Id)).Name;
+			.GetBestGradeInDisciplineAsync(user.Id, speed.Id))?
+			.Name ?? "-";
 	}
 }

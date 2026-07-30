@@ -2,7 +2,7 @@ using MyClients.ViewModels;
 
 namespace MyClients.Views;
 
-public partial class ProfilePage
+public partial class ProfilePage : ContentPage
 {
 	public ProfilePage()
 	{

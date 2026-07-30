@@ -77,7 +77,7 @@ public static class MauiProgram
 		using var scope = app.Services.CreateScope();
 		var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
 
-		dbContext.Database.EnsureDeleted();
+		// dbContext.Database.EnsureDeleted();
 		dbContext.Database.EnsureCreated(); 
 		
 		Task.Run(async () => await dbContext.SeedTestDataAsync()).Wait();

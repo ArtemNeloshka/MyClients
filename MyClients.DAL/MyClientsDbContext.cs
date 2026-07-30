@@ -12,7 +12,7 @@ public class MyClientsDbContext : DbContext
 	public DbSet<Discipline> Disciplines { get; set; } = null!;
 	public DbSet<PersonalRecord> PersonalRecords { get; set; } = null!;
 
-	public MyClientsDbContext(DbContextOptions options) : base(options)
+	public MyClientsDbContext(DbContextOptions<MyClientsDbContext> options) : base(options)
 	{
 		
 	}
