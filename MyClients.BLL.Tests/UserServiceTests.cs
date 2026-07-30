@@ -1,7 +1,7 @@
 using Moq;
+using MyClients.BLL.Interfaces.Repositories;
 using MyClients.BLL.Services;
-using MyClients.DAL.Entities;
-using MyClients.DAL.Repositories;
+using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Tests;
 

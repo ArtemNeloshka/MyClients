@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using MyClients.BLL.Interfaces;
-using MyClients.DAL.Entities;
+using MyClients.BLL.Interfaces.Services;
+using MyClients.Domain.Entities;
 
 namespace MyClients.ViewModels;
 

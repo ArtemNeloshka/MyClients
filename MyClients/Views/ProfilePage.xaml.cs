@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MyClients.ViewModels;
 
 namespace MyClients.Views;
 
-public partial class ProfilePage : ContentPage
+public partial class ProfilePage
 {
 	public ProfilePage()
 	{
@@ -28,7 +23,10 @@ public partial class ProfilePage : ContentPage
 		var names = viewModel.DisciplineNames.ToArray();
 		
 		var result = await DisplayActionSheetAsync(
-			"Select discipline", "Cancel", null, names);
+			title: "Select discipline", 
+			cancel: "Cancel",
+			destruction:null,
+			buttons: names);
 
 		if (result != null && result != "Cancel")
 			DisciplineLabel.Text = result;
