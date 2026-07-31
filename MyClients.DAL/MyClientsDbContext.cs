@@ -104,6 +104,7 @@ public class MyClientsDbContext : DbContext
 	    {
 		    UserId = user.Id,
 		    TrainingDate = today.AddDays(-5),
+		    TrainingDuration = new TimeSpan(hours: 4, minutes: 0, seconds: 0),
 		    TrainingLog = "Гарна розминка. Лазив переважно боулдеринг категорії 6A. Пальці швидко втомилися."
 	    };
 	    
@@ -111,6 +112,7 @@ public class MyClientsDbContext : DbContext
 	    {
 		    UserId = user.Id,
 		    TrainingDate = today.AddDays(-2),
+		    TrainingDuration = new TimeSpan(hours: 4, minutes: 0, seconds: 0),
 		    TrainingLog =
 			    "Робота над проєктом 6B на нависання. Зробив 5 спроб, розклав усі рухи, але не зібрав до купи."
 	    };
@@ -119,6 +121,7 @@ public class MyClientsDbContext : DbContext
 	    {
 		    UserId = user.Id,
 		    TrainingDate = today,
+		    TrainingDuration = new TimeSpan(hours: 4, minutes: 0, seconds: 0),
 		    TrainingLog = "Відновлювальне тренування на трудність. Багато об'єму на легких трасах."
 	    };
 
@@ -133,7 +136,7 @@ public class MyClientsDbContext : DbContext
 		    DisciplineId = bouldering.Id,
 		    GradeId = grade6A.Id,
 		    ClimbResultId = flash.Id,
-		    Timestamp = new TimeOnly(hour: 0, minute: 25),
+		    Timestamp = new TimeSpan(hours: 0, minutes: 25, seconds: 0),
 	    };
 	    
 	    var attemptTraining1Fail = new Attempt
@@ -142,7 +145,7 @@ public class MyClientsDbContext : DbContext
 		    DisciplineId = bouldering.Id,
 		    GradeId = grade6C.Id,
 		    ClimbResultId = fail.Id,
-		    Timestamp = new TimeOnly(hour: 1, minute: 2),
+		    Timestamp = new TimeSpan(hours: 1, minutes: 25, seconds: 0),
 	    };
 	    
 	    var attemptTraining2Top = new Attempt
@@ -151,7 +154,7 @@ public class MyClientsDbContext : DbContext
 		    DisciplineId = lead.Id,
 		    GradeId = grade6B.Id,
 		    ClimbResultId = top.Id,
-		    Timestamp = new TimeOnly(hour: 0, minute: 30),
+		    Timestamp = new TimeSpan(hours: 0, minutes: 30, seconds: 0),
 	    };
 	    
 	    var attemptTraining3Top = new Attempt
@@ -160,7 +163,7 @@ public class MyClientsDbContext : DbContext
 		    DisciplineId = topRope.Id,
 		    GradeId = grade6B.Id,
 		    ClimbResultId = top.Id,
-		    Timestamp = new TimeOnly(hour: 3, minute: 45),
+		    Timestamp = new TimeSpan(hours: 3, minutes: 25, seconds: 0),
 	    };
 	    
 	    var attemptTraining3Zone = new Attempt
@@ -169,7 +172,7 @@ public class MyClientsDbContext : DbContext
 		    DisciplineId = bouldering.Id,
 		    GradeId = grade6C.Id,
 		    ClimbResultId = zone.Id,
-		    Timestamp = new TimeOnly(hour: 0, minute: 25),
+		    Timestamp = new TimeSpan(hours: 0, minutes: 25, seconds: 0),
 	    };
 
 	    await this.Attempts.AddAsync(attemptTraining1Fail);

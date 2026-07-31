@@ -13,7 +13,7 @@ public class UserRepository : Repository<User>, IUserRepository
 
 	public async Task<Grade?> GetBestGradeInDisciplineAsync(int userId, int disciplineId)
 	{
-		var bestGrade = await _dbContext.Attempts
+		return await _dbContext.Attempts
 			.Where(a => a.DisciplineId == disciplineId
 			            && a.Training.UserId == userId
 			            && (a.ClimbResult.Name == "Flash"
@@ -21,7 +21,5 @@ public class UserRepository : Repository<User>, IUserRepository
 			.Select(a => a.Grade)
 			.OrderByDescending(grade => grade.Value)
 			.FirstOrDefaultAsync();
-
-		return bestGrade;
 	}
 }

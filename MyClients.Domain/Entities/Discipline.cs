@@ -9,4 +9,5 @@ public class Discipline
 	
 	// Navigation properties
 	public ICollection<Attempt> Attempts { get; set; } = new List<Attempt>();
+	public ICollection<User> UsersAsFavouriteDiscipline { get; set; } = new List<User>();
 }

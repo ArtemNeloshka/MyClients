@@ -7,7 +7,7 @@ public class Attempt
 	public int DisciplineId { get; set; }
 	public int GradeId { get; set; }
 	public int ClimbResultId { get; set; }
-	public TimeOnly Timestamp { get; set; }
+	public TimeSpan Timestamp { get; set; }
 
 	public Training Training { get; set; } = null!;
 	public Discipline Discipline { get; set; } = null!;

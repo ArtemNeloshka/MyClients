@@ -1,6 +1,8 @@
-namespace MyClients.DAL.Repositories;
+using MyClients.Domain.Entities;
 
-public interface IClimbResultRepository
+namespace MyClients.BLL.Interfaces.Repositories;
+
+public interface IClimbResultRepository : IRepository<ClimbResult>
 {
 	
 }
