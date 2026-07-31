@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyClients.BLL.Interfaces.Repositories;
 using MyClients.Domain.Entities;
+using static MyClients.Domain.Constants.ClimbResults;
 
 namespace MyClients.DAL.Repositories;
 
@@ -13,13 +14,13 @@ public class UserRepository : Repository<User>, IUserRepository
 
 	public async Task<Grade?> GetBestGradeInDisciplineAsync(int userId, int disciplineId)
 	{
-		var bestGrade = await _dbContext.PersonalRecords
-			.Where(pr => pr.UserId == userId
-			             && pr.DisciplineId == disciplineId)
-			.Select(pr => pr.Grade)
+		return await _dbContext.Attempts
+			.Where(a => a.DisciplineId == disciplineId
+			            && a.Training.UserId == userId
+			            && (a.ClimbResult.Name == Flash
+			                || a.ClimbResult.Name == Top))
+			.Select(a => a.Grade)
 			.OrderByDescending(grade => grade.Value)
 			.FirstOrDefaultAsync();
-
-		return bestGrade;
 	}
 }

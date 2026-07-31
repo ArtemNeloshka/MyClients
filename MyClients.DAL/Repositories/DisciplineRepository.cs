@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MyClients.BLL.Interfaces.Repositories;
-using MyClients.DAL;
 using MyClients.Domain.Entities;
 
 namespace MyClients.DAL.Repositories;

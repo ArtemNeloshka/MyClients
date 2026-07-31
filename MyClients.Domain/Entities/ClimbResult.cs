@@ -1,12 +1,10 @@
 namespace MyClients.Domain.Entities;
 
-public class Grade
+public class ClimbResult
 {
-	// PK
 	public int Id { get; set; }
 	public string Name { get; set; } = String.Empty;
-	public int Value { get; set; }
-	
-	// Navigation properties
+	public string? Description { get; set; }
+
 	public ICollection<Attempt> Attempts { get; set; } = new List<Attempt>();
 }
