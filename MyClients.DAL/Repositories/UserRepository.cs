@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyClients.BLL.Interfaces.Repositories;
 using MyClients.Domain.Entities;
+using static MyClients.Domain.Constants.ClimbResults;
 
 namespace MyClients.DAL.Repositories;
 
@@ -16,8 +17,8 @@ public class UserRepository : Repository<User>, IUserRepository
 		return await _dbContext.Attempts
 			.Where(a => a.DisciplineId == disciplineId
 			            && a.Training.UserId == userId
-			            && (a.ClimbResult.Name == "Flash"
-			                || a.ClimbResult.Name == "Top"))
+			            && (a.ClimbResult.Name == Flash
+			                || a.ClimbResult.Name == Top))
 			.Select(a => a.Grade)
 			.OrderByDescending(grade => grade.Value)
 			.FirstOrDefaultAsync();

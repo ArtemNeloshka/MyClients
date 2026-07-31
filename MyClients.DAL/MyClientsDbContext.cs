@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MyClients.Domain.Entities;
+using static MyClients.Domain.Constants.Disciplines;
+using static MyClients.Domain.Constants.ClimbResults;
+using static MyClients.Domain.Constants.GradeNames;
 
 namespace MyClients.DAL;
 
@@ -38,58 +41,57 @@ public class MyClientsDbContext : DbContext
 
 	    var bouldering = new Discipline 
 	    { 
-	        Name = "Bouldering", 
-	        Description = "Короткі складні траси без мотузки над матами." 
+	        Name = Bouldering,
+	        Description = BoulderingDescription,
 	    };
 	    var lead = new Discipline 
 	    { 
-	        Name = "Lead Climbing", 
-	        Description = "Довгі траси з нижньою страховкою." 
+	        Name = LeadClimbing, 
+	        Description = LeadClimbingDescription,
 	    };
 	    var topRope = new Discipline 
 	    { 
-		    Name = "Top Rope Climbing", 
-		    Description = "Довгі траси з верхньою страховкою." 
+		    Name = TopRopeClimbing, 
+		    Description = TopRopeClimbingDescription
 	    };
 	    var speed = new Discipline 
 	    { 
-		    Name = "Speed Climbing", 
-		    Description = "Лазіння по еталонному маршруту висотою 15м на час." 
+		    Name = SpeedClimbing, 
+		    Description = SpeedClimbingDescription
 	    };
 	    
 	    await this.Disciplines.AddRangeAsync(bouldering, topRope, lead, speed);
 	    await this.SaveChangesAsync();
 
-	    var grade6A = new Grade { Name = "6A", Value = 10 };
-	    var grade6B = new Grade { Name = "6B", Value = 12 };
-	    var grade6C = new Grade { Name = "6C", Value = 14 };
+	    var grade6A = new Grade { Name = Grade6aName, Value = 10 };
+	    var grade6B = new Grade { Name = Grade6bName, Value = 12 };
+	    var grade6C = new Grade { Name = Grade6cName, Value = 14 };
 	    
 	    await this.Grades.AddRangeAsync(grade6A, grade6B, grade6C);
 	    await this.SaveChangesAsync();
 
-
 	    var flash = new ClimbResult
 	    {
-		    Name = "Flash",
-		    Description = "Sending from the first time",
+		    Name = Flash,
+		    Description = FlashDescription,
 	    };
 
 	    var top = new ClimbResult
 	    {
-		    Name = "Top",
-		    Description = "Not from the first time, but sending",
+		    Name = Top,
+		    Description = TopDescription,
 	    };
 
 	    var zone = new ClimbResult
 	    {
-		    Name = "Zone",
-		    Description = "Climbing to the zone, more competition thing",
+		    Name = Zone,
+		    Description = ZoneDescription,
 	    };
 
 	    var fail = new ClimbResult
 	    {
-		    Name = "Fail",
-		    Description = "You failed, you're loder. Try one more time!",
+		    Name = Fail,
+		    Description = FailDescription,
 	    };
 
 	    await this.ClimbResults.AddAsync(flash);
