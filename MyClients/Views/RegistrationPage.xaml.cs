@@ -1,4 +1,4 @@
-using MyClients.Constants;
+using MyClients.Domain.Constants;
 using MyClients.ViewModels;
 using MyClients.Views.Controls;
 

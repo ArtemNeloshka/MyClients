@@ -1,5 +1,6 @@
 using MyClients.BLL.Interfaces;
-using MyClients.Constants;
+using MyClients.BLL.Interfaces.Services;
+using MyClients.Domain.Constants;
 
 namespace MyClients.ViewModels;
 
