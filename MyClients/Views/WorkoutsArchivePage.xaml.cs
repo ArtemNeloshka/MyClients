@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls.Shapes;
-using MyClients.DAL.Entities;
+using MyClients.Domain.Entities;
 using MyClients.ViewModels;
 
 namespace MyClients.Views;

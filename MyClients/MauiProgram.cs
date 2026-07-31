@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using MyClients.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using MyClients.BLL.Interfaces.Repositories;
+using MyClients.BLL.Interfaces.Services;
 using MyClients.BLL.Services;
 using MyClients.DAL;
-using MyClients.DAL.Entities;
 using MyClients.DAL.Repositories;
 using MyClients.ViewModels;
 using MyClients.Views;
@@ -28,21 +29,24 @@ public static class MauiProgram
 		builder.Services.AddSingleton<App>();
 		
 		// db context
-		builder.Services.AddDbContext<MyClientsDbContext>();
+		var dbPath = Path.Combine(FileSystem.AppDataDirectory, "myClients.db");
+
+		builder.Services.AddDbContext<MyClientsDbContext>(options =>
+			options.UseSqlite($"Filename={dbPath}"));
 		
 		// DAL
 		builder.Services.AddTransient<IUserRepository, UserRepository>();
 		builder.Services.AddTransient<IDisciplineRepository, DisciplineRepository>();
 		builder.Services.AddTransient<IGradeRepository, GradeRepository>();
 		builder.Services.AddTransient<ITrainingRepository, TrainingRepository>();
-		builder.Services.AddTransient<IPersonalRecordRepository, PersonalRecordRepository>();
+		builder.Services.AddTransient<IAttemptRepository, AttemptRepository>();
+		builder.Services.AddTransient<IClimbResultRepository, ClimbResultRepository>();
 		
 		// BLL
 		builder.Services.AddTransient<IUserService, UserService>();
 		builder.Services.AddTransient<IDisciplineService, DisciplineService>();
 		builder.Services.AddTransient<IGradeService, GradeService>();
 		builder.Services.AddTransient<ITrainingService, TrainingService>();
-		builder.Services.AddTransient<IPersonalRecordService, PersonalRecordService>();
 		
 		// PL
 		builder.Services.AddSingleton<LoginPage>();
@@ -72,7 +76,8 @@ public static class MauiProgram
 #if DEBUG
 		using var scope = app.Services.CreateScope();
 		var dbContext = scope.ServiceProvider.GetRequiredService<MyClientsDbContext>();
-            
+
+		// dbContext.Database.EnsureDeleted();
 		dbContext.Database.EnsureCreated(); 
 		
 		Task.Run(async () => await dbContext.SeedTestDataAsync()).Wait();
