@@ -14,7 +14,7 @@ public class UserService : Service, IUserService
 		this._userRepository = userRepository;
 	}
 	
-	public async Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday)
+	public async Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday, int? favouriteDisciplineId)
 	{
 		// validate input
 		if (birthday != null && birthday > DateOnly.FromDateTime(DateTime.Now))
@@ -39,6 +39,9 @@ public class UserService : Service, IUserService
 		
 		if (birthday != null)
 			user.Birthday = (DateOnly)birthday;
+
+		if (favouriteDisciplineId != null)
+			user.FavouriteDisciplineId = favouriteDisciplineId;
 		
 		// saving changes
 		await _userRepository.UpdateAsync(user);
@@ -46,9 +49,7 @@ public class UserService : Service, IUserService
 
 	public async Task<ICollection<User>> GetAllUsersAsync()
 	{
-		var allUsers = (await _userRepository.GetAllAsync()).ToList();
-
-		return allUsers;
+		return (await _userRepository.GetAllAsync()).ToList();
 	}
 
 	public async Task<User?> GetUserByEmailAsync(string email)
@@ -58,11 +59,8 @@ public class UserService : Service, IUserService
 		{
 			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
 		}
-		
-		// getting all users
-		var users = await _userRepository.GetAllAsync();
 
-		return users.FirstOrDefault(u => u.Email == email);
+		return await _userRepository.GetByEmailAsync(email);
 	}
 
 	public async Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate, string password)
@@ -88,7 +86,7 @@ public class UserService : Service, IUserService
 			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday);
 		}
 
-		if (password.Length < ValidationRules.MinPasswordLength)
+		if (string.IsNullOrWhiteSpace(password) || password.Length < ValidationRules.MinPasswordLength)
 		{
 			throw new ArgumentException(ErrorMessages.PasswordIsShort, nameof(password));
 		}
@@ -121,7 +119,7 @@ public class UserService : Service, IUserService
 			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
 		}
 
-		if (password.Length < ValidationRules.MinPasswordLength)
+		if (string.IsNullOrWhiteSpace(password) || password.Length < ValidationRules.MinPasswordLength)
 		{
 			throw new ArgumentException(ErrorMessages.PasswordIsShort, nameof(password));
 		}
