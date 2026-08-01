@@ -5,7 +5,7 @@ using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Services;
 
-public class TrainingService : Service, ITrainingService
+public class TrainingService : ITrainingService
 {
 	private readonly ITrainingRepository _trainingRepository;
 
@@ -13,37 +13,73 @@ public class TrainingService : Service, ITrainingService
 	{
 		this._trainingRepository = trainingRepository;
 	}
-	
-	public async Task AddTrainingLogAsync(int id, string text)
+
+	public async Task CreateTrainingAsync(int userId, DateOnly trainingDate, TimeSpan duration, string? trainingLog,
+		ICollection<Attempt> attempts)
 	{
-		// input validation
-		if (string.IsNullOrWhiteSpace(text))
+		if (trainingDate > DateOnly.FromDateTime(DateTime.Now))
 		{
-			throw new ArgumentException(ErrorMessages.TrainingLogIsNullOrEmpty, nameof(text));
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(trainingDate));
+		}
+		if (duration < TimeSpan.Zero)
+		{
+			throw new ArgumentException(ErrorMessages.InvalidDuration, nameof(duration));
 		}
 
-		// get a record from DB
-		var training = await _trainingRepository.GetByIdAsync(id);
+		trainingLog = trainingLog?.Trim();
 
+		if (trainingLog?.Length > ValidationRules.MaxTrainingLogLength)
+		{
+			throw new ArgumentException(ErrorMessages.TrainingLogIsLong, nameof(trainingLog));
+		}
+		
+		var training = new Training
+		{
+			UserId = userId,
+			TrainingDate = trainingDate,
+			TrainingDuration = duration,
+			TrainingLog = trainingLog,
+			Attempts = attempts,
+		};
+		
+		await _trainingRepository.AddAsync(training);
+	}
+	
+	public async Task<Training> GetTrainingByIdAsync(int id)
+	{
+		var training = await _trainingRepository.GetByIdAsync(id);
 		if (training == null)
 		{
 			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
 		}
-		
-		// adding the log
-		training.TrainingLog += $"\n[{DateTime.Now:HH:mm:ss}]: {text}";
 
-		await _trainingRepository.UpdateAsync(training);
+		return training;
+	}
+
+	public async Task<ICollection<Training>> GetTrainingsByUserIdAsync(int userId)
+	{
+		return await _trainingRepository.GetAllByUserIdAsync(userId);
+	}
+	
+	public async Task<ICollection<Training>> GetTrainingsByPeriodAsync(int userId, DateOnly start, DateOnly end)
+	{
+		// validate input
+		if (end > DateOnly.FromDateTime(DateTime.Now))
+		{
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(end));
+		}
+
+		if (start > end)
+		{
+			throw new ArgumentException(ErrorMessages.DateStartHigherThanEnd);
+		}
+		
+		// getting record from DB
+		return await _trainingRepository.GetTrainingsByPeriodAsync(userId, start, end);
 	}
 
 	public async Task EditTrainingLogAsync(int id, string text)
 	{
-		// input validation
-		if (string.IsNullOrWhiteSpace(text))
-		{
-			throw new ArgumentException(ErrorMessages.TrainingLogIsNullOrEmpty, nameof(text));
-		}
-		
 		// get a record from DB
 		var training = await _trainingRepository.GetByIdAsync(id);
 
@@ -72,44 +108,39 @@ public class TrainingService : Service, ITrainingService
 		await _trainingRepository.DeleteAsync(training);
 	}
 
-	public async Task<Training> GetTrainingByIdAsync(int id)
+	public async Task<ICollection<Attempt>> GetAllAttemptsByTrainingIdAsync(int trainingId)
 	{
-		var training = await _trainingRepository.GetByIdAsync(id);
+		var training = await _trainingRepository.GetByIdAsync(trainingId);
+
 		if (training == null)
 		{
-			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
-		}
-
-		return training;
-	}
-
-	public async Task<ICollection<Training>> GetTrainingsByPeriodAsync(DateOnly start, DateOnly end)
-	{
-		// validate input
-		if (end > DateOnly.FromDateTime(DateTime.Now))
-		{
-			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(end));
-		}
-
-		if (start > end)
-		{
-			throw new ArgumentException(ErrorMessages.DateStartHigherThanEnd);
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={trainingId})");
 		}
 		
-		// getting record from DB
-		var allTrainings = await _trainingRepository.GetAllAsync();
-
-		var selectedTrainings = allTrainings
-			.Where(t => t.TrainingDate >= start && t.TrainingDate <= end)
-			.ToList();
-
-		return selectedTrainings;
+		return await _trainingRepository.GetAllAttemptsByTrainingIdAsync(trainingId);
 	}
 
-	public async Task<ICollection<Training>> GetTrainingsByUserIdAsync(int userId)
+	public async Task<ICollection<Attempt>> GetTopAttemptsByTrainingIdAsync(int trainingId, int amount)
 	{
-		var trainings = await _trainingRepository.GetAllByUserIdAsync(userId);
+		var training = await _trainingRepository.GetByIdAsync(trainingId);
 
-		return trainings;
+		if (training == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={trainingId})");
+		}
+
+		return await _trainingRepository.GetTopAttemptsByTrainingIdAsync(trainingId, amount);
+	}
+
+	public async Task<ICollection<Discipline>> GetAllDisciplinesByTrainingIdAsync(int trainingId)
+	{
+		var training = await _trainingRepository.GetByIdAsync(trainingId);
+
+		if (training == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={trainingId})");
+		}
+
+		return await _trainingRepository.GetAllDisciplinesByTrainingIdAsync(trainingId);
 	}
 }

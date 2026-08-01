@@ -5,7 +5,7 @@ using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Services;
 
-public class UserService : Service, IUserService
+public class UserService : IUserService
 {
 	private readonly IUserRepository _userRepository;
 

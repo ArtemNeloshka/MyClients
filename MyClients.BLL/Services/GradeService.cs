@@ -4,7 +4,7 @@ using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Services;
 
-public class GradeService : Service, IGradeService
+public class GradeService : IGradeService
 {
 	private readonly IGradeRepository _gradeRepository;
 

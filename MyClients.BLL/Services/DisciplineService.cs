@@ -5,7 +5,7 @@ using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Services;
 
-public class DisciplineService : Service, IDisciplineService
+public class DisciplineService : IDisciplineService
 {
 	private readonly IDisciplineRepository _disciplineRepository;
 
