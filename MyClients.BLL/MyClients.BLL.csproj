@@ -13,5 +13,9 @@
     <ItemGroup>
         <ProjectReference Include="..\MyClients.Domain\MyClients.Domain.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="Interfaces\Services\IAttemptService.cs" />
+    </ItemGroup>
 
 </Project>

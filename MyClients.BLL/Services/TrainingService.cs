@@ -78,8 +78,13 @@ public class TrainingService : ITrainingService
 		return await _trainingRepository.GetTrainingsByPeriodAsync(userId, start, end);
 	}
 
-	public async Task EditTrainingLogAsync(int id, string text)
+	public async Task EditTrainingLogAsync(int id, string? text)
 	{
+		if (text?.Length > ValidationRules.MaxTrainingLogLength)
+		{
+			throw new ArgumentException(ErrorMessages.TrainingLogIsLong, nameof(text));
+		}
+		
 		// get a record from DB
 		var training = await _trainingRepository.GetByIdAsync(id);
 

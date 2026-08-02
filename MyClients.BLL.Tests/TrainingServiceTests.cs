@@ -183,7 +183,7 @@ public class TrainingServiceTests
 	
 	// get by period happy path
 	[Fact]
-	public async Task GetTrainingsByPeriodAsync_ValidData_ReturnsTrainingsInGivenPeriod()
+	public async Task GetTrainingsByPeriodAsync_ValidData_ReturnsTrainingsList()
 	{
 		var existingValidTraining = new Training()
 		{
@@ -215,6 +215,23 @@ public class TrainingServiceTests
 	}
 	
 	// edit log sad path
+	// log is too long
+	[Fact]
+	public async Task EditTrainingLogAsync_InvalidLog_ThrowsArgumentException()
+	{
+		var training = new Training { Id = 1, TrainingLog = "TestLog" };
+		var newLog = new string('A', ValidationRules.MaxTrainingLogLength + 1);
+		
+		_mockRepo.Setup(r => r.GetByIdAsync(training.Id))
+			.ReturnsAsync(training);
+
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.EditTrainingLogAsync(training.Id, newLog));
+
+		Assert.Contains(ErrorMessages.TrainingLogIsLong, exception.Message);
+	}
+
+	// training not found
 	[Fact]
 	public async Task EditTrainingLogAsync_NullTraining_ThrowsKeyNotFoundException()
 	{
