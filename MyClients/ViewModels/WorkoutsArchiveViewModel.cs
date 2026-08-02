@@ -1,9 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using MyClients.BLL.Interfaces;
 using MyClients.BLL.Interfaces.Services;
-using MyClients.BLL.Services;
 using MyClients.Domain.Entities;
 
 namespace MyClients.ViewModels;

@@ -1,7 +1,4 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using MyClients.BLL.Interfaces;
-using System.Linq;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
 
@@ -105,10 +102,11 @@ public class TrainingDetailsViewModel : INotifyPropertyChanged
 
 	public async Task LoadTrainingAsync(int trainingId)
 	{
-		// if (string.IsNullOrEmpty(Session.CurrentUserEmail))
-		// 	throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+		var userEmail = Session.CurrentUserEmail;
+		if (string.IsNullOrEmpty(userEmail))
+			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
 
-		var user = await _userService.GetUserByEmailAsync("test@gmail.com");
+		var user = await _userService.GetUserByEmailAsync(userEmail);
 
 		if (user == null)
 			throw new KeyNotFoundException(ErrorMessages.UserNotFound);

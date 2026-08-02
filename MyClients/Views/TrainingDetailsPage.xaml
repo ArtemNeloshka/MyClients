@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyClients.Views.Controls"
+             xmlns:constants="clr-namespace:MyClients.Domain.Constants;assembly=MyClients.Domain"
              x:Class="MyClients.Views.TrainingDetailsPage"
              NavigationPage.HasNavigationBar="False">
 	<Grid>
@@ -170,7 +171,8 @@
                   	<Grid ColumnDefinitions="Auto, Auto">
                   		<!-- bouldering best grade -->
                   		<Label Grid.Column="0"
-                  		       Text="Bouldering:"
+                  		       Text="{Binding Source={x:Static constants:Disciplines.BoulderingShort}, 
+																														StringFormat='{0}:'}"
                   		       FontSize="12"
                   		       FontAttributes="Bold, Italic"
                   		       HorizontalTextAlignment="Start"
@@ -191,7 +193,9 @@
                           BackgroundColor="#D9D9D9">
                   	<Grid ColumnDefinitions="Auto, Auto">
                   		<!-- top rope best grade -->
-                  		<Label Grid.Column="0" Text="Top rope:"
+                  		<Label Grid.Column="0" 
+		                         Text="{Binding Source={x:Static constants:Disciplines.TopRopeClimbingShort}, 
+																														StringFormat='{0}:'}"
                   		       FontSize="12"
                   		       FontAttributes="Bold, Italic"
                   		       HorizontalTextAlignment="Start"
@@ -211,7 +215,9 @@
                           BackgroundColor="#D9D9D9">
                   	<Grid ColumnDefinitions="Auto, Auto">
                   		<!-- lead best grade -->
-                  		<Label Grid.Column="0" Text="Lead:"
+                  		<Label Grid.Column="0"
+		                         Text="{Binding Source={x:Static constants:Disciplines.LeadClimbingShort}, 
+																														StringFormat='{0}:'}"
                   		       FontSize="12"
                   		       FontAttributes="Bold, Italic"
                   		       HorizontalTextAlignment="Start"
@@ -232,7 +238,8 @@
                   	<Grid ColumnDefinitions="Auto, Auto">
                   		<!-- speed best grade -->
                   		<Label Grid.Column="0"
-                  		       Text="Speed:"
+		                         Text="{Binding Source={x:Static constants:Disciplines.SpeedClimbingShort}, 
+																														StringFormat='{0}:'}"
                   		       FontSize="12"
                   		       FontAttributes="Bold, Italic"
                   		       HorizontalTextAlignment="Start"

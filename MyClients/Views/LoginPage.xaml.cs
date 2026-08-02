@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyClients.BLL.Interfaces;
 using MyClients.Domain.Constants;
 using MyClients.ViewModels;
 

@@ -3,8 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyClients.Views.Controls"
-             xmlns:viewModels="clr-namespace:MyClients.ViewModels"
              xmlns:entities="clr-namespace:MyClients.Domain.Entities;assembly=MyClients.Domain"
+             xmlns:viewModels="clr-namespace:MyClients.ViewModels"
              x:DataType="viewModels:DisciplinesViewModel"
              x:Class="MyClients.Views.DisciplinesPage"
              NavigationPage.HasNavigationBar="False">
