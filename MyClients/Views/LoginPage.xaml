@@ -13,7 +13,7 @@
 		
 		<ScrollView>
 			<!-- main content -->
-			<Grid RowDefinitions="5*, Auto, 5*">
+			<Grid RowDefinitions="*, Auto, *">
 				<VerticalStackLayout
 					Grid.Row="1"
 					Spacing="0"
@@ -42,27 +42,29 @@
         		        BackgroundColor="Gray"
         		        HeightRequest="45">
 			        <Entry
-        				x:Name="LoginEmailEntry"
-        				Placeholder="Enter your email..."
+				        Text="{Binding Email}"
+        				Placeholder="{Binding EmailPlaceholder}"
+				        PlaceholderColor="{Binding EmailPlaceholderColor}"
         				Keyboard="Email"
         				ClearButtonVisibility="WhileEditing"
         				Margin="15, 0"
         				VerticalOptions="Center"/>
         		</Border>
-        	<!-- password field -->
+        		<!-- password field -->
         		<Border StrokeShape="RoundRectangle 20"
         		        StrokeThickness="0"
         		        BackgroundColor="Gray"
         		        HeightRequest="45">
         			<Entry
-        				x:Name="LoginPasswordEntry"
-        				Placeholder="Enter your password..."
+				        Text="{Binding Password}"
+        				Placeholder="{Binding PasswordPlaceholder}"
+				        PlaceholderColor="{Binding PasswordPlaceholderColor}"
         				IsPassword="True"
         				ClearButtonVisibility="WhileEditing"
         				Margin="15, 0"
         				VerticalOptions="Center"/>
         		</Border>
-        	<!-- log in button -->
+        		<!-- log in button -->
         		<Button Text="Log in"
         		        BackgroundColor="Black"
         		        TextColor="White"
@@ -71,7 +73,7 @@
         		        HeightRequest="50"
         		        FontAttributes="Italic, Bold"
         		        FontSize="28"
-        		        Clicked="OnLoginClicked"/>
+        		        Command="{Binding LogInCommand}"/>
         		
         		<Label Text="or"
         		       TextColor="White"
@@ -88,7 +90,7 @@
         		        HeightRequest="50"
         		        FontAttributes="Italic, Bold"
         		        FontSize="28"
-        		        Clicked="OnRegisterClicked" />
+        		        Command="{Binding NavigateToRegisterPageCommand}" />
         		
         	</VerticalStackLayout>
 				</VerticalStackLayout>

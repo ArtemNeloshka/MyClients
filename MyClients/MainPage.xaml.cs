@@ -1,20 +1,21 @@
-﻿using MyClients.BLL.Interfaces;
-using MyClients.ViewModels;
+﻿using MyClients.ViewModels;
 
 namespace MyClients;
 
 public partial class MainPage : ContentPage
 {
-	public MainPage()
+	private readonly MainViewModel _viewModel;
+	
+	public MainPage(MainViewModel viewModel)
 	{
 		InitializeComponent();
+		_viewModel = viewModel;
+		BindingContext = _viewModel;
 	}
 
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		var viewModel = IPlatformApplication.Current.Services.GetService<MainViewModel>();
-		BindingContext = viewModel;
-		await viewModel.LoadUserNameAsync();
+		await _viewModel.LoadUserNameAsync();
 	}
 }
