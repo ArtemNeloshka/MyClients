@@ -21,7 +21,7 @@ public class TrainingService : ITrainingService
 		{
 			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(trainingDate));
 		}
-		if (duration < TimeSpan.Zero)
+		if (duration <= TimeSpan.Zero)
 		{
 			throw new ArgumentException(ErrorMessages.InvalidDuration, nameof(duration));
 		}

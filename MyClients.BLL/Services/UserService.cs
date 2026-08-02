@@ -13,55 +13,6 @@ public class UserService : IUserService
 	{
 		this._userRepository = userRepository;
 	}
-	
-	public async Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday, int? favouriteDisciplineId)
-	{
-		// validate input
-		if (birthday != null && birthday > DateOnly.FromDateTime(DateTime.Now))
-		{
-			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(birthday));
-		}
-		
-		// getting user from DB
-		var user = await _userRepository.GetByIdAsync(id);
-
-		if (user == null)
-		{
-			throw new KeyNotFoundException(ErrorMessages.UserNotFound + $" (id={id})");
-		}
-		
-		// editing info
-		if (!string.IsNullOrWhiteSpace(name))
-			user.Name = name;
-		
-		if (!string.IsNullOrWhiteSpace(surname))
-			user.Surname = surname;
-		
-		if (birthday != null)
-			user.Birthday = (DateOnly)birthday;
-
-		if (favouriteDisciplineId != null)
-			user.FavouriteDisciplineId = favouriteDisciplineId;
-		
-		// saving changes
-		await _userRepository.UpdateAsync(user);
-	}
-
-	public async Task<ICollection<User>> GetAllUsersAsync()
-	{
-		return (await _userRepository.GetAllAsync()).ToList();
-	}
-
-	public async Task<User?> GetUserByEmailAsync(string email)
-	{
-		// validate input
-		if (!ValidationRules.IsValidEmail(email))
-		{
-			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
-		}
-
-		return await _userRepository.GetByEmailAsync(email);
-	}
 
 	public async Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate, string password)
 	{
@@ -109,6 +60,55 @@ public class UserService : IUserService
 		};
 		
 		await _userRepository.AddAsync(newUser);
+	}
+
+	public async Task<ICollection<User>> GetAllUsersAsync()
+	{
+		return (await _userRepository.GetAllAsync()).ToList();
+	}
+	
+	public async Task<User?> GetUserByEmailAsync(string email)
+	{
+		// validate input
+		if (!ValidationRules.IsValidEmail(email))
+		{
+			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
+		}
+
+		return await _userRepository.GetByEmailAsync(email);
+	}
+	
+	public async Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday, int? favouriteDisciplineId)
+	{
+		// validate input
+		if (birthday != null && birthday > DateOnly.FromDateTime(DateTime.Now))
+		{
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(birthday));
+		}
+		
+		// getting user from DB
+		var user = await _userRepository.GetByIdAsync(id);
+
+		if (user == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.UserNotFound + $" (id={id})");
+		}
+		
+		// editing info
+		if (!string.IsNullOrWhiteSpace(name))
+			user.Name = name;
+		
+		if (!string.IsNullOrWhiteSpace(surname))
+			user.Surname = surname;
+		
+		if (birthday != null)
+			user.Birthday = (DateOnly)birthday;
+
+		if (favouriteDisciplineId != null)
+			user.FavouriteDisciplineId = favouriteDisciplineId;
+		
+		// saving changes
+		await _userRepository.UpdateAsync(user);
 	}
 
 	public async Task<(bool Success, string? ErrorMessage)> LoginUserAsync(string email, string password)

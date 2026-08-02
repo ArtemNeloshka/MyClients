@@ -36,15 +36,17 @@ public class TrainingServiceTests
 	}
 	
 	// invalid duration
-	[Fact]
-	public async Task CreateTrainingAsync_InvalidDuration_ThrowsArgumentException()
+	[Theory]
+	[InlineData(-1, 1, 1)]
+	[InlineData(0, 0, 0)]
+	public async Task CreateTrainingAsync_InvalidDuration_ThrowsArgumentException(int hours, int minutes, int seconds)
 	{
 		var userId = 1;
 		var trainingDate = DateOnly.FromDateTime(DateTime.Now).AddDays(-1);
-		var duration = new TimeSpan(hours: -1, minutes: 1, seconds: 1);
+		var duration = new TimeSpan(hours, minutes, seconds);
 		var trainingLog = string.Empty;
 		var attempts = new List<Attempt> { new Attempt { } };
-		
+	
 		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
 			_service.CreateTrainingAsync(userId, trainingDate, duration, trainingLog, attempts));
 
@@ -129,6 +131,26 @@ public class TrainingServiceTests
 		Assert.Contains("Show this training.", training.TrainingLog);
 
 		_mockRepo.Verify(r => r.GetByIdAsync(1), Times.Once);
+	}
+	
+	// get training by user id happy path
+	[Fact]
+	public async Task GetTrainingsByUserIdAsync_ValidData_ReturnsTrainingsList()
+	{
+		var user = new User { Id = 1 };
+		var training1 = new Training { UserId = user.Id };
+		var training2 = new Training { UserId = user.Id };
+
+		_mockRepo.Setup(r => r.GetAllByUserIdAsync(user.Id))
+			.ReturnsAsync([training1, training2]);
+
+		var result = await _service.GetTrainingsByUserIdAsync(user.Id);
+		
+		Assert.Equal(2, result.Count);
+		Assert.Contains(training1, result);
+		Assert.Contains(training2, result);
+		
+		_mockRepo.Verify(r => r.GetAllByUserIdAsync(user.Id), Times.Once);
 	}
 	
 	// get by period sad path

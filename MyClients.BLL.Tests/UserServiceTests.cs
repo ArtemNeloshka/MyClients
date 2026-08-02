@@ -2,6 +2,7 @@ using Moq;
 using MyClients.BLL.Interfaces.Repositories;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.BLL.Services;
+using MyClients.Domain.Constants;
 using MyClients.Domain.Entities;
 using static MyClients.Domain.Constants.ErrorMessages;
 
@@ -16,6 +17,204 @@ public class UserServiceTests
 	{
 		_mockRepo = new Mock<IUserRepository>();
 		_service = new UserService(_mockRepo.Object);
+	}
+	
+	// register sad path
+	// null name
+	[Fact]
+	public async Task RegisterUserAsync_InvalidFirstName_ThrowsArgumentException()
+	{
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.RegisterUserAsync(
+				firstName: string.Empty,
+				lastName: "Test",
+				email: "test@gmail.com",
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
+
+		Assert.Contains(NameIsNullOrEmpty, exception.Message);
+	}
+	
+	// null surname
+	[Fact]
+	public async Task RegisterUserAsync_InvalidLastName_ThrowsArgumentException()
+	{
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.RegisterUserAsync(
+				firstName: "Test",
+				lastName: string.Empty,
+				email: "test@gmail.com",
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
+
+		Assert.Contains(SurnameIsNullOrEmpty, exception.Message);
+	}
+	
+	// invalid email
+	[Theory]
+	[InlineData("")]
+	[InlineData("invalidDomain@test.com")]
+	[InlineData("noAtgmail.com")]
+	[InlineData("      ")]
+	[InlineData("shortDomain@gmail.c")]
+	[InlineData("@gmail.com")]
+	public async Task RegisterUserAsync_InvalidEmail_ThrowsArgumentException(string invalidEmail)
+	{
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.RegisterUserAsync(
+				firstName: "Test",
+				lastName: "Test",
+				email: invalidEmail,
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
+
+		Assert.Contains(InvalidEmail, exception.Message);
+	}
+	
+	// invalid birthday
+	[Fact]
+	public async Task RegisterUserAsync_InvalidBirthday_ThrowsArgumentException()
+	{
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.RegisterUserAsync(
+				firstName: "Test",
+				lastName: "Test",
+				email: "test@gmail.com",
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(1),
+				password: "TestPassword"));
+
+		Assert.Contains(InvalidDateHigherThanToday, exception.Message);
+	}
+	
+	// invalid password
+	[Theory]
+	[InlineData("")]
+	[InlineData(null)]
+	[InlineData("short")]
+	public async Task RegisterUserAsync_InvalidPassword_ThrowsArgumentException(string invalidPassword)
+	{
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.RegisterUserAsync(
+				firstName: "TestName",
+				lastName: "TestSurname",
+				email: "test@gmail.com",
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: invalidPassword));
+
+		Assert.Contains(PasswordIsShort, exception.Message);
+	}
+	
+	// email already exists
+	[Fact]
+	public async Task RegisterUserAsync_EmailAlreadyExists_ThrowsInvalidOperationException()
+	{
+		var existingUser = new User
+		{
+			Email = "test@gmail.com",
+		};
+
+		_mockRepo.Setup(r => r.GetByEmailAsync("test@gmail.com"))
+			.ReturnsAsync(existingUser);
+
+		var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+			_service.RegisterUserAsync(
+				firstName: "Test",
+				lastName: "Test",
+				email: "test@gmail.com",
+				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+				password: "TestPassword"));
+
+		Assert.Contains(EmailAlreadyExists, exception.Message);
+	
+		_mockRepo.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Never);
+	}
+	
+	// register happy path
+	[Fact]
+	public async Task RegisterUserAsync_ValidData_AddsNewUserToRepository()
+	{
+		var userToRegister = new User()
+		{
+			Name = "Name",
+			Surname = "Surname",
+			Email = "test@gmail.com",
+			Birthday = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+		};
+
+		_mockRepo.Setup(r => r.GetByEmailAsync(userToRegister.Email))
+			.ReturnsAsync((User?)null);
+
+		await _service.RegisterUserAsync(
+			firstName: userToRegister.Name,
+			lastName: userToRegister.Surname,
+			email: userToRegister.Email,
+			birthdate: userToRegister.Birthday,
+			password: "TestPassword");
+		
+		_mockRepo.Verify(r => r.AddAsync(It.Is<User>(u =>
+			u.Name == userToRegister.Name &&
+			u.Surname == userToRegister.Surname &&
+			u.Email == userToRegister.Email &&
+			u.Birthday == userToRegister.Birthday
+		)), Times.Once);
+	}
+	
+	// get all happy path
+	[Fact]
+	public async Task GetAllUsersAsync_ValidData_ReturnsUsersList()
+	{
+		var user1 = new User();
+		var user2 = new User();
+
+		_mockRepo.Setup(r => r.GetAllAsync())
+			.ReturnsAsync([user1, user2]);
+
+		var result = await _service.GetAllUsersAsync();
+		
+		Assert.Equal(2, result.Count);
+		
+		_mockRepo.Verify(r => r.GetAllAsync(), Times.Once);
+	}
+	
+	// get by email sad path
+	[Theory]
+	[InlineData("")]
+	[InlineData("invalidDomain@test.com")]
+	[InlineData("noAtgmail.com")]
+	[InlineData("      ")]
+	[InlineData("shortDomain@gmail.c")]
+	[InlineData("@gmail.com")]
+	[InlineData("invalidEmail@gmail.com@gmail.com")]
+	[InlineData("invalidEm@il@gmail.com")]
+	[InlineData(" @gmail.com")]
+	[InlineData("with space@gmail.com")]
+	public async Task GetUserByEmailAsync_InvalidEmail_ThrowsArgumentException(string invalidEmail)
+	{
+		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+			_service.GetUserByEmailAsync(invalidEmail));
+
+		Assert.Contains(InvalidEmail, exception.Message);
+	}
+
+	// get by email happy path
+	[Fact]
+	public async Task GetUserByEmailAsync_ValidEmail_ReturnsUserWithValidEmail()
+	{
+		var existingUser = new User()
+		{
+			Id = 1,
+			Email = "test@gmail.com",
+		};
+
+		_mockRepo.Setup(r => r.GetByEmailAsync("test@gmail.com"))
+			.ReturnsAsync(existingUser);
+
+		var userByEmail = await _service.GetUserByEmailAsync(existingUser.Email);
+		
+		Assert.NotNull(userByEmail);
+		Assert.Equal(existingUser.Email, userByEmail.Email);
+		
+		_mockRepo.Verify(r => r.GetByEmailAsync("test@gmail.com"), Times.Once);
 	}
 	
 	// edit info sad path
@@ -37,9 +236,14 @@ public class UserServiceTests
 	[Fact]
 	public async Task EditUserInfoAsync_UserNotFound_ThrowsKeyNotFoundException()
 	{
+		var invalidId = -1;
+		
+		_mockRepo.Setup(r => r.GetByIdAsync(invalidId))
+			.ReturnsAsync((User?)null);
+		
 		var exception = await Assert.ThrowsAsync<KeyNotFoundException>(() =>
 			_service.EditUserInfoAsync(
-				id: -1,
+				id: invalidId,
 				name: "TestName",
 				surname: "TestSurname",
 				birthday: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
@@ -157,159 +361,6 @@ public class UserServiceTests
 		_mockRepo.Verify(r => r.UpdateAsync(user), Times.Once);
 	}
 	
-	// get by email sad path
-	[Theory]
-	[InlineData("")]
-	[InlineData("invalidDomain@test.com")]
-	[InlineData("noAtgmail.com")]
-	[InlineData("      ")]
-	[InlineData("shortDomain@gmail.c")]
-	[InlineData("@gmail.com")]
-	[InlineData("invalidEmail@gmail.com@gmail.com")]
-	[InlineData("invalidEm@il@gmail.com")]
-	[InlineData(" @gmail.com")]
-	[InlineData("with space@gmail.com")]
-	public async Task GetUserByEmailAsync_InvalidEmail_ThrowsArgumentException(string invalidEmail)
-	{
-		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			_service.GetUserByEmailAsync(invalidEmail));
-
-		Assert.Contains(InvalidEmail, exception.Message);
-	}
-
-	// get by email happy path
-	[Fact]
-	public async Task GetUserByEmailAsync_ValidEmail_ReturnsUserWithValidEmail()
-	{
-		var existingUser = new User()
-		{
-			Id = 1,
-			Email = "test@gmail.com",
-		};
-
-		_mockRepo.Setup(r => r.GetByEmailAsync("test@gmail.com"))
-			.ReturnsAsync(existingUser);
-
-		var userByEmail = await _service.GetUserByEmailAsync(existingUser.Email);
-		
-		Assert.NotNull(userByEmail);
-		Assert.Equal(existingUser.Email, userByEmail.Email);
-		
-		_mockRepo.Verify(r => r.GetByEmailAsync("test@gmail.com"), Times.Once);
-	}
-	
-	// register sad path
-	// null name
-	[Fact]
-	public async Task RegisterUserAsync_InvalidFirstName_ThrowsArgumentException()
-	{
-		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			_service.RegisterUserAsync(
-				firstName: string.Empty,
-				lastName: "Test",
-				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
-				password: "TestPassword"));
-
-		Assert.Contains(NameIsNullOrEmpty, exception.Message);
-	}
-	
-	// null surname
-	[Fact]
-	public async Task RegisterUserAsync_InvalidLastName_ThrowsArgumentException()
-	{
-		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			_service.RegisterUserAsync(
-				firstName: "Test",
-				lastName: string.Empty,
-				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
-				password: "TestPassword"));
-
-		Assert.Contains(SurnameIsNullOrEmpty, exception.Message);
-	}
-	
-	// invalid email
-	[Theory]
-	[InlineData("")]
-	[InlineData("invalidDomain@test.com")]
-	[InlineData("noAtgmail.com")]
-	[InlineData("      ")]
-	[InlineData("shortDomain@gmail.c")]
-	[InlineData("@gmail.com")]
-	public async Task RegisterUserAsync_InvalidEmail_ThrowsArgumentException(string invalidEmail)
-	{
-		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			_service.RegisterUserAsync(
-				firstName: "Test",
-				lastName: "Test",
-				email: invalidEmail,
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
-				password: "TestPassword"));
-
-		Assert.Contains(InvalidEmail, exception.Message);
-	}
-	
-	// invalid birthday
-	[Fact]
-	public async Task RegisterUserAsync_InvalidBirthday_ThrowsArgumentException()
-	{
-		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			_service.RegisterUserAsync(
-				firstName: "Test",
-				lastName: "Test",
-				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(1),
-				password: "TestPassword"));
-
-		Assert.Contains(InvalidDateHigherThanToday, exception.Message);
-	}
-	
-	// invalid password
-	[Theory]
-	[InlineData("")]
-	[InlineData(null)]
-	[InlineData("short")]
-	public async Task RegisterUserAsync_InvalidPassword_ThrowsArgumentException(string invalidPassword)
-	{
-		var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
-			_service.RegisterUserAsync(
-				firstName: "TestName",
-				lastName: "TestSurname",
-				email: "test@gmail.com",
-				birthdate: DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
-				password: invalidPassword));
-
-		Assert.Contains(PasswordIsShort, exception.Message);
-	}
-	
-	// register happy path
-	[Fact]
-	public async Task RegisterUserAsync_ValidData_AddsNewUserToRepository()
-	{
-		var userToRegister = new User()
-		{
-			Name = "Name",
-			Surname = "Surname",
-			Email = "test@gmail.com",
-			Birthday = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
-		};
-
-		await _service.RegisterUserAsync(
-			firstName: userToRegister.Name,
-			lastName: userToRegister.Surname,
-			email: userToRegister.Email,
-			birthdate: userToRegister.Birthday,
-			password: "TestPassword");
-		
-		_mockRepo.Verify(r => r.AddAsync(It.Is<User>(u =>
-			u.Name == userToRegister.Name &&
-			u.Surname == userToRegister.Surname &&
-			u.Email == userToRegister.Email &&
-			u.Birthday == userToRegister.Birthday
-		)), Times.Once);
-	}
-	
 	// login sad path
 	// invalid email
 	[Theory]
@@ -344,7 +395,7 @@ public class UserServiceTests
 	
 	// email not found
 	[Fact]
-	public async Task LoginUserAsync_EmailDoesntFound_ThrowsArgumentException()
+	public async Task LoginUserAsync_EmailDoesntFound_ReturnsFalse()
 	{
 		_mockRepo.Setup(r => r.GetByEmailAsync("non_existence_email@gmail.com"))
 			.ReturnsAsync((User?)null);
@@ -359,7 +410,7 @@ public class UserServiceTests
 	
 	// incorrect password
 	[Fact]
-	public async Task LoginUserAsync_PasswordsDoesntMatch_ThrowsArgumentException()
+	public async Task LoginUserAsync_PasswordsDoesntMatch_ReturnsFalse()
 	{
 		var user = new User
 		{
@@ -382,7 +433,7 @@ public class UserServiceTests
 	
 	// password hash is null
 	[Fact]
-	public async Task LoginUserAsync_PasswordHashIsNull_ThrowsArgumentException()
+	public async Task LoginUserAsync_PasswordHashIsNull_ReturnsFalse()
 	{
 		var user = new User
 		{
@@ -428,7 +479,7 @@ public class UserServiceTests
 	
 	// login happy path
 	[Fact]
-	public async Task LoginUserAsync_NoExistingEmail_ReturnsFalse()
+	public async Task LoginUserAsync_WrongEmail_ReturnsFalse()
 	{
 		var plainPassword = "TestPassword";
 		var existingUser = new User()
@@ -445,7 +496,44 @@ public class UserServiceTests
 		var result = await _service.LoginUserAsync("invalid" + existingUser.Email, plainPassword);
 
 		Assert.False(result.Success);
+		Assert.Contains(UserNotFound, result.ErrorMessage);
 		
 		_mockRepo.Verify(r => r.GetByEmailAsync("invalidtest@gmail.com"), Times.Once);
+	}
+	
+	// get best grade happy path (has best grade)
+	[Fact]
+	public async Task GetBestGradeInDisciplineAsync_ValidData_ReturnsGrade()
+	{
+		var user = new User { Id = 1 };
+		var grade2 = new Grade { Id = 2, Value = 2 };
+		var bouldering = new Discipline { Id = 1, Name = Disciplines.Bouldering };
+
+		_mockRepo.Setup(r => r.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id))
+			.ReturnsAsync(grade2);
+
+		var result = await _service.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id);
+		
+		Assert.NotNull(result);
+		Assert.Equal(grade2.Value, result.Value);
+		
+		_mockRepo.Verify(r => r.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id), Times.Once);
+	}
+	
+	// get best grade happy path (returns null)
+	[Fact]
+	public async Task GetBestGradeInDisciplineAsync_ValidData_ReturnsNull()
+	{
+		var user = new User { Id = 1 };
+		var bouldering = new Discipline { Id = 1, Name = Disciplines.Bouldering };
+
+		_mockRepo.Setup(r => r.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id))
+			.ReturnsAsync((Grade?)null);
+
+		var result = await _service.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id);
+		
+		Assert.Null(result);
+		
+		_mockRepo.Verify(r => r.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id), Times.Once);
 	}
 }

@@ -14,16 +14,21 @@ public class DisciplineService : IDisciplineService
 		this._disciplineRepository = disciplineRepository;
 	}
 	
-	public async Task<Discipline?> GetDisciplineByIdAsync(int id)
+	public async Task<Discipline> GetDisciplineByIdAsync(int id)
 	{
-		return await _disciplineRepository.GetByIdAsync(id);
+		var discipline = await _disciplineRepository.GetByIdAsync(id);
+
+		if (discipline == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.DisciplineNotFoundMessage);
+		}
+
+		return discipline;
 	}
 
 	public async Task<ICollection<Discipline>> GetAllDisciplinesAsync()
 	{
-		var disciplines = (await _disciplineRepository.GetAllAsync()).ToList();
-
-		return disciplines;
+		return (await _disciplineRepository.GetAllAsync()).ToList();
 	}
 
 	public async Task<Discipline> GetDisciplineByNameAsync(string name)
