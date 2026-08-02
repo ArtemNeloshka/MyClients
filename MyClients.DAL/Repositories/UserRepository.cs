@@ -17,10 +17,16 @@ public class UserRepository : Repository<User>, IUserRepository
 		return await _dbContext.Attempts
 			.Where(a => a.DisciplineId == disciplineId
 			            && a.Training.UserId == userId
-			            && (a.ClimbResult.Name == Flash
-			                || a.ClimbResult.Name == Top))
+			            && (string.Equals(a.ClimbResult.Name, Flash)
+			                || string.Equals(a.ClimbResult.Name, Top)))
 			.Select(a => a.Grade)
 			.OrderByDescending(grade => grade.Value)
 			.FirstOrDefaultAsync();
+	}
+
+	public async Task<User?> GetByEmailAsync(string email)
+	{
+		return await _dbSet.FirstOrDefaultAsync(u => 
+			string.Equals(u.Email, email, StringComparison.OrdinalIgnoreCase));
 	}
 }

@@ -1,10 +1,11 @@
 using MyClients.BLL.Interfaces.Repositories;
 using MyClients.BLL.Interfaces.Services;
+using MyClients.Domain.Constants;
 using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Services;
 
-public class GradeService : Service, IGradeService
+public class GradeService : IGradeService
 {
 	private readonly IGradeRepository _gradeRepository;
 
@@ -13,15 +14,20 @@ public class GradeService : Service, IGradeService
 		this._gradeRepository = gradeRepository;
 	}
 	
-	public async Task<Grade?> GetGradeByIdAsync(int id)
+	public async Task<Grade> GetGradeByIdAsync(int id)
 	{
-		return await _gradeRepository.GetByIdAsync(id);
+		var grade = await _gradeRepository.GetByIdAsync(id);
+
+		if (grade == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.GradeNotFound);
+		}
+
+		return grade;
 	}
 
 	public async Task<ICollection<Grade>> GetAllGradesAsync()
 	{
-		var grades = await _gradeRepository.GetAllAsync();
-
-		return grades.ToList();
+		return (await _gradeRepository.GetAllAsync()).ToList();
 	}
 }

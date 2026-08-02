@@ -39,8 +39,6 @@ public static class MauiProgram
 		builder.Services.AddTransient<IDisciplineRepository, DisciplineRepository>();
 		builder.Services.AddTransient<IGradeRepository, GradeRepository>();
 		builder.Services.AddTransient<ITrainingRepository, TrainingRepository>();
-		builder.Services.AddTransient<IAttemptRepository, AttemptRepository>();
-		builder.Services.AddTransient<IClimbResultRepository, ClimbResultRepository>();
 		
 		// BLL
 		builder.Services.AddTransient<IUserService, UserService>();

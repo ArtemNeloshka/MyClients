@@ -15,4 +15,7 @@ public static class ErrorMessages
 	public const string TrainingNotFound = "Training is not found.";
 	public const string DateStartHigherThanEnd = "Start date cannot be higher than an end date.";
 	public const string DisciplineNotFoundMessage = "Discipline is not found.";
+	public const string InvalidDuration = "Duration cannot be less than 0.";
+	public static readonly string TrainingLogIsLong = $"Training log cannot be longer than {ValidationRules.MaxTrainingLogLength} symbols.";
+	public const string GradeNotFound = "Grade is not found.";
 }

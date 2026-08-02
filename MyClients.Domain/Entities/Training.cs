@@ -7,7 +7,7 @@ public class Training
 	public int UserId { get; set; }
 	public DateOnly TrainingDate { get; set; }
 	public TimeSpan TrainingDuration { get; set; }
-	public string TrainingLog { get; set; } = String.Empty;
+	public string? TrainingLog { get; set; }
 	
 	// Navigation property
 	public User User { get; set; } = null!;

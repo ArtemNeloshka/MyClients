@@ -5,64 +5,13 @@ using MyClients.Domain.Entities;
 
 namespace MyClients.BLL.Services;
 
-public class UserService : Service, IUserService
+public class UserService : IUserService
 {
 	private readonly IUserRepository _userRepository;
 
 	public UserService(IUserRepository userRepository)
 	{
 		this._userRepository = userRepository;
-	}
-	
-	public async Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday)
-	{
-		// validate input
-		if (birthday != null && birthday > DateOnly.FromDateTime(DateTime.Now))
-		{
-			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(birthday));
-		}
-		
-		// getting user from DB
-		var user = await _userRepository.GetByIdAsync(id);
-
-		if (user == null)
-		{
-			throw new KeyNotFoundException(ErrorMessages.UserNotFound + $" (id={id})");
-		}
-		
-		// editing info
-		if (!string.IsNullOrWhiteSpace(name))
-			user.Name = name;
-		
-		if (!string.IsNullOrWhiteSpace(surname))
-			user.Surname = surname;
-		
-		if (birthday != null)
-			user.Birthday = (DateOnly)birthday;
-		
-		// saving changes
-		await _userRepository.UpdateAsync(user);
-	}
-
-	public async Task<ICollection<User>> GetAllUsersAsync()
-	{
-		var allUsers = (await _userRepository.GetAllAsync()).ToList();
-
-		return allUsers;
-	}
-
-	public async Task<User?> GetUserByEmailAsync(string email)
-	{
-		// validate input
-		if (!ValidationRules.IsValidEmail(email))
-		{
-			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
-		}
-		
-		// getting all users
-		var users = await _userRepository.GetAllAsync();
-
-		return users.FirstOrDefault(u => u.Email == email);
 	}
 
 	public async Task RegisterUserAsync(string firstName, string lastName, string email, DateOnly birthdate, string password)
@@ -88,7 +37,7 @@ public class UserService : Service, IUserService
 			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday);
 		}
 
-		if (password.Length < ValidationRules.MinPasswordLength)
+		if (string.IsNullOrWhiteSpace(password) || password.Length < ValidationRules.MinPasswordLength)
 		{
 			throw new ArgumentException(ErrorMessages.PasswordIsShort, nameof(password));
 		}
@@ -113,6 +62,55 @@ public class UserService : Service, IUserService
 		await _userRepository.AddAsync(newUser);
 	}
 
+	public async Task<ICollection<User>> GetAllUsersAsync()
+	{
+		return (await _userRepository.GetAllAsync()).ToList();
+	}
+	
+	public async Task<User?> GetUserByEmailAsync(string email)
+	{
+		// validate input
+		if (!ValidationRules.IsValidEmail(email))
+		{
+			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
+		}
+
+		return await _userRepository.GetByEmailAsync(email);
+	}
+	
+	public async Task EditUserInfoAsync(int id, string? name, string? surname, DateOnly? birthday, int? favouriteDisciplineId)
+	{
+		// validate input
+		if (birthday != null && birthday > DateOnly.FromDateTime(DateTime.Now))
+		{
+			throw new ArgumentException(ErrorMessages.InvalidDateHigherThanToday, nameof(birthday));
+		}
+		
+		// getting user from DB
+		var user = await _userRepository.GetByIdAsync(id);
+
+		if (user == null)
+		{
+			throw new KeyNotFoundException(ErrorMessages.UserNotFound + $" (id={id})");
+		}
+		
+		// editing info
+		if (!string.IsNullOrWhiteSpace(name))
+			user.Name = name;
+		
+		if (!string.IsNullOrWhiteSpace(surname))
+			user.Surname = surname;
+		
+		if (birthday != null)
+			user.Birthday = (DateOnly)birthday;
+
+		if (favouriteDisciplineId != null)
+			user.FavouriteDisciplineId = favouriteDisciplineId;
+		
+		// saving changes
+		await _userRepository.UpdateAsync(user);
+	}
+
 	public async Task<(bool Success, string? ErrorMessage)> LoginUserAsync(string email, string password)
 	{
 		// validate input
@@ -121,7 +119,7 @@ public class UserService : Service, IUserService
 			throw new ArgumentException(ErrorMessages.InvalidEmail, nameof(email));
 		}
 
-		if (password.Length < ValidationRules.MinPasswordLength)
+		if (string.IsNullOrWhiteSpace(password) || password.Length < ValidationRules.MinPasswordLength)
 		{
 			throw new ArgumentException(ErrorMessages.PasswordIsShort, nameof(password));
 		}
