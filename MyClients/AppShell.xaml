@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MyClients"
     xmlns:views="clr-namespace:MyClients.Views"
+    xmlns:constants="clr-namespace:MyClients.Constants"
     Shell.FlyoutBehavior="Disabled"
     Title="MyClients"
     
@@ -13,24 +14,34 @@
     Shell.TabBarUnselectedColor="Firebrick">
     
     <TabBar>
-        <Tab Title="Home" Icon="home_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage"/>
+        <Tab Title="Home"
+             Icon="home_icon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" 
+                          Route="{x:Static constants:AppRoutes.MainPageRoute}"/>
         </Tab>
 	    
-        <Tab Title="Disciplines" Icon="disciplines_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:DisciplinesPage}" />
+        <Tab Title="Disciplines" 
+             Icon="disciplines_icon.png" >
+            <ShellContent ContentTemplate="{DataTemplate views:DisciplinesPage}"
+             Route="{x:Static constants:AppRoutes.DisciplinesPageRoute}" />
         </Tab>
 	    
-        <Tab Title="Train" Icon="train_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:TrainPage}" />
+        <Tab Title="Train" 
+             Icon="train_icon.png" >
+            <ShellContent ContentTemplate="{DataTemplate views:TrainPage}"
+             Route="{x:Static constants:AppRoutes.TrainPageRoute}" />
         </Tab>
 	    
-        <Tab Title="Statistics" Icon="statistics_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}" />
+        <Tab Title="Statistics" 
+             Icon="statistics_icon.png" >
+            <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}"
+             Route="{x:Static constants:AppRoutes.StatisticsPageRoute}" />
         </Tab>
 	    
-        <Tab Title="Profile" Icon="user_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
+        <Tab Title="Profile" 
+             Icon="user_icon.png" >
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}"
+             Route="{x:Static constants:AppRoutes.ProfilePageRoute}" />
         </Tab>
     </TabBar>
 
