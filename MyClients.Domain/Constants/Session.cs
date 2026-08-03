@@ -3,5 +3,5 @@ namespace MyClients.Domain.Constants;
 public static class Session
 {
 	public static string CurrentUserEmail { get; set; } = String.Empty;
-	public static int CurrentUserId { get; set; }
+	public static int? CurrentUserId { get; set; }
 }

@@ -66,18 +66,18 @@ public partial class LogInViewModel : ObservableObject
 		try
 		{
 			var result = await _userService.LoginUserAsync(this.Email, this.Password);
-			if (result.Success)
-			{
-				Session.CurrentUserEmail = this.Email;
-				return (true, null);
-			}
+			if (result is not { Success: true, userId: not null })
+				return result.ErrorMessage switch
+				{
+					ErrorMessages.UserNotFound => (false, ErrorPlaceholders.LogInEmailNotFound),
+					ErrorMessages.PasswordIncorrect => (false, ErrorPlaceholders.PasswordIncorrect),
+					_ => (false, result.ErrorMessage)
+				};
+			
+			Session.CurrentUserEmail = this.Email;
+			Session.CurrentUserId = result.userId;
+			return (true, null);
 
-			return result.ErrorMessage switch
-			{
-				ErrorMessages.UserNotFound => (false, ErrorPlaceholders.LogInEmailNotFound),
-				ErrorMessages.PasswordIncorrect => (false, ErrorPlaceholders.PasswordIncorrect),
-				_ => (false, result.ErrorMessage)
-			};
 		}
 		catch (Exception e)
 		{
