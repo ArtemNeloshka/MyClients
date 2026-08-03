@@ -1,10 +1,13 @@
 using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
+using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-public class ProfileViewModel : INotifyPropertyChanged
+public partial class ProfileViewModel : ObservableObject
 {
 	private readonly IUserService _userService;
 	private readonly IDisciplineService _disciplineService;
@@ -15,115 +18,154 @@ public class ProfileViewModel : INotifyPropertyChanged
 		this._disciplineService = disciplineService;
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
-
+	[ObservableProperty]
 	private string _name = string.Empty;
-	public string Name
-	{
-		get => _name;
-		set { _name = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name))); }
-	}
-
+	[ObservableProperty]
 	private string _surname = string.Empty;
-	public string Surname
-	{
-		get => _surname;
-		set { _surname = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Surname))); }
-	}
-
+	[ObservableProperty]
 	private string _email = string.Empty;
-	public string Email
-	{
-		get => _email;
-		set { _email = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Email))); }
-	}
+	[ObservableProperty]
+	private string _favouriteDiscipline = "Favourite Discipline";
 
+	[ObservableProperty]
 	private DateOnly _birthdate;
-	public DateOnly Birthdate
-	{
-		get => _birthdate;
-		set { _birthdate = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Birthdate))); }
-	}
 
+	[ObservableProperty]
 	private string _boulderingBestGrade = "-";
-	public string BoulderingBestGrade
-	{
-		get => _boulderingBestGrade;
-		set
-		{
-			_boulderingBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BoulderingBestGrade)));
-		}
-	}
-
+	[ObservableProperty]
 	private string _topRopeBestGrade = "-";
-	public string TopRopeBestGrade
-	{
-		get => _topRopeBestGrade;
-		set
-		{
-			_topRopeBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TopRopeBestGrade)));
-		}
-	}
-
+	[ObservableProperty]
 	private string _leadBestGrade = "-";
-	public string LeadBestGrade
-	{
-		get => _leadBestGrade;
-		set
-		{
-			_leadBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeadBestGrade)));
-		}
-	}
-
+	[ObservableProperty]
 	private string _speedBestGrade = "-";
-	public string SpeedBestGrade
-	{
-		get => _speedBestGrade;
-		set
-		{
-			_speedBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpeedBestGrade)));
-		}
-	}
-
-	public List<string> DisciplineNames { get; set; } = new();
 
 	public async Task LoadUserAsync()
 	{
-		var userEmail = Session.CurrentUserEmail;
-		if (string.IsNullOrEmpty(userEmail))
-			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+		try
+		{
+			var userEmail = Session.CurrentUserEmail;
+			if (string.IsNullOrEmpty(userEmail))
+			{
+				await LogoutAndRedirectToLoginPageByReasonAsync(
+					"You are not logged in. Try to log in with your email!");
+				return;
+			}
 
-		var user = await _userService.GetUserByEmailAsync(userEmail);
-		
-		if (user == null)
-			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+			var user = await _userService.GetUserByEmailAsync(userEmail);
 
-		Name = user.Name;
-		Surname = user.Surname;
-		Email = user.Email;
-		Birthdate = user.Birthday;
+			if (user == null)
+			{
+				await LogoutAndRedirectToLoginPageByReasonAsync(
+					"We cannot find an account with your email. Try later or register!");
+				return;
+			}
+			if (user.Id != Session.CurrentUserId)
+			{
+				await LogoutAndRedirectToLoginPageByReasonAsync(
+					"We cannot identify you. Try later or register!");
+				return;
+			}
 
-		var disciplines = await _disciplineService.GetAllDisciplinesAsync();
-		DisciplineNames = disciplines.Select(d => d.Name).ToList();
+			this.Name = user.Name;
+			this.Surname = user.Surname;
+			this.FavouriteDiscipline = user.FavouriteDiscipline?.Name ?? "Favourite Discipline";
+			this.Email = user.Email;
+			this.Birthdate = user.Birthday;
 
-		var bouldering = await _disciplineService.GetDisciplineByNameAsync(Disciplines.Bouldering);
-		BoulderingBestGrade = (await _userService
-			.GetBestGradeInDisciplineAsync(user.Id, bouldering.Id))?.Name ?? "-";
+			var boulderingGradeTask = GetGradeAsync(Disciplines.Bouldering, user.Id);
+			var topRopeGradeTask = GetGradeAsync(Disciplines.TopRopeClimbing, user.Id);
+			var leadGradeTask = GetGradeAsync(Disciplines.LeadClimbing, user.Id);
+			var speedGradeTask = GetGradeAsync(Disciplines.SpeedClimbing, user.Id);
+
+			await Task.WhenAll(boulderingGradeTask, topRopeGradeTask, leadGradeTask, speedGradeTask);
+			
+			this.BoulderingBestGrade = boulderingGradeTask.Result;
+			this.TopRopeBestGrade = topRopeGradeTask.Result;
+			this.LeadBestGrade = leadGradeTask.Result;
+			this.SpeedBestGrade = speedGradeTask.Result;
+		}
+		catch (KeyNotFoundException e)
+		{
+			await LogoutAndRedirectToLoginPageByReasonAsync(
+				"We cannot find an account with your email. Try later or to register!");
+		}
+		catch (Exception e)
+		{
+			await LogoutAndRedirectToLoginPageByReasonAsync(
+				"Couldn't load your profile page. Try later!");
+		}
+	}
+
+	[RelayCommand]
+	private async Task LogoutAndRedirectToLoginPageAsync()
+	{
+		ClearSession();
+		await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+	}
+
+	[RelayCommand]
+	private async Task SelectFavouriteDisciplineAsync()
+	{
+		string[] disciplineNames = [Disciplines.Bouldering, Disciplines.TopRopeClimbing, Disciplines.LeadClimbing,
+			Disciplines.SpeedClimbing];
 		
-		var topRope = await _disciplineService.GetDisciplineByNameAsync(Disciplines.TopRopeClimbing);
-		TopRopeBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, topRope.Id))?.Name ?? "-";
+		var result = await Shell.Current.DisplayActionSheetAsync(
+			"Select discipline", "Cancel", null, disciplineNames);
+
+		if (result != null && result != "Cancel")
+		{
+			var selectedDiscipline = await _disciplineService.GetDisciplineByNameAsync(result);
+			try
+			{
+				await _userService.EditUserInfoAsync(
+					id: Session.CurrentUserId,
+					name: null,
+					surname: null,
+					birthday: null,
+					favouriteDisciplineId: selectedDiscipline.Id);
+				this.FavouriteDiscipline = result;
+			}
+			catch (ArgumentException e)
+			{
+				await Shell.Current.DisplayAlertAsync("Sorry,", 
+					"Couldn't remember your favourite discipline. Try later!",
+					"Ok");
+			}
+			catch (KeyNotFoundException e)
+			{
+				await Shell.Current.DisplayAlertAsync("Sorry,",
+					"Couldn't find your favourite discipline. Try later!",
+					"Ok");
+			}
+			catch (Exception e)
+			{
+				await Shell.Current.DisplayAlertAsync("Sorry,",
+					"Couldn't write your favourite discipline for a mystery reason. Try later!",
+					"Ok");
+			}
+		}
+	}
+
+	private async Task<string> GetGradeAsync(string disciplineName, int userId)
+	{
+		var discipline = await _disciplineService.GetDisciplineByNameAsync(disciplineName);
+		var grade = await _userService.GetBestGradeInDisciplineAsync(userId, discipline.Id);
+		return grade?.Name ?? "-";
+	}
+	
+	private async Task LogoutAndRedirectToLoginPageByReasonAsync(string logoutReason)
+	{
+		var navigationParameter = new Dictionary<string, object>
+		{
+			{ "LogoutReason", logoutReason }
+		};
 		
-		var lead = await _disciplineService.GetDisciplineByNameAsync(Disciplines.LeadClimbing);
-		LeadBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, lead.Id))?.Name ?? "-";
-		
-		var speed = await _disciplineService.GetDisciplineByNameAsync(Disciplines.SpeedClimbing);
-		SpeedBestGrade = (await _userService
-				.GetBestGradeInDisciplineAsync(user.Id, speed.Id))?.Name ?? "-";
+		ClearSession();
+		await Shell.Current.GoToAsync($"//{nameof(LoginPage)}", navigationParameter);
+	}
+	
+	private void ClearSession()
+	{
+		Session.CurrentUserEmail = string.Empty;
 	}
 }

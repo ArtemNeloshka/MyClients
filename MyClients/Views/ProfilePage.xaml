@@ -61,11 +61,10 @@
 								        BackgroundColor="#D9D9D9"
 								        Margin="10 5 0 0">
 									<Border.GestureRecognizers>
-										<TapGestureRecognizer Tapped="OnDisciplinePickerTapped"/>
+										<TapGestureRecognizer Command="{Binding SelectFavouriteDisciplineCommand}"/>
 									</Border.GestureRecognizers>
     
-									<Label x:Name="DisciplineLabel"
-									       Text="Favorite discipline"
+									<Label Text="{Binding FavouriteDiscipline}"
 									       FontAttributes="Bold, Italic"
 									       HorizontalTextAlignment="Center"
 									       VerticalOptions="Center"/>
@@ -243,7 +242,7 @@
 					        FontSize="20"
 					        HorizontalOptions="Center"
 					        Margin="15"
-					        Clicked="OnGoToLoginPageClicked"/>
+					        Command="{Binding LogoutAndRedirectToLoginPageCommand}"/>
 				</VerticalStackLayout>
 			</ScrollView>
 			
