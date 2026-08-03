@@ -63,15 +63,15 @@
 					       FontSize="28"
 					       FontAttributes="Italic, Bold"/>
 					<!-- name field -->
-					<controls:RegistrationTextFieldView Text="{Binding Name}"
+					<controls:RegistrationTextFieldView Text="{Binding Name, Mode=TwoWay}"
 					                                    Placeholder="{Binding NamePlaceholder}"
 					                                    PlaceholderColor="{Binding NamePlaceholderColor}"/>
 					<!-- surname field -->
-					<controls:RegistrationTextFieldView Text="{Binding Surname}"
+					<controls:RegistrationTextFieldView Text="{Binding Surname, Mode=TwoWay}"
 					                                    Placeholder="{Binding SurnamePlaceholder}"
 					                                    PlaceholderColor="{Binding SurnamePlaceholderColor}"/>
 					<!-- email field -->
-					<controls:RegistrationTextFieldView Text="{Binding Email}"
+					<controls:RegistrationTextFieldView Text="{Binding Email, Mode=TwoWay}"
 					                                    Placeholder="{Binding EmailPlaceholder}"
 					                                    PlaceholderColor="{Binding EmailPlaceholderColor}"
 					                                    Keyboard="Email"/>
@@ -115,12 +115,12 @@
 					       FontSize="28"
 					       FontAttributes="Italic, Bold"/>
 					<!-- password field -->
-					<controls:RegistrationTextFieldView Text="{Binding Password}"
+					<controls:RegistrationTextFieldView Text="{Binding Password, Mode=TwoWay}"
 					                                    Placeholder="{Binding PasswordPlaceholder}"
 					                                    PlaceholderColor="{Binding PasswordPlaceholderColor}"
 					                                    IsPassword="True"/>
 					<!-- confirm password field -->
-					<controls:RegistrationTextFieldView Text="{Binding ConfirmPassword}"
+					<controls:RegistrationTextFieldView Text="{Binding ConfirmPassword, Mode=TwoWay}"
 					                                    Placeholder="{Binding ConfirmPasswordPlaceholder}"
 					                                    PlaceholderColor="{Binding ConfirmPasswordPlaceholderColor}"
 					                                    IsPassword="True"/>

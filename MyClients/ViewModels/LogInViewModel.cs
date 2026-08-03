@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
+using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
@@ -34,8 +35,7 @@ public partial class LogInViewModel : ObservableObject
 	{
 		if (!string.IsNullOrWhiteSpace(value))
 		{
-			MainThread.BeginInvokeOnMainThread(async () =>
-				await Shell.Current.DisplayAlertAsync("Увага!", value, "Ok"));
+			MainThread.BeginInvokeOnMainThread(() => Shell.Current.DisplayAlertAsync("Увага!", value, "Ok"));
 
 			IncomingMessage = string.Empty;
 		}
@@ -132,7 +132,7 @@ public partial class LogInViewModel : ObservableObject
 	[RelayCommand]
 	private async Task NavigateToRegisterPageAsync()
 	{
-		await Shell.Current.GoToAsync($"//{AppRoutes.RegistrationPage}");
+		await Shell.Current.GoToAsync(nameof(RegistrationPage));
 	}
 	
 	private void SetEmailError(string placeholder)

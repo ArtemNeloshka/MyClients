@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
+using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
@@ -117,6 +118,7 @@ public partial class RegisterViewModel : ObservableObject
 		{
 			await _userService.RegisterUserAsync(this.Name, this.Surname, this.Email, 
 				DateOnly.FromDateTime(this.Birthdate), this.Password);
+			Session.CurrentUserEmail = this.Email;
 
 			await Shell.Current.GoToAsync($"//{AppRoutes.MainPage}");
 		}
@@ -140,7 +142,7 @@ public partial class RegisterViewModel : ObservableObject
 	[RelayCommand]
 	private async Task GoToLoginPageAsync()
 	{
-		await Shell.Current.GoToAsync(AppRoutes.LogInPage);
+		await Shell.Current.GoToAsync("..");
 	}
 
 	private void SetNameError(string placeholder)

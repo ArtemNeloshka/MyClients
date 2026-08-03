@@ -12,11 +12,6 @@
     Shell.TabBarForegroundColor="Green"
     Shell.TabBarUnselectedColor="Firebrick">
     
-		<ShellContent Route="{x:Static constants:AppRoutes.LogInPage}"
-		              ContentTemplate="{DataTemplate views:LoginPage}"/>
-		<ShellContent Route="{x:Static constants:AppRoutes.RegistrationPage}"
-		              ContentTemplate="{DataTemplate views:RegistrationPage}"/>
-	
 		<TabBar>
         <Tab Title="{x:Static constants:PageTitles.MainPage}"
              Icon="{x:Static constants:AppRoutes.MainPageIcon}">

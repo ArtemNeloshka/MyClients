@@ -42,7 +42,7 @@
         		        BackgroundColor="Gray"
         		        HeightRequest="45">
 			        <Entry
-				        Text="{Binding Email}"
+				        Text="{Binding Email, Mode=TwoWay}"
         				Placeholder="{Binding EmailPlaceholder}"
 				        PlaceholderColor="{Binding EmailPlaceholderColor}"
         				Keyboard="Email"
@@ -56,7 +56,7 @@
         		        BackgroundColor="Gray"
         		        HeightRequest="45">
         			<Entry
-				        Text="{Binding Password}"
+				        Text="{Binding Password, Mode=TwoWay}"
         				Placeholder="{Binding PasswordPlaceholder}"
 				        PlaceholderColor="{Binding PasswordPlaceholderColor}"
         				IsPassword="True"

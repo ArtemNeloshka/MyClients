@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
+using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
@@ -73,7 +74,7 @@ public partial class MainViewModel : ObservableObject
 		};
 		
 		ClearSession();
-		await Shell.Current.GoToAsync($"//{AppRoutes.LogInPage}", navigationParameter);
+		await Shell.Current.GoToAsync($"//{nameof(LoginPage)}", navigationParameter);
 	}
 	
 	private void ClearSession()
