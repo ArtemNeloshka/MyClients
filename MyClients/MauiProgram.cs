@@ -47,7 +47,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<ITrainingService, TrainingService>();
 		
 		// PL
-		builder.Services.AddSingleton<LoginPage>();
+		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegistrationPage>();
 		builder.Services.AddTransient<MainPage>();
 		builder.Services.AddTransient<DisciplinesPage>();
@@ -60,7 +60,7 @@ public static class MauiProgram
 		// viewModels
 		builder.Services.AddTransient<RegisterViewModel>();
 		builder.Services.AddTransient<LogInViewModel>();
-		builder.Services.AddSingleton<TrainPageViewModel>();
+		builder.Services.AddTransient<TrainPageViewModel>();
 		builder.Services.AddTransient<ProfileViewModel>();
 		builder.Services.AddTransient<DisciplinesViewModel>();
 		builder.Services.AddTransient<WorkoutsArchiveViewModel>();

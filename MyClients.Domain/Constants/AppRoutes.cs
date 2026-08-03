@@ -2,7 +2,7 @@ namespace MyClients.Domain.Constants;
 
 public class AppRoutes
 {
-	public const string LogInPage = "LogInPage";
+	public const string LoginPage = "LoginPage";
 	public const string RegistrationPage = "RegistrationPage";
 	public const string MainPage = "MainPage";
 	public const string DisciplinesPage = "DisciplinesPage";

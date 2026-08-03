@@ -4,18 +4,21 @@ namespace MyClients;
 
 public partial class MainPage : ContentPage
 {
-	private readonly MainViewModel _viewModel;
+	private readonly MainViewModel? _viewModel;
 	
-	public MainPage(MainViewModel viewModel)
+	public MainPage()
 	{
 		InitializeComponent();
-		_viewModel = viewModel;
+		_viewModel = IPlatformApplication.Current.Services.GetService<MainViewModel>();;
 		BindingContext = _viewModel;
 	}
 
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await _viewModel.LoadUserNameAsync();
+		if (_viewModel != null)
+		{
+			await _viewModel.LoadUserNameAsync();
+		}
 	}
 }
