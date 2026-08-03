@@ -4,17 +4,20 @@ namespace MyClients.Views;
 
 public partial class DisciplinesPage : ContentPage
 {
-	private readonly DisciplinesViewModel _viewModel;
-	public DisciplinesPage(DisciplinesViewModel viewModel)
+	private readonly DisciplinesViewModel? _viewModel;
+	public DisciplinesPage()
 	{
 		InitializeComponent();
-		this._viewModel = viewModel;
+		_viewModel = IPlatformApplication.Current?.Services.GetService<DisciplinesViewModel>();
 		BindingContext = _viewModel;
 	}
 
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await _viewModel.LoadDisciplinesAsync();
+		if (_viewModel != null)
+		{
+			await _viewModel.LoadDisciplinesAsync();
+		}
 	}
 }

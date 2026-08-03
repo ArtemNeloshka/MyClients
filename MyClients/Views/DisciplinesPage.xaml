@@ -44,8 +44,6 @@
 							</Border>
 						</DataTemplate>
 					</BindableLayout.ItemTemplate>
-					
-					
 				</VerticalStackLayout>
 			</ScrollView>
 			

@@ -9,7 +9,7 @@ public partial class MainPage : ContentPage
 	public MainPage()
 	{
 		InitializeComponent();
-		_viewModel = IPlatformApplication.Current.Services.GetService<MainViewModel>();;
+		_viewModel = IPlatformApplication.Current?.Services.GetService<MainViewModel>();
 		BindingContext = _viewModel;
 	}
 
