@@ -2,11 +2,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
-using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : BaseViewModel
 {
 	private readonly IUserService _userService;
 
@@ -23,7 +22,10 @@ public partial class MainViewModel : ObservableObject
 		var userEmail = Session.CurrentUserEmail;
 		if (string.IsNullOrWhiteSpace(userEmail))
 		{
-			await LogoutAndRedirectToLoginPage("Ваша сесія закінчилась або користувача не знайдено. Будь ласка, увійдіть знову.");
+			await GoBackWithAlertAsync(
+				message: "Ваша сесія закінчилась або користувача не знайдено. Будь ласка, увійдіть знову.",
+				pagePath: $"//{AppRoutes.LoginPage}",
+				isError: true);
 			return;
 		}
 
@@ -33,7 +35,10 @@ public partial class MainViewModel : ObservableObject
 
 			if (user == null)
 			{
-				await LogoutAndRedirectToLoginPage("Користувача не знайдено за вказаним email. Будь ласка, увійдіть знову.");
+				await GoBackWithAlertAsync(
+					message: "Користувача не знайдено за вказаним email. Будь ласка, увійдіть знову.",
+					pagePath: $"//{AppRoutes.LoginPage}",
+					isError: true);
 			}
 			else
 			{
@@ -44,7 +49,10 @@ public partial class MainViewModel : ObservableObject
 		}
 		catch (ArgumentException e)
 		{
-			await LogoutAndRedirectToLoginPage("Помилка формату email. Будь ласка, увійдіть знову.");
+			await GoBackWithAlertAsync(
+				message: "Помилка формату email. Будь ласка, увійдіть знову.",
+				pagePath: $"//AppRoutes.LoginPage",
+				isError: true);
 		}
 		catch (Exception)
 		{
@@ -64,21 +72,5 @@ public partial class MainViewModel : ObservableObject
 	{
 		await Shell.Current.GoToAsync($"//{AppRoutes.TrainPage}");
 		Console.WriteLine("Started training from main page.");
-	}
-
-	private async Task LogoutAndRedirectToLoginPage(string logoutReason)
-	{
-		var navigationParameter = new Dictionary<string, object>
-		{
-			{ "LogoutReason", logoutReason }
-		};
-		
-		ClearSession();
-		await Shell.Current.GoToAsync($"//{nameof(LoginPage)}", navigationParameter);
-	}
-	
-	private void ClearSession()
-	{
-		Session.CurrentUserEmail = string.Empty;
 	}
 }

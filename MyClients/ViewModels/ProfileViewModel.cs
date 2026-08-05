@@ -7,7 +7,7 @@ using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-public partial class ProfileViewModel : ObservableObject
+public partial class ProfileViewModel : BaseViewModel
 {
 	private readonly IUserService _userService;
 	private readonly IDisciplineService _disciplineService;
@@ -46,8 +46,10 @@ public partial class ProfileViewModel : ObservableObject
 			var userEmail = Session.CurrentUserEmail;
 			if (string.IsNullOrEmpty(userEmail))
 			{
-				await LogoutAndRedirectToLoginPageByReasonAsync(
-					"You are not logged in. Try to log in with your email!");
+				await GoBackWithAlertAsync(
+					message: "You are not logged in. Try to log in with your email!",
+					pagePath: $"//{AppRoutes.LoginPage}",
+					isError: true);
 				return;
 			}
 
@@ -55,14 +57,18 @@ public partial class ProfileViewModel : ObservableObject
 
 			if (user == null)
 			{
-				await LogoutAndRedirectToLoginPageByReasonAsync(
-					"We cannot find an account with your email. Try later or register!");
+				await GoBackWithAlertAsync(
+					message: "We cannot find an account with your email. Try later or register!",
+					pagePath: $"//{AppRoutes.LoginPage}",
+					isError: true);
 				return;
 			}
 			if (user.Id != Session.CurrentUserId)
 			{
-				await LogoutAndRedirectToLoginPageByReasonAsync(
-					"We cannot identify you. Try later or register!");
+				await GoBackWithAlertAsync(
+					message: "We cannot identify you. Try later or register!",
+					pagePath: $"//{AppRoutes.LoginPage}",
+					isError: true);
 				return;
 			}
 
@@ -86,13 +92,17 @@ public partial class ProfileViewModel : ObservableObject
 		}
 		catch (KeyNotFoundException e)
 		{
-			await LogoutAndRedirectToLoginPageByReasonAsync(
-				"We cannot find an account with your email. Try later or to register!");
+			await GoBackWithAlertAsync(
+				message: "We cannot find an account with your email. Try later or to register!",
+				pagePath: $"//{AppRoutes.LoginPage}",
+				isError: true);
 		}
 		catch (Exception e)
 		{
-			await LogoutAndRedirectToLoginPageByReasonAsync(
-				"Couldn't load your profile page. Try later!");
+			await GoBackWithAlertAsync(
+				message: "Couldn't load your profile page. Try later!",
+				pagePath: $"//{AppRoutes.LoginPage}",
+				isError: true);
 		}
 	}
 
@@ -106,6 +116,16 @@ public partial class ProfileViewModel : ObservableObject
 	[RelayCommand]
 	private async Task SelectFavouriteDisciplineAsync()
 	{
+		var userId = Session.CurrentUserId;
+		if (userId == null)
+		{
+			await GoBackWithAlertAsync(
+				message: "We cannot find your account. Try later!",
+				pagePath: $"//{AppRoutes.LoginPage}",
+				isError: true);
+			return;
+		}
+		
 		string[] disciplineNames = [Disciplines.Bouldering, Disciplines.TopRopeClimbing, Disciplines.LeadClimbing,
 			Disciplines.SpeedClimbing];
 		
@@ -118,7 +138,7 @@ public partial class ProfileViewModel : ObservableObject
 			try
 			{
 				await _userService.EditUserInfoAsync(
-					id: Session.CurrentUserId,
+					id: (int)userId,
 					name: null,
 					surname: null,
 					birthday: null,
@@ -151,21 +171,5 @@ public partial class ProfileViewModel : ObservableObject
 		var discipline = await _disciplineService.GetDisciplineByNameAsync(disciplineName);
 		var grade = await _userService.GetBestGradeInDisciplineAsync(userId, discipline.Id);
 		return grade?.Name ?? "-";
-	}
-	
-	private async Task LogoutAndRedirectToLoginPageByReasonAsync(string logoutReason)
-	{
-		var navigationParameter = new Dictionary<string, object>
-		{
-			{ "LogoutReason", logoutReason }
-		};
-		
-		ClearSession();
-		await Shell.Current.GoToAsync($"//{nameof(LoginPage)}", navigationParameter);
-	}
-	
-	private void ClearSession()
-	{
-		Session.CurrentUserEmail = string.Empty;
 	}
 }

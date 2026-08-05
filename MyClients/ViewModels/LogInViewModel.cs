@@ -6,11 +6,10 @@ using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-[QueryProperty(nameof(IncomingMessage), "LogoutReason")]
-public partial class LogInViewModel : ObservableObject
+[QueryProperty(nameof(AlertMessage), Navigation.AlertMessageKey)]
+[QueryProperty(nameof(IsErrorAlert), Navigation.IsErrorKey)]
+public partial class LogInViewModel : BaseViewModel
 {
-	[ObservableProperty]
-	private string _incomingMessage = string.Empty;
 	private readonly IUserService _userService;
 
 	public LogInViewModel(IUserService userService)
@@ -31,15 +30,27 @@ public partial class LogInViewModel : ObservableObject
 	[ObservableProperty]
 	private Color _passwordPlaceholderColor = Colors.Gray;
 
-	partial void OnIncomingMessageChanged(string value)
-	{
-		if (!string.IsNullOrWhiteSpace(value))
-		{
-			MainThread.BeginInvokeOnMainThread(() => Shell.Current.DisplayAlertAsync("Увага!", value, "Ok"));
+	private string _alertMessage;
 
-			IncomingMessage = string.Empty;
+	public string AlertMessage
+	{
+		get => _alertMessage;
+		set
+		{
+			_alertMessage = value;
+			if (string.IsNullOrEmpty(value))
+			{
+				Shell.Current.DisplayAlertAsync(
+					IsErrorAlert ? "Error" : "Success",
+					value,
+					"Ok");
+
+				_alertMessage = string.Empty;
+			}
 		}
 	}
+	
+	public bool IsErrorAlert { get; set; }
 	
 	private async Task<(bool Success, string? ErrorMessage)> LogInUserAsync()
 	{
