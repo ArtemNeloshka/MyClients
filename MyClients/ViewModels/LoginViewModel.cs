@@ -8,11 +8,11 @@ namespace MyClients.ViewModels;
 
 [QueryProperty(nameof(AlertMessage), Navigation.AlertMessageKey)]
 [QueryProperty(nameof(IsErrorAlert), Navigation.IsErrorKey)]
-public partial class LogInViewModel : BaseViewModel
+public partial class LoginViewModel : BaseViewModel
 {
 	private readonly IUserService _userService;
 
-	public LogInViewModel(IUserService userService)
+	public LoginViewModel(IUserService userService)
 	{
 		this._userService = userService;
 	}
@@ -24,11 +24,11 @@ public partial class LogInViewModel : BaseViewModel
 	[ObservableProperty]
 	private string _emailPlaceholder = "Enter your email...";
 	[ObservableProperty]
-	private Color _emailPlaceholderColor = Colors.Gray;
+	private Color _emailPlaceholderColor = Colors.Black;
 	[ObservableProperty]
 	private string _passwordPlaceholder = "Enter your password...";
 	[ObservableProperty]
-	private Color _passwordPlaceholderColor = Colors.Gray;
+	private Color _passwordPlaceholderColor = Colors.Black;
 
 	private string _alertMessage;
 
@@ -38,15 +38,13 @@ public partial class LogInViewModel : BaseViewModel
 		set
 		{
 			_alertMessage = value;
-			if (string.IsNullOrEmpty(value))
-			{
-				Shell.Current.DisplayAlertAsync(
-					IsErrorAlert ? "Error" : "Success",
-					value,
-					"Ok");
+			if (string.IsNullOrEmpty(value)) return;
+			Shell.Current.DisplayAlertAsync(
+				IsErrorAlert ? "Error" : "Success",
+				value,
+				"Ok");
 
-				_alertMessage = string.Empty;
-			}
+			_alertMessage = string.Empty;
 		}
 	}
 	
@@ -104,7 +102,7 @@ public partial class LogInViewModel : BaseViewModel
 
 		if (result.Success)
 		{
-			await Shell.Current.GoToAsync($"//{AppRoutes.MainPage}");
+			Application.Current.MainPage = new AppShell();
 			return;
 		}
 
@@ -141,9 +139,10 @@ public partial class LogInViewModel : BaseViewModel
 	}
 
 	[RelayCommand]
-	private async Task NavigateToRegisterPageAsync()
+	private void NavigateToRegisterPage()
 	{
-		await Shell.Current.GoToAsync(nameof(RegistrationPage));
+		var registrationPage = Application.Current.Handler?.MauiContext?.Services.GetService<RegistrationPage>();
+		Application.Current.MainPage = registrationPage;
 	}
 	
 	private void SetEmailError(string placeholder)
@@ -164,7 +163,7 @@ public partial class LogInViewModel : BaseViewModel
 	{
 		if (this.EmailPlaceholderColor == Colors.Red)
 		{
-			this.EmailPlaceholderColor = Colors.Gray;
+			this.EmailPlaceholderColor = Colors.Black;
 			this.EmailPlaceholder = "Enter your email...";
 		}
 	}
@@ -173,7 +172,7 @@ public partial class LogInViewModel : BaseViewModel
 	{
 		if (this.PasswordPlaceholderColor == Colors.Red)
 		{
-			this.PasswordPlaceholderColor = Colors.Gray;
+			this.PasswordPlaceholderColor = Colors.Black;
 			this.PasswordPlaceholder = "Enter your password...";
 		}
 	}

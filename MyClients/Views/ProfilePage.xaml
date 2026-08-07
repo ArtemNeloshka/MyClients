@@ -245,7 +245,6 @@
 					        Command="{Binding LogoutAndRedirectToLoginPageCommand}"/>
 				</VerticalStackLayout>
 			</ScrollView>
-			
 		</Grid>
 	</Grid>
 </ContentPage>

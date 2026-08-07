@@ -26,7 +26,6 @@ public class UserRepository : Repository<User>, IUserRepository
 
 	public async Task<User?> GetByEmailAsync(string email)
 	{
-		return await _dbSet.FirstOrDefaultAsync(u => 
-			string.Equals(u.Email, email, StringComparison.OrdinalIgnoreCase));
+		return await _dbSet.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
 	}
 }

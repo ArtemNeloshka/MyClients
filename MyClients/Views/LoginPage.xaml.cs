@@ -4,9 +4,9 @@ namespace MyClients.Views;
 
 public partial class LoginPage : ContentPage
 {
-	public LoginPage(LogInViewModel logInViewModel)
+	public LoginPage(LoginViewModel loginViewModel)
 	{
 		InitializeComponent();
-		BindingContext = logInViewModel;
+		BindingContext = loginViewModel;
 	}
 }

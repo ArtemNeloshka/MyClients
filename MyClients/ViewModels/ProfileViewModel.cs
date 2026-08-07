@@ -107,10 +107,11 @@ public partial class ProfileViewModel : BaseViewModel
 	}
 
 	[RelayCommand]
-	private async Task LogoutAndRedirectToLoginPageAsync()
+	private void LogoutAndRedirectToLoginPage()
 	{
+		var loginPage = Application.Current.Handler?.MauiContext?.Services.GetService<LoginPage>();
+		Application.Current.MainPage = loginPage;
 		ClearSession();
-		await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
 	}
 
 	[RelayCommand]
@@ -119,10 +120,8 @@ public partial class ProfileViewModel : BaseViewModel
 		var userId = Session.CurrentUserId;
 		if (userId == null)
 		{
-			await GoBackWithAlertAsync(
-				message: "We cannot find your account. Try later!",
-				pagePath: $"//{AppRoutes.LoginPage}",
-				isError: true);
+			var loginPage = Application.Current.Handler?.MauiContext?.Services.GetService<LoginPage>();
+			Application.Current.MainPage = loginPage;
 			return;
 		}
 		

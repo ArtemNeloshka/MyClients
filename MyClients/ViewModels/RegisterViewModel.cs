@@ -20,21 +20,21 @@ public partial class RegisterViewModel : ObservableObject
 	[ObservableProperty]
 	private string _namePlaceholder = "Enter your name...";
 	[ObservableProperty]
-	private Color _namePlaceholderColor = Colors.Gray;
+	private Color _namePlaceholderColor = Colors.Black;
 	
 	[ObservableProperty]
 	private string _surname = String.Empty;
 	[ObservableProperty]
 	private string _surnamePlaceholder = "Enter your surname...";
 	[ObservableProperty]
-	private Color _surnamePlaceholderColor = Colors.Gray;
+	private Color _surnamePlaceholderColor = Colors.Black;
 	
 	[ObservableProperty]
 	private string _email = String.Empty;
 	[ObservableProperty]
 	private string _emailPlaceholder = "Enter your email...";
 	[ObservableProperty]
-	private Color _emailPlaceholderColor = Colors.Gray;
+	private Color _emailPlaceholderColor = Colors.Black;
 	
 	[ObservableProperty] 
 	private DateTime _birthdate = new DateTime(year: 2000, month: 1, day: 1);
@@ -44,14 +44,14 @@ public partial class RegisterViewModel : ObservableObject
 	[ObservableProperty]
 	private string _passwordPlaceholder = "Create a password";
 	[ObservableProperty]
-	private Color _passwordPlaceholderColor = Colors.Gray;
+	private Color _passwordPlaceholderColor = Colors.Black;
 	
 	[ObservableProperty]
 	private string _confirmPassword = String.Empty;
 	[ObservableProperty]
 	private string _confirmPasswordPlaceholder = "Enter your password again...";
 	[ObservableProperty]
-	private Color _confirmPasswordPlaceholderColor = Colors.Gray;
+	private Color _confirmPasswordPlaceholderColor = Colors.Black;
 
 	[RelayCommand]
 	private async Task RegisterAsync()
@@ -119,8 +119,9 @@ public partial class RegisterViewModel : ObservableObject
 			await _userService.RegisterUserAsync(this.Name, this.Surname, this.Email, 
 				DateOnly.FromDateTime(this.Birthdate), this.Password);
 			Session.CurrentUserEmail = this.Email;
+			Session.CurrentUserId = (await _userService.GetUserByEmailAsync(this.Email)).Id;
 
-			await Shell.Current.GoToAsync($"//{AppRoutes.MainPage}");
+			Application.Current.MainPage = new AppShell();
 		}
 		catch (InvalidOperationException e)
 		{
@@ -140,9 +141,10 @@ public partial class RegisterViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	private async Task GoToLoginPageAsync()
+	private void GoToLoginPage()
 	{
-		await Shell.Current.GoToAsync("..");
+		var loginPage = Application.Current.Handler?.MauiContext?.Services.GetService<LoginPage>();
+		Application.Current.MainPage = loginPage;
 	}
 
 	private void SetNameError(string placeholder)
@@ -184,7 +186,7 @@ public partial class RegisterViewModel : ObservableObject
 	{
 		if (this.NamePlaceholderColor == Colors.Red)
 		{
-			this.NamePlaceholderColor = Colors.Gray;
+			this.NamePlaceholderColor = Colors.Black;
 			this.NamePlaceholder = "Enter your name...";
 		}
 	}
@@ -193,7 +195,7 @@ public partial class RegisterViewModel : ObservableObject
 	{
 		if (this.SurnamePlaceholderColor == Colors.Red)
 		{
-			this.SurnamePlaceholderColor = Colors.Gray;
+			this.SurnamePlaceholderColor = Colors.Black;
 			this.SurnamePlaceholder = "Enter your surname...";
 		}
 	}
@@ -202,7 +204,7 @@ public partial class RegisterViewModel : ObservableObject
 	{
 		if (this.EmailPlaceholderColor == Colors.Red)
 		{
-			this.EmailPlaceholderColor = Colors.Gray;
+			this.EmailPlaceholderColor = Colors.Black;
 			this.EmailPlaceholder = "Enter your email...";
 		}
 	}
@@ -211,7 +213,7 @@ public partial class RegisterViewModel : ObservableObject
 	{
 		if (this.PasswordPlaceholderColor == Colors.Red)
 		{
-			this.PasswordPlaceholderColor = Colors.Gray;
+			this.PasswordPlaceholderColor = Colors.Black;
 			this.PasswordPlaceholder = "Create your password";
 		}
 	}
@@ -220,7 +222,7 @@ public partial class RegisterViewModel : ObservableObject
 	{
 		if (this.ConfirmPasswordPlaceholderColor == Colors.Red)
 		{
-			this.ConfirmPasswordPlaceholderColor = Colors.Gray;
+			this.ConfirmPasswordPlaceholderColor = Colors.Black;
 			this.ConfirmPasswordPlaceholder = "Enter your password again...";
 		}
 	}
