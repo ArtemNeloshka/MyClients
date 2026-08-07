@@ -6,11 +6,11 @@ public partial class MainPage : ContentPage
 {
 	private readonly MainViewModel? _viewModel;
 	
-	public MainPage()
+	public MainPage(MainViewModel viewModel)
 	{
 		InitializeComponent();
-		_viewModel = IPlatformApplication.Current?.Services.GetService<MainViewModel>();
-		BindingContext = _viewModel;
+		_viewModel = viewModel;
+		BindingContext = viewModel;
 	}
 
 	protected override async void OnAppearing()

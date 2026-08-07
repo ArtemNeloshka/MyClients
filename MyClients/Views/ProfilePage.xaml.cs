@@ -5,11 +5,11 @@ namespace MyClients.Views;
 public partial class ProfilePage : ContentPage
 {
 	private readonly ProfileViewModel? _viewModel;
-	public ProfilePage()
+	public ProfilePage(ProfileViewModel viewModel)
 	{
 		InitializeComponent();
-		_viewModel = IPlatformApplication.Current?.Services.GetService<ProfileViewModel>();
-		BindingContext = _viewModel;
+		_viewModel = viewModel;
+		BindingContext = viewModel;
 	}
 
 	protected override async void OnAppearing()

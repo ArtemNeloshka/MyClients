@@ -5,11 +5,11 @@ namespace MyClients.Views;
 public partial class DisciplinesPage : ContentPage
 {
 	private readonly DisciplinesViewModel? _viewModel;
-	public DisciplinesPage()
+	public DisciplinesPage(DisciplinesViewModel viewModel)
 	{
 		InitializeComponent();
-		_viewModel = IPlatformApplication.Current?.Services.GetService<DisciplinesViewModel>();
-		BindingContext = _viewModel;
+		_viewModel = viewModel;
+		BindingContext = viewModel;
 	}
 
 	protected override async void OnAppearing()

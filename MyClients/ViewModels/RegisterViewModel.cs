@@ -119,7 +119,12 @@ public partial class RegisterViewModel : ObservableObject
 			await _userService.RegisterUserAsync(this.Name, this.Surname, this.Email, 
 				DateOnly.FromDateTime(this.Birthdate), this.Password);
 			Session.CurrentUserEmail = this.Email;
-			Session.CurrentUserId = (await _userService.GetUserByEmailAsync(this.Email)).Id;
+			var newUser = await _userService.GetUserByEmailAsync(this.Email);
+
+			if (newUser != null)
+			{
+				Session.CurrentUserId = newUser.Id;
+			}
 
 			Application.Current.MainPage = new AppShell();
 		}

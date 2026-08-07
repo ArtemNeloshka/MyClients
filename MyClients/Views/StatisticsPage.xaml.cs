@@ -4,9 +4,9 @@ namespace MyClients.Views;
 
 public partial class StatisticsPage : ContentPage
 {
-	public StatisticsPage()
+	public StatisticsPage(StatisticsPageViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = IPlatformApplication.Current?.Services.GetService<StatisticsPageViewModel>();
+		BindingContext = viewModel;
 	}
 }

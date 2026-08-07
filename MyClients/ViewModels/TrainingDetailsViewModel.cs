@@ -50,7 +50,7 @@ public partial class TrainingDetailsViewModel : BaseViewModel
 	[ObservableProperty]
 	private string _speedBestGrade = "-";
 
-	public async Task LoadTrainingAsync(int trainingId)
+	private async Task LoadTrainingAsync(int trainingId)
 	{
 		var userEmail = Session.CurrentUserEmail;
 		if (string.IsNullOrEmpty(userEmail))
