@@ -22,9 +22,17 @@ public partial class TrainingDetailsViewModel : BaseViewModel
 		this._trainingService = trainingService;
 	}
 
-	partial void OnTrainingIdChanged(int value)
+	async partial void OnTrainingIdChanged(int value)
 	{
-		LoadTrainingAsync(value);
+		try
+		{
+			await LoadTrainingAsync(value);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e.Message);
+			await GoBackWithAlertAsync("Cannot find your training. Try later!", isError: true);
+		}
 	}
 
 	[ObservableProperty]
@@ -56,10 +64,7 @@ public partial class TrainingDetailsViewModel : BaseViewModel
 		if (string.IsNullOrEmpty(userEmail))
 		{
 			Console.WriteLine($"Email is empty.");
-			await GoBackWithAlertAsync(
-				message: "Couldn't find your training. Try later!",
-				pagePath: $"//{AppRoutes.LoginPage}",
-				isError: true);
+			RedirectToLoginPage("Couldn't find your training. Try later!");
 			return;
 		}
 
@@ -70,10 +75,7 @@ public partial class TrainingDetailsViewModel : BaseViewModel
 			if (user == null)
 			{
 				Console.WriteLine($"User for email {userEmail} doesn't have an account");
-				await GoBackWithAlertAsync(
-					message: "Couldn't find your account. Try later!",
-					pagePath: $"//{AppRoutes.LoginPage}",
-					isError: true);
+				RedirectToLoginPage("Couldn't find your account. Try later!");
 				return;
 			}
 

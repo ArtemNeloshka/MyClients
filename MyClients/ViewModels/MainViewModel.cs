@@ -22,10 +22,7 @@ public partial class MainViewModel : BaseViewModel
 		var userEmail = Session.CurrentUserEmail;
 		if (string.IsNullOrWhiteSpace(userEmail))
 		{
-			await GoBackWithAlertAsync(
-				message: "Ваша сесія закінчилась або користувача не знайдено. Будь ласка, увійдіть знову.",
-				pagePath: $"//{AppRoutes.LoginPage}",
-				isError: true);
+			RedirectToLoginPage("Ваша сесія закінчилась або користувача не знайдено. Будь ласка, увійдіть знову.");
 			return;
 		}
 
@@ -35,10 +32,7 @@ public partial class MainViewModel : BaseViewModel
 
 			if (user == null)
 			{
-				await GoBackWithAlertAsync(
-					message: "Користувача не знайдено за вказаним email. Будь ласка, увійдіть знову.",
-					pagePath: $"//{AppRoutes.LoginPage}",
-					isError: true);
+				RedirectToLoginPage("Користувача не знайдено за вказаним email. Будь ласка, увійдіть знову.");
 			}
 			else
 			{
@@ -49,10 +43,7 @@ public partial class MainViewModel : BaseViewModel
 		}
 		catch (ArgumentException e)
 		{
-			await GoBackWithAlertAsync(
-				message: "Помилка формату email. Будь ласка, увійдіть знову.",
-				pagePath: $"//AppRoutes.LoginPage",
-				isError: true);
+			RedirectToLoginPage("Помилка формату email. Будь ласка, увійдіть знову.");
 		}
 		catch (Exception)
 		{

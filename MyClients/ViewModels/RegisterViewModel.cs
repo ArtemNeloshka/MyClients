@@ -6,7 +6,7 @@ using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-public partial class RegisterViewModel : ObservableObject
+public partial class RegisterViewModel : BaseViewModel
 {
 	private readonly IUserService _userService;
 
@@ -148,8 +148,7 @@ public partial class RegisterViewModel : ObservableObject
 	[RelayCommand]
 	private void GoToLoginPage()
 	{
-		var loginPage = Application.Current.Handler?.MauiContext?.Services.GetService<LoginPage>();
-		Application.Current.MainPage = loginPage;
+		RedirectToLoginPage(null, false);
 	}
 
 	private void SetNameError(string placeholder)

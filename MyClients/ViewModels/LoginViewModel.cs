@@ -6,8 +6,6 @@ using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-[QueryProperty(nameof(AlertMessage), Navigation.AlertMessageKey)]
-[QueryProperty(nameof(IsErrorAlert), Navigation.IsErrorKey)]
 public partial class LoginViewModel : BaseViewModel
 {
 	private readonly IUserService _userService;

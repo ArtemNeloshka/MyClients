@@ -46,10 +46,7 @@ public partial class ProfileViewModel : BaseViewModel
 			var userEmail = Session.CurrentUserEmail;
 			if (string.IsNullOrEmpty(userEmail))
 			{
-				await GoBackWithAlertAsync(
-					message: "You are not logged in. Try to log in with your email!",
-					pagePath: $"//{AppRoutes.LoginPage}",
-					isError: true);
+				RedirectToLoginPage("You are not logged in. Try to log in with your email!");
 				return;
 			}
 
@@ -57,18 +54,12 @@ public partial class ProfileViewModel : BaseViewModel
 
 			if (user == null)
 			{
-				await GoBackWithAlertAsync(
-					message: "We cannot find an account with your email. Try later or register!",
-					pagePath: $"//{AppRoutes.LoginPage}",
-					isError: true);
+				RedirectToLoginPage("We cannot find an account with your email. Try later or register!");
 				return;
 			}
 			if (user.Id != Session.CurrentUserId)
 			{
-				await GoBackWithAlertAsync(
-					message: "We cannot identify you. Try later or register!",
-					pagePath: $"//{AppRoutes.LoginPage}",
-					isError: true);
+				RedirectToLoginPage("We cannot identify you. Try later or register!");
 				return;
 			}
 
@@ -92,26 +83,18 @@ public partial class ProfileViewModel : BaseViewModel
 		}
 		catch (KeyNotFoundException e)
 		{
-			await GoBackWithAlertAsync(
-				message: "We cannot find an account with your email. Try later or to register!",
-				pagePath: $"//{AppRoutes.LoginPage}",
-				isError: true);
+			RedirectToLoginPage("We cannot find an account with your email. Try later or to register!");
 		}
 		catch (Exception e)
 		{
-			await GoBackWithAlertAsync(
-				message: "Couldn't load your profile page. Try later!",
-				pagePath: $"//{AppRoutes.LoginPage}",
-				isError: true);
+			RedirectToLoginPage("Couldn't load your profile page. Try later!");
 		}
 	}
 
 	[RelayCommand]
 	private void LogoutAndRedirectToLoginPage()
 	{
-		var loginPage = Application.Current.Handler?.MauiContext?.Services.GetService<LoginPage>();
-		Application.Current.MainPage = loginPage;
-		ClearSession();
+		RedirectToLoginPage(null, false);
 	}
 
 	[RelayCommand]
@@ -120,8 +103,7 @@ public partial class ProfileViewModel : BaseViewModel
 		var userId = Session.CurrentUserId;
 		if (userId == null)
 		{
-			var loginPage = Application.Current.Handler?.MauiContext?.Services.GetService<LoginPage>();
-			Application.Current.MainPage = loginPage;
+			RedirectToLoginPage("Couldn't fing you. Try later!");
 			return;
 		}
 		

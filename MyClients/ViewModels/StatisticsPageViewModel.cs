@@ -16,7 +16,7 @@ public partial class StatisticsPageViewModel : BaseViewModel
 		set
 		{
 			_alertMessage = value;
-			if (string.IsNullOrEmpty(value))
+			if (!string.IsNullOrEmpty(value))
 			{
 				Shell.Current.DisplayAlertAsync(
 					IsErrorAlert ? "Error" : "Success",

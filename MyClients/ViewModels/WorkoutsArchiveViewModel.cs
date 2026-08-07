@@ -27,7 +27,7 @@ public partial class WorkoutsArchiveViewModel : BaseViewModel
 		set
 		{
 			_alertMessage = value;
-			if (string.IsNullOrEmpty(value))
+			if (!string.IsNullOrEmpty(value))
 			{
 				Shell.Current.DisplayAlertAsync(
 					IsErrorAlert ? "Error" : "Success",
@@ -77,7 +77,7 @@ public partial class WorkoutsArchiveViewModel : BaseViewModel
 				TrainingCards.Add(new TrainingCardModel
 				{
 					TrainingId = training.Id,
-					TrainingDate = training.TrainingDate.ToString("dd.MM.yyyy"),
+					TrainingDate = training.TrainingDate.ToString("dd.MM.yy"),
 					TrainingDuration = durationToString,
 					DisciplinesTrained = disciplinedTrainedText,
 					BestGradesClimbed = bestGradesClimbedText,
