@@ -45,15 +45,9 @@ public class TrainingService : ITrainingService
 		await _trainingRepository.AddAsync(training);
 	}
 	
-	public async Task<Training> GetTrainingByIdAsync(int id)
+	public async Task<Training?> GetTrainingByIdAsync(int id)
 	{
-		var training = await _trainingRepository.GetByIdAsync(id);
-		if (training == null)
-		{
-			throw new KeyNotFoundException(ErrorMessages.TrainingNotFound + $" (id={id})");
-		}
-
-		return training;
+		return await _trainingRepository.GetByIdAsync(id);
 	}
 
 	public async Task<ICollection<Training>> GetTrainingsByUserIdAsync(int userId)

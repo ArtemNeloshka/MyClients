@@ -111,7 +111,7 @@ public class UserService : IUserService
 		await _userRepository.UpdateAsync(user);
 	}
 
-	public async Task<(bool Success, string? ErrorMessage)> LoginUserAsync(string email, string password)
+	public async Task<(bool Success, string? ErrorMessage, int? userId)> LoginUserAsync(string email, string password)
 	{
 		// validate input
 		if (!ValidationRules.IsValidEmail(email))
@@ -129,17 +129,17 @@ public class UserService : IUserService
 
 		if (user == null)
 		{
-			return (false, ErrorMessages.UserNotFound);
+			return (false, ErrorMessages.UserNotFound, null);
 		}
 
 		if (string.IsNullOrWhiteSpace(user.PasswordHash))
 		{
-			return (false, ErrorMessages.PasswordIncorrect);
+			return (false, ErrorMessages.PasswordIncorrect, null);
 		}
 
 		bool isPasswordMatch = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
 		
-		return isPasswordMatch ? (true, null) : (false, ErrorMessages.PasswordIncorrect);
+		return isPasswordMatch ? (true, null, user.Id) : (false, ErrorMessages.PasswordIncorrect, null);
 	}
 	
 	public async Task<Grade?> GetBestGradeInDisciplineAsync(int userId, int disciplineId)

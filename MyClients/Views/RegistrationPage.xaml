@@ -27,7 +27,7 @@
 
 					<ImageButton Source="back_arrow.png"
 					             BackgroundColor="Transparent"
-					             Clicked="OnBackToLogInPageClicked"/>
+					             Command="{Binding GoToLoginPageCommand}"/>
 
 					<Label Text="BACK"
 					       FontSize="20"
@@ -63,14 +63,17 @@
 					       FontSize="28"
 					       FontAttributes="Italic, Bold"/>
 					<!-- name field -->
-					<controls:RegistrationTextFieldView x:Name="EntryNameRegistration"
-					                                    Placeholder="Enter your name..."/>
+					<controls:RegistrationTextFieldView Text="{Binding Name, Mode=TwoWay}"
+					                                    Placeholder="{Binding NamePlaceholder}"
+					                                    PlaceholderColor="{Binding NamePlaceholderColor}"/>
 					<!-- surname field -->
-					<controls:RegistrationTextFieldView x:Name="EntrySurnameRegistration"
-					                                    Placeholder="Enter your surname..."/>
+					<controls:RegistrationTextFieldView Text="{Binding Surname, Mode=TwoWay}"
+					                                    Placeholder="{Binding SurnamePlaceholder}"
+					                                    PlaceholderColor="{Binding SurnamePlaceholderColor}"/>
 					<!-- email field -->
-					<controls:RegistrationTextFieldView x:Name="EntryEmailRegistration"
-					                                    Placeholder="Enter your email..."
+					<controls:RegistrationTextFieldView Text="{Binding Email, Mode=TwoWay}"
+					                                    Placeholder="{Binding EmailPlaceholder}"
+					                                    PlaceholderColor="{Binding EmailPlaceholderColor}"
 					                                    Keyboard="Email"/>
 					<!-- birth date text -->
 					<Label Text="Pick your birth date"
@@ -94,9 +97,8 @@
 					        BackgroundColor="Gray"
 					        HeightRequest="45"
 					        StrokeThickness="0">
-						<DatePicker x:Name="RegistrationBirthDatePicker"
-						            Format="dd.MM.yyyy"
-						            Date="01.01.2000"
+						<DatePicker Format="dd.MM.yyyy"
+						            Date="{Binding Birthdate}"
 						            HorizontalOptions="Fill"
 						            VerticalOptions="Center"
 						            Margin="0 15"
@@ -113,12 +115,14 @@
 					       FontSize="28"
 					       FontAttributes="Italic, Bold"/>
 					<!-- password field -->
-					<controls:RegistrationTextFieldView x:Name="EntryPasswordRegistration"
-					                                    Placeholder="Create a password"
+					<controls:RegistrationTextFieldView Text="{Binding Password, Mode=TwoWay}"
+					                                    Placeholder="{Binding PasswordPlaceholder}"
+					                                    PlaceholderColor="{Binding PasswordPlaceholderColor}"
 					                                    IsPassword="True"/>
 					<!-- confirm password field -->
-					<controls:RegistrationTextFieldView x:Name="EntryConfirmPasswordRegistration"
-					                                    Placeholder="Enter your password again..."
+					<controls:RegistrationTextFieldView Text="{Binding ConfirmPassword, Mode=TwoWay}"
+					                                    Placeholder="{Binding ConfirmPasswordPlaceholder}"
+					                                    PlaceholderColor="{Binding ConfirmPasswordPlaceholderColor}"
 					                                    IsPassword="True"/>
 					<!-- register button -->
 					<Button Text="Register!"
@@ -131,7 +135,7 @@
 					        HorizontalOptions="Center"
 					        Margin="15 0"
 					        Padding="5 35"
-					        Clicked="OnRegisterClicked"/>
+					        Command="{Binding RegisterCommand}"/>
 					
 				</VerticalStackLayout>
 				

@@ -3,6 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyClients.Views.Controls"
+             xmlns:viewModels="clr-namespace:MyClients.ViewModels"
+             x:DataType="viewModels:StatisticsPageViewModel"
              x:Class="MyClients.Views.StatisticsPage">
 	<Grid>
 		<!-- background -->
@@ -27,7 +29,7 @@
 										       Aspect="AspectFill"
 										       VerticalOptions="Start"
 										       CornerRadius="25"
-										       Clicked="OnOpenWorkoutsArchivePageClicked">
+										       Command="{Binding OpenWorkoutsArchivePageCommand}">
 							</ImageButton>
 							<Label Text="Workouts Archive"
 							       HorizontalOptions="Center"

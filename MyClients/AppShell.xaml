@@ -5,32 +5,42 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MyClients"
     xmlns:views="clr-namespace:MyClients.Views"
+    xmlns:constants="clr-namespace:MyClients.Domain.Constants;assembly=MyClients.Domain"
     Shell.FlyoutBehavior="Disabled"
     Title="MyClients"
-    
     Shell.TabBarBackgroundColor="#222222"
     Shell.TabBarForegroundColor="Green"
     Shell.TabBarUnselectedColor="Firebrick">
     
-    <TabBar>
-        <Tab Title="Home" Icon="home_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage"/>
+		<TabBar>
+        <Tab Title="{x:Static constants:PageTitles.MainPage}"
+             Icon="{x:Static constants:AppRoutes.MainPageIcon}">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" 
+                          Route="{x:Static constants:AppRoutes.MainPage}"/>
         </Tab>
 	    
-        <Tab Title="Disciplines" Icon="disciplines_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:DisciplinesPage}" />
+        <Tab Title="{x:Static constants:PageTitles.DisciplinesPage}"
+             Icon="{x:Static constants:AppRoutes.DisciplinesPageIcon}">
+            <ShellContent ContentTemplate="{DataTemplate views:DisciplinesPage}"
+                          Route="{x:Static constants:AppRoutes.DisciplinesPage}"/>
         </Tab>
 	    
-        <Tab Title="Train" Icon="train_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:TrainPage}" />
+        <Tab Title="{x:Static constants:PageTitles.TrainPage}"
+             Icon="{x:Static constants:AppRoutes.TrainPageIcon}">
+            <ShellContent ContentTemplate="{DataTemplate views:TrainPage}"
+                          Route="{x:Static constants:AppRoutes.TrainPage}"/>
         </Tab>
 	    
-        <Tab Title="Statistics" Icon="statistics_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}" />
+        <Tab Title="{x:Static constants:PageTitles.StatisticsPage}"
+             Icon="{x:Static constants:AppRoutes.StatisticsPageIcon}">
+            <ShellContent ContentTemplate="{DataTemplate views:StatisticsPage}"
+                          Route="{x:Static constants:AppRoutes.StatisticsPage}"/>
         </Tab>
 	    
-        <Tab Title="Profile" Icon="user_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
+        <Tab Title="{x:Static constants:PageTitles.ProfilePage}"
+             Icon="{x:Static constants:AppRoutes.ProfilePageIcon}">
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}"
+                          Route="{x:Static constants:AppRoutes.ProfilePage}"/>
         </Tab>
     </TabBar>
 

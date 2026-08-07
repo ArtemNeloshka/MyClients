@@ -1,10 +1,12 @@
-using MyClients.BLL.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
+using MyClients.Views;
 
 namespace MyClients.ViewModels;
 
-public class RegisterViewModel
+public partial class RegisterViewModel : BaseViewModel
 {
 	private readonly IUserService _userService;
 
@@ -13,70 +15,219 @@ public class RegisterViewModel
 		this._userService = userService;
 	}
 	
-	public string Name { get; set; } = String.Empty;
-	public string Surname { get; set; } = String.Empty;
-	public string Email { get; set; } = String.Empty;
-	public DateOnly Birthdate { get; set; }
-	public string Password { get; set; } = String.Empty;
-	public string ConfirmPassword { get; set; } = String.Empty;
+	[ObservableProperty]
+	private string _name = String.Empty;
+	[ObservableProperty]
+	private string _namePlaceholder = "Enter your name...";
+	[ObservableProperty]
+	private Color _namePlaceholderColor = Colors.Black;
+	
+	[ObservableProperty]
+	private string _surname = String.Empty;
+	[ObservableProperty]
+	private string _surnamePlaceholder = "Enter your surname...";
+	[ObservableProperty]
+	private Color _surnamePlaceholderColor = Colors.Black;
+	
+	[ObservableProperty]
+	private string _email = String.Empty;
+	[ObservableProperty]
+	private string _emailPlaceholder = "Enter your email...";
+	[ObservableProperty]
+	private Color _emailPlaceholderColor = Colors.Black;
+	
+	[ObservableProperty] 
+	private DateTime _birthdate = new DateTime(year: 2000, month: 1, day: 1);
+	
+	[ObservableProperty]
+	private string _password = String.Empty;
+	[ObservableProperty]
+	private string _passwordPlaceholder = "Create a password";
+	[ObservableProperty]
+	private Color _passwordPlaceholderColor = Colors.Black;
+	
+	[ObservableProperty]
+	private string _confirmPassword = String.Empty;
+	[ObservableProperty]
+	private string _confirmPasswordPlaceholder = "Enter your password again...";
+	[ObservableProperty]
+	private Color _confirmPasswordPlaceholderColor = Colors.Black;
 
-	public async Task<(bool Success, string? ErrorMessage)> RegisterAsync()
+	[RelayCommand]
+	private async Task RegisterAsync()
 	{
 		// UI validation
-		if (string.IsNullOrWhiteSpace(Name))
+		if (string.IsNullOrWhiteSpace(this.Name))
 		{
-			return (false, ErrorPlaceholders.NameIsEmpty);
+			SetNameError(ErrorPlaceholders.NameIsEmpty);
+			return;
 		}
-		if (Name.Length > ValidationRules.MaxNameLength)
+		if (this.Name.Length > ValidationRules.MaxNameLength)
 		{
-			return (false, ErrorPlaceholders.NameIsLong);
+			SetNameError(ErrorPlaceholders.NameIsLong);
+			return;
 		}
-		if (string.IsNullOrWhiteSpace(Surname))
+		if (string.IsNullOrWhiteSpace(this.Surname))
 		{
-			return (false, ErrorPlaceholders.SurnameIsEmpty);
+			SetSurnameError(ErrorPlaceholders.SurnameIsEmpty);
+			return;
 		}
-		if (Surname.Length > ValidationRules.MaxSurnameLength)
+		if (this.Surname.Length > ValidationRules.MaxSurnameLength)
 		{
-			return (false, ErrorPlaceholders.SurnameIsLong);
+			SetSurnameError(ErrorPlaceholders.SurnameIsLong);
+			return;
 		}
-		if (string.IsNullOrWhiteSpace(Email))
+		if (string.IsNullOrWhiteSpace(this.Email))
 		{
-			return (false, ErrorPlaceholders.EmailIsEmpty);
+			SetEmailError(ErrorPlaceholders.EmailIsEmpty);
+			return;
 		}
-		if (!ValidationRules.IsValidEmail(Email))
+		if (!ValidationRules.IsValidEmail(this.Email))
 		{
-			return (false, ErrorPlaceholders.InvalidEmail);
+			SetEmailError(ErrorPlaceholders.InvalidEmail);
+			return;
 		}
-		if (await _userService.GetUserByEmailAsync(Email) != null)
+		if (await _userService.GetUserByEmailAsync(this.Email) != null)
 		{
-			return (false, ErrorPlaceholders.EmailAlreadyExists);
+			SetEmailError(ErrorPlaceholders.EmailAlreadyExists);
+			return;
 		}
-		if (string.IsNullOrWhiteSpace(Password))
+		if (string.IsNullOrWhiteSpace(this.Password))
 		{
-			return (false, ErrorPlaceholders.RegistrationPasswordIsEmpty);
+			SetPasswordError(ErrorPlaceholders.RegistrationPasswordIsEmpty);
+			return;
 		}
-		if (Password.Length < ValidationRules.MinPasswordLength)
+		if (this.Password.Length < ValidationRules.MinPasswordLength)
 		{
-			return (false, ErrorPlaceholders.PasswordIsShort);
+			SetPasswordError(ErrorPlaceholders.PasswordIsShort);
+			return;
 		}
-		if (string.IsNullOrWhiteSpace(ConfirmPassword))
+		if (string.IsNullOrWhiteSpace(this.ConfirmPassword))
 		{
-			return (false, ErrorPlaceholders.ConfirmPasswordIsEmpty);
+			SetConfirmPasswordError(ErrorPlaceholders.ConfirmPasswordIsEmpty);
+			return;
 		}
-		if (Password != ConfirmPassword)
+		if (this.Password != this.ConfirmPassword)
 		{
-			return (false, ErrorPlaceholders.PasswordsDontMatch);
+			SetConfirmPasswordError(ErrorPlaceholders.PasswordsDontMatch);
+			return;
 		}
 		
 		// BLL
 		try
 		{
-			await _userService.RegisterUserAsync(Name, Surname, Email, Birthdate, Password);
-			return (true, null);
+			await _userService.RegisterUserAsync(this.Name, this.Surname, this.Email, 
+				DateOnly.FromDateTime(this.Birthdate), this.Password);
+			Session.CurrentUserEmail = this.Email;
+			var newUser = await _userService.GetUserByEmailAsync(this.Email);
+
+			if (newUser != null)
+			{
+				Session.CurrentUserId = newUser.Id;
+			}
+
+			Application.Current.MainPage = new AppShell();
+		}
+		catch (InvalidOperationException e)
+		{
+			Console.WriteLine(e.Message);
+			SetEmailError(ErrorPlaceholders.EmailAlreadyExists);
+		}
+		catch (ArgumentException e)
+		{
+			Console.WriteLine(e.Message);
+			await Shell.Current.DisplayAlertAsync("Увага!", "Перевірте правильність введених даних.", "Ok");
 		}
 		catch (Exception e)
 		{
-			return (false, e.Message);
+			Console.WriteLine(e.Message);
+			await Shell.Current.DisplayAlertAsync("Увага!", "Невідома помилка. Спробуй трохи пізніше!", "Ok");
+		}
+	}
+
+	[RelayCommand]
+	private void GoToLoginPage()
+	{
+		RedirectToLoginPage(null, false);
+	}
+
+	private void SetNameError(string placeholder)
+	{
+		this.Name = string.Empty;
+		this.NamePlaceholder = placeholder;
+		this.NamePlaceholderColor = Colors.Red;
+	}
+	
+	private void SetSurnameError(string placeholder)
+	{
+		this.Surname = string.Empty;
+		this.SurnamePlaceholder = placeholder;
+		this.SurnamePlaceholderColor = Colors.Red;
+	}
+	
+	private void SetEmailError(string placeholder)
+	{
+		this.Email = string.Empty;
+		this.EmailPlaceholder = placeholder;
+		this.EmailPlaceholderColor = Colors.Red;
+	}
+	
+	private void SetPasswordError(string placeholder)
+	{
+		this.Password = string.Empty;
+		this.PasswordPlaceholder = placeholder;
+		this.PasswordPlaceholderColor = Colors.Red;
+	}
+	
+	private void SetConfirmPasswordError(string placeholder)
+	{
+		this.ConfirmPassword = string.Empty;
+		this.ConfirmPasswordPlaceholder = placeholder;
+		this.ConfirmPasswordPlaceholderColor = Colors.Red;
+	}
+
+	partial void OnNameChanged(string value)
+	{
+		if (this.NamePlaceholderColor == Colors.Red)
+		{
+			this.NamePlaceholderColor = Colors.Black;
+			this.NamePlaceholder = "Enter your name...";
+		}
+	}
+	
+	partial void OnSurnameChanged(string value)
+	{
+		if (this.SurnamePlaceholderColor == Colors.Red)
+		{
+			this.SurnamePlaceholderColor = Colors.Black;
+			this.SurnamePlaceholder = "Enter your surname...";
+		}
+	}
+	
+	partial void OnEmailChanged(string value)
+	{
+		if (this.EmailPlaceholderColor == Colors.Red)
+		{
+			this.EmailPlaceholderColor = Colors.Black;
+			this.EmailPlaceholder = "Enter your email...";
+		}
+	}
+	
+	partial void OnPasswordChanged(string value)
+	{
+		if (this.PasswordPlaceholderColor == Colors.Red)
+		{
+			this.PasswordPlaceholderColor = Colors.Black;
+			this.PasswordPlaceholder = "Create your password";
+		}
+	}
+	
+	partial void OnConfirmPasswordChanged(string value)
+	{
+		if (this.ConfirmPasswordPlaceholderColor == Colors.Red)
+		{
+			this.ConfirmPasswordPlaceholderColor = Colors.Black;
+			this.ConfirmPasswordPlaceholder = "Enter your password again...";
 		}
 	}
 }

@@ -67,9 +67,9 @@
 							        BackgroundColor="#B50000"
 							        StrokeShape="RoundRectangle 10"
 							        StrokeThickness="0">
-								<!-- <Border.GestureRecognizers> -->
-								<!-- 	<TapGestureRecognizer Tapped="OnDisciplinesClicked"/> -->
-								<!-- </Border.GestureRecognizers> -->
+								<Border.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding NavigateToDisciplinesCommand}"/>
+								</Border.GestureRecognizers>
 
 								<Label Text="Explore climbing disciplines"
 								       TextColor="White"
@@ -103,9 +103,9 @@
 							        BackgroundColor="#B50000"
 							        StrokeShape="RoundRectangle 10"
 							        StrokeThickness="0">
-								<!-- <Border.GestureRecognizers> -->
-								<!-- 	<TapGestureRecognizer Tapped="OnStartTrainingClicked"/> -->
-								<!-- </Border.GestureRecognizers> -->
+								<Border.GestureRecognizers>
+									<TapGestureRecognizer Command="{Binding StartNewTrainingCommand}"/>
+								</Border.GestureRecognizers>
 								<!-- button text -->
 								<Label Text="Start new training"
 								       TextColor="White"

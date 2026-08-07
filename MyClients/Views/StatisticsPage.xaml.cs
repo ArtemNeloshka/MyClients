@@ -1,21 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MyClients.ViewModels;
 
 namespace MyClients.Views;
 
 public partial class StatisticsPage : ContentPage
 {
-	public StatisticsPage()
+	public StatisticsPage(StatisticsPageViewModel viewModel)
 	{
 		InitializeComponent();
-	}
-
-	private async void OnOpenWorkoutsArchivePageClicked(object? sender, EventArgs e)
-	{
-		var workoutsArchivePage = Handler.MauiContext.Services.GetService<WorkoutsArchivePage>();
-		await Navigation.PushAsync(workoutsArchivePage);
+		BindingContext = viewModel;
 	}
 }

@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MyClients.Views.Controls"
+             xmlns:constants="clr-namespace:MyClients.Domain.Constants;assembly=MyClients.Domain"
              x:Class="MyClients.Views.ProfilePage">
 	<Grid>
 		<!-- background -->
@@ -60,11 +61,10 @@
 								        BackgroundColor="#D9D9D9"
 								        Margin="10 5 0 0">
 									<Border.GestureRecognizers>
-										<TapGestureRecognizer Tapped="OnDisciplinePickerTapped"/>
+										<TapGestureRecognizer Command="{Binding SelectFavouriteDisciplineCommand}"/>
 									</Border.GestureRecognizers>
     
-									<Label x:Name="DisciplineLabel"
-									       Text="Favorite discipline"
+									<Label Text="{Binding FavouriteDiscipline}"
 									       FontAttributes="Bold, Italic"
 									       HorizontalTextAlignment="Center"
 									       VerticalOptions="Center"/>
@@ -106,6 +106,7 @@
 									       FontAttributes="Bold, Italic"/>
 								</Border>
 								<!-- edit button -->
+								<!-- TODO: implement button -->
 								<Border Grid.Row="2"
 								        Grid.Column="2"
 								        StrokeShape="RoundRectangle 7"
@@ -144,7 +145,8 @@
 									<Grid ColumnDefinitions="*, *">
 										<!-- bouldering best grade -->
 										<Label Grid.Column="0"
-										       Text="Bouldering:"
+										       Text="{Binding Source={x:Static constants:Disciplines.BoulderingShort}, 
+																													StringFormat='{0}:'}"
 										       FontSize="12"
 										       FontAttributes="Bold, Italic"
 										       HorizontalTextAlignment="Start"
@@ -166,7 +168,9 @@
 								        BackgroundColor="#D9D9D9">
 									<Grid ColumnDefinitions="*, *">
 										<!-- top rope best grade -->
-										<Label Grid.Column="0" Text="Top rope:"
+										<Label Grid.Column="0"
+										       Text="{Binding Source={x:Static constants:Disciplines.TopRopeClimbingShort}, 
+																													StringFormat='{0}:'}"
 										       FontSize="12"
 										       FontAttributes="Bold, Italic"
 										       HorizontalTextAlignment="Start"
@@ -187,7 +191,9 @@
 								        BackgroundColor="#D9D9D9">
 									<Grid ColumnDefinitions="*, *">
 										<!-- lead best grade -->
-										<Label Grid.Column="0" Text="Lead:"
+										<Label Grid.Column="0"
+										       Text="{Binding Source={x:Static constants:Disciplines.LeadClimbingShort}, 
+																													StringFormat='{0}:'}"
 										       FontSize="12"
 										       FontAttributes="Bold, Italic"
 										       HorizontalTextAlignment="Start"
@@ -209,7 +215,8 @@
 									<Grid ColumnDefinitions="*, *">
 										<!-- speed best grade -->
 										<Label Grid.Column="0"
-										       Text="Speed:"
+										       Text="{Binding Source={x:Static constants:Disciplines.SpeedClimbingShort}, 
+																													StringFormat='{0}:'}"
 										       FontSize="12"
 										       FontAttributes="Bold, Italic"
 										       HorizontalTextAlignment="Start"
@@ -235,10 +242,9 @@
 					        FontSize="20"
 					        HorizontalOptions="Center"
 					        Margin="15"
-					        Clicked="OnGoToLoginPageClicked"/>
+					        Command="{Binding LogoutAndRedirectToLoginPageCommand}"/>
 				</VerticalStackLayout>
 			</ScrollView>
-			
 		</Grid>
 	</Grid>
 </ContentPage>

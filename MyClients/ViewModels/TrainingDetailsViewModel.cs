@@ -1,14 +1,15 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using MyClients.BLL.Interfaces;
-using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using MyClients.BLL.Interfaces.Services;
 using MyClients.Domain.Constants;
 
 namespace MyClients.ViewModels;
 
-public class TrainingDetailsViewModel : INotifyPropertyChanged
+[QueryProperty(nameof(TrainingId), "TrainingId")]
+public partial class TrainingDetailsViewModel : BaseViewModel
 {
+	[ObservableProperty]
+	private int _trainingId;
+	
 	private readonly IUserService _userService;
 	private readonly IDisciplineService _disciplineService;
 	private readonly ITrainingService _trainingService;
@@ -21,111 +22,100 @@ public class TrainingDetailsViewModel : INotifyPropertyChanged
 		this._trainingService = trainingService;
 	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+	async partial void OnTrainingIdChanged(int value)
+	{
+		try
+		{
+			await LoadTrainingAsync(value);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e.Message);
+			await GoBackWithAlertAsync("Cannot find your training. Try later!", isError: true);
+		}
+	}
 
+	[ObservableProperty]
 	private string _name = string.Empty;
-	public string Name
-	{
-		get => _name;
-		set { _name = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name))); }
-	}
-
+	[ObservableProperty]
 	private string _surname = string.Empty;
-	public string Surname
-	{
-		get => _surname;
-		set { _surname = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Surname))); }
-	}
 
+	[ObservableProperty]
 	private DateOnly _trainingDate;
-	public DateOnly TrainingDate
-	{
-		get => _trainingDate;
-		set
-		{
-			_trainingDate = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrainingDate)));
-		}
-	}
 
+	[ObservableProperty]
 	private string _trainingLog;
-	public string TrainingLog
-	{
-		get => _trainingLog;
-		set
-		{
-			_trainingLog = value;
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrainingLog)));
-		}
-	}
 
-	private string _boulderingBestGrade = "-";
-	public string BoulderingBestGrade
-	{
-		get => _boulderingBestGrade;
-		set
-		{
-			_boulderingBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BoulderingBestGrade)));
-		}
-	}
+	[ObservableProperty]
+	private string _boulderingBestGrade;
 
-	private string _topRopeBestGrade = "-";
-	public string TopRopeBestGrade
-	{
-		get => _topRopeBestGrade;
-		set
-		{
-			_topRopeBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TopRopeBestGrade)));
-		}
-	}
+	[ObservableProperty]
+	private string _topRopeBestGrade;
 
-	private string _leadBestGrade = "-";
-	public string LeadBestGrade
-	{
-		get => _leadBestGrade;
-		set
-		{
-			_leadBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LeadBestGrade)));
-		}
-	}
+	[ObservableProperty]
+	private string _leadBestGrade;
 
+	[ObservableProperty]
 	private string _speedBestGrade = "-";
-	public string SpeedBestGrade
+
+	private async Task LoadTrainingAsync(int trainingId)
 	{
-		get => _speedBestGrade;
-		set
+		var userEmail = Session.CurrentUserEmail;
+		if (string.IsNullOrEmpty(userEmail))
 		{
-			_speedBestGrade = value; 
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpeedBestGrade)));
+			Console.WriteLine($"Email is empty.");
+			RedirectToLoginPage("Couldn't find your training. Try later!");
+			return;
 		}
-	}
 
-	public async Task LoadTrainingAsync(int trainingId)
-	{
-		// if (string.IsNullOrEmpty(Session.CurrentUserEmail))
-		// 	throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+		try
+		{
+			var user = await _userService.GetUserByEmailAsync(userEmail);
 
-		var user = await _userService.GetUserByEmailAsync("test@gmail.com");
+			if (user == null)
+			{
+				Console.WriteLine($"User for email {userEmail} doesn't have an account");
+				RedirectToLoginPage("Couldn't find your account. Try later!");
+				return;
+			}
 
-		if (user == null)
-			throw new KeyNotFoundException(ErrorMessages.UserNotFound);
+			Name = user.Name;
+			Surname = user.Surname;
 
-		Name = user.Name;
-		Surname = user.Surname;
+			var training = await _trainingService.GetTrainingByIdAsync(trainingId);
 
-		var training = await _trainingService.GetTrainingByIdAsync(trainingId);
+			if (training == null)
+			{
+				Console.WriteLine($"Couldn't find a training with id={trainingId}");
+				await GoBackWithAlertAsync(
+					message: "We cannot find your training. Try later!",
+					isError: true);
+				return;
+			}
 
-		if (training == null) return;
-		
-		BoulderingBestGrade = "N/A";
-		TopRopeBestGrade = "N/A";
-		LeadBestGrade = "N/A";
-		SpeedBestGrade = "N/A";
+			// TODO: GetBestGradeByTrainingId method
+			BoulderingBestGrade = "N/A";
+			TopRopeBestGrade = "N/A";
+			LeadBestGrade = "N/A";
+			SpeedBestGrade = "N/A";
 
-		TrainingDate = training.TrainingDate;
-		TrainingLog = training.TrainingLog;
+			TrainingDate = training.TrainingDate;
+			TrainingLog = training.TrainingLog;
+		}
+		catch (ArgumentException e)
+		{
+			Console.WriteLine(e.Message);
+			await GoBackWithAlertAsync("Cannot find your training. Try later!", isError: true);
+		}
+		catch (KeyNotFoundException e)
+		{
+			Console.WriteLine(e.Message);
+			await GoBackWithAlertAsync("Some record isn't found in DB", isError: true);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e.Message);
+			await GoBackWithAlertAsync("Somthn weird happened", isError: true);
+		}
 	}
 }

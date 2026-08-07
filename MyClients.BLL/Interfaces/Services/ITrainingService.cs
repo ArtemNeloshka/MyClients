@@ -9,7 +9,7 @@ public interface ITrainingService
 	Task CreateTrainingAsync(int userId, DateOnly trainingDate, TimeSpan duration, string? trainingLog,
 		ICollection<Attempt> attempts);
 	// Read
-	Task<Training> GetTrainingByIdAsync(int id);
+	Task<Training?> GetTrainingByIdAsync(int id);
 	Task<ICollection<Training>> GetTrainingsByUserIdAsync(int userId);
 	Task<ICollection<Training>> GetTrainingsByPeriodAsync(int userId, DateOnly start, DateOnly end);
 	// Update
